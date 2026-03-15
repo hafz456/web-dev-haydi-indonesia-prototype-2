@@ -9,8 +9,8 @@ const language = {
     },
     aboutProduct: {
       title: "Curriculum",
-      weeks: {
-        week1: {
+      weeks: [
+        {
           label: "Week 1",
           topics: [
             "Letters",
@@ -19,7 +19,7 @@ const language = {
             "Examination of the Subject (S) concept (formal and informal usage)",
           ],
         },
-        week2: {
+        {
           label: "Week 2",
           topics: [
             "Examination of the Predicate (P) concept (verbs and adjectives)",
@@ -27,33 +27,33 @@ const language = {
             "Examination of the Object (O) concept",
           ],
         },
-        week3: {
+        {
           label: "Week 3",
           topics: ["Prepositions (continued)", "Past tense"],
         },
-        week4: {
+        {
           label: "Week 4",
           topics: ["Future tense", "Demonstratives", "Possessive suffixes"],
         },
-        week5: {
+        {
           label: "Week 5",
           topics: ["Conversation practice"],
         },
-        week6: {
+        {
           label: "Week 6",
           topics: ["Listening practice", "Conjunctions"],
         },
-        week7: {
+        {
           label: "Week 7",
           topics: ["Writing short stories and presenting them"],
         },
-        week8: {
+        {
           label: "Week 8",
           topics: [
             "Integrated development of reading, writing, speaking, and listening skills",
           ],
         },
-      },
+      ],
     },
     aboutOwner: {
       paragraphs:
@@ -64,29 +64,28 @@ const language = {
       packages: [
         {
           name: "Main Package",
-          duration: "Sessions: 8 meetings",
-          hours: "Total Hours: 16 hours (2 hours each)",
-          include: {
-            label: "Include:",
-            topic: "E‑book",
-          },
-          price: "Price: 2,500 TL",
+          info: [
+            "Sessions: 8 meetings",
+            "Total Hours: 16 hours (2 hours each)",
+            "Include: E‑book",
+          ],
+          price: "Price: 2.500 TL",
+          btn: "Buy Now",
         },
         {
           name: "Flexible Package",
-          duration: "Sessions: 1 meeting",
-          hours: "Total Hours: 2 hours",
-          include: {
-            label: "Include:",
-            topic: "E‑book",
-          },
+          info: [
+            "Sessions: 1 meeting",
+            "Total Hours: 2 hours",
+            "Include: E‑book",
+          ],
           price: "Price: 400 TL",
           btn: "Buy Now",
         },
       ],
     },
     footer: {
-      titles: ["Follow us", "Contact"],
+      titles: ["Contact us", "Follow us"],
     },
   },
   tr: {
@@ -99,8 +98,8 @@ const language = {
     },
     aboutProduct: {
       title: "Öğretim programı",
-      weeks: {
-        week1: {
+      weeks: [
+        {
           label: "1. Hafta",
           topics: [
             "Harfler",
@@ -109,7 +108,7 @@ const language = {
             "Özne (S) kavramının incelenmesi (resmi ve gayri resmi kullanım)",
           ],
         },
-        week2: {
+        {
           label: "2. Hafta",
           topics: [
             "Yüklem (P) kavramının incelenmesi (fiiller ve sıfatlar)",
@@ -117,33 +116,33 @@ const language = {
             "Nesne (O) kavramının incelenmesi",
           ],
         },
-        week3: {
+        {
           label: "3. Hafta",
           topics: ["Edatlar (devam)", "Geçmiş zaman"],
         },
-        week4: {
+        {
           label: "4. Hafta",
           topics: ["Gelecek zaman", "İşaret sıfatları", "İyelik ekleri"],
         },
-        week5: {
+        {
           label: "5. Hafta",
           topics: ["Konuşma pratiği"],
         },
-        week6: {
+        {
           label: "6. Hafta",
           topics: ["Dinleme pratiği", "Bağlaçlar"],
         },
-        week7: {
+        {
           label: "7. Hafta",
           topics: ["Kısa hikayeler yazma ve sunma"],
         },
-        week8: {
+        {
           label: "8. Hafta",
           topics: [
             "Okuma, yazma, konuşma ve dinleme becerilerinin entegre gelişimi",
           ],
         },
-      },
+      ],
     },
     aboutOwner: {
       paragraphs:
@@ -154,29 +153,28 @@ const language = {
       packages: [
         {
           name: "Ana Paket",
-          duration: "Oturumlar: 8 buluşma",
-          hours: "Toplam Süre: 16 saat (her biri 2 saat)",
-          include: {
-            label: "Dahil:",
-            topic: "E‑kitap",
-          },
+          info: [
+            "Oturumlar: 8 buluşma",
+            "Toplam Süre: 16 saat (her biri 2 saat)",
+            "Dahil: E‑kitap",
+          ],
           price: "Fiyat: 2.500 TL",
+          btn: "Satın Al",
         },
         {
           name: "Esnek Paket",
-          duration: "Oturumlar: 1 buluşma",
-          hours: "Toplam Süre: 2 saat",
-          include: {
-            label: "Dahil:",
-            topic: "E‑kitap",
-          },
+          info: [
+            "Oturumlar: 1 buluşma",
+            "Toplam Süre: 2 saat",
+            "Dahil: E‑kitap",
+          ],
           price: "Fiyat: 400 TL",
           btn: "Satın Al",
         },
       ],
     },
     footer: {
-      titles: ["Takip edin", "İletişim"],
+      titles: ["İletişim", "Takip edin"],
     },
   },
 };
@@ -196,6 +194,7 @@ const pill = document.getElementById("scroll-pill");
 const track = document.getElementById("scroll-track");
 
 let fadeTimeout; // This holds our timer
+let currentlang = "en";
 
 const updatePill = () => {
   // 1. Show the track immediately when scrolling starts
@@ -221,10 +220,6 @@ const updatePill = () => {
   }, 1500); // 1500ms = 1.5 seconds
 };
 
-window.addEventListener("scroll", updatePill, { passive: true });
-
-let currentlang = "en";
-
 function setLanguage(lang) {
   currentlang = lang;
   /*header*/
@@ -238,16 +233,16 @@ function setLanguage(lang) {
   /*About-Product*/
   document.getElementById("about-Product-title").innerText =
     language[lang].aboutProduct.title;
-  Object.keys(language[lang].aboutProduct.weeks).forEach((key, i) => {
-    document.querySelectorAll("#about-Product h3")[i].innerText =
-      language[lang].aboutProduct.weeks[key].label;
 
-    document
-      .querySelectorAll("#about-Product ul")
-      [i].querySelectorAll("li")
-      .forEach((el, i) => {
-        el.innerText = language[lang].aboutProduct.weeks[key].topics[i];
-      });
+  language[lang].aboutProduct.weeks.forEach((week, i) => {
+    const weekBox = document.querySelectorAll(".about-Product-box-week")[i];
+
+    if (weekBox) {
+      weekBox.querySelector("h3").innerText = week.label;
+      weekBox.querySelector("ul").innerHTML = week.topics
+        .map((topic) => `<li>${topic}</li>`)
+        .join("");
+    }
   });
 
   /*about-owner*/
@@ -257,8 +252,23 @@ function setLanguage(lang) {
   /*pricing*/
   document.getElementById("pricing-title").innerText =
     language[lang].pricing.title;
-  document.querySelectorAll(".pricing-box-name").forEach((el, i) => {
-    el.innerText = language[lang].pricing.packages[i].name;
+
+  language[lang].pricing.packages.forEach((package, i) => {
+    const packagesName = document.querySelectorAll(".pricing-box")[i];
+    const packagesInfo = document.querySelectorAll(".pricing-box")[i + 2];
+
+    if (packagesName) {
+      packagesName.querySelector(".pricing-box-name").innerText = package.name;
+    }
+
+    if (packagesInfo) {
+      packagesInfo.querySelector("ul").innerHTML = package.info
+        .map((inf) => `<li>${inf}</li>`)
+        .join("");
+
+      packagesInfo.querySelector(".price").innerText = package.price;
+      packagesInfo.querySelector(".pricing .btn").innerText = package.btn;
+    }
   });
 
   /*footer*/
@@ -266,6 +276,8 @@ function setLanguage(lang) {
     el.innerText = language[lang].footer.titles[i];
   });
 }
+
+window.addEventListener("scroll", updatePill, { passive: true });
 
 document
   .getElementById("lang-en")

@@ -423,10 +423,14 @@ body.loading {
   grid-row: 1;
 }
 
+.pricing-box-title,
+.pricing-box {
+  display: flex;
+}
+
 .pricing-box-1,
 .pricing-box-2,
 .pricing-box-3 {
-  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -455,7 +459,6 @@ body.loading {
 .pricing-box-4,
 .pricing-box-5 {
   grid-row: 3;
-  display: flex;
   flex-direction: column;
 }
 
