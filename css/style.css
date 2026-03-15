@@ -776,6 +776,11 @@ footer {
     font-size: 1rem;
   }
 
+  a:hover,
+  .hearder-btn:hover {
+    transform: scale(1.2);
+  }
+
   /* hero section*/
   .hero {
     gap: 2rem;
@@ -825,6 +830,16 @@ footer {
    ========================================== */
 @media (max-width: 320px) {
   /* general properties (use in 2 section or more) */
+  #header-label,
+  .item {
+    font-size: 0.8rem;
+  }
+
+  .hearder-btn:hover,
+  a:hover {
+    transform: scale(1.4);
+  }
+
   #about-Product-title,
   #pricing-title {
     font-size: 1.6rem;
@@ -840,9 +855,9 @@ footer {
     font-size: 0.8rem;
   }
 
-  a:hover,
-  .hearder-btn:hover {
-    transform: scale(1.2);
+  /* header section */
+  .header-box-1 > h3 {
+    font-size: 1rem;
   }
 
   /* hero section*/
