@@ -609,6 +609,10 @@ footer {
     padding: 2rem 1rem;
   }
 
+  #scroll-track.visible {
+    opacity: 0;
+  }
+
   /* hero section*/
   #hero-title {
     font-size: 5.5rem;
