@@ -179,47 +179,6 @@ const language = {
   },
 };
 
-document.body.classList.add("loading");
-
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    document.getElementById("loader").classList.add("slide-up");
-    setTimeout(() => {
-      document.body.classList.remove("loading");
-    }, 900);
-  }, 4000);
-});
-
-const pill = document.getElementById("scroll-pill");
-const track = document.getElementById("scroll-track");
-
-let fadeTimeout; // This holds our timer
-let currentlang = "en";
-
-const updatePill = () => {
-  // 1. Show the track immediately when scrolling starts
-  track.classList.add("visible");
-
-  // 2. Clear the previous timer (so it doesn't fade while we are still moving)
-  clearTimeout(fadeTimeout);
-
-  // 3. Do the math we did before
-  const scrolled = window.scrollY;
-  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-
-  if (maxScroll > 0) {
-    const scrollPercent = scrolled / maxScroll;
-    const travelDistance = track.offsetHeight - pill.offsetHeight;
-    const finalPos = scrollPercent * travelDistance;
-    pill.style.transform = `translateY(${finalPos}px)`;
-  }
-
-  // 4. Set a new timer to hide the track after 1.5 seconds of no scrolling
-  fadeTimeout = setTimeout(() => {
-    track.classList.remove("visible");
-  }, 1500); // 1500ms = 1.5 seconds
-};
-
 function setLanguage(lang) {
   currentlang = lang;
   /*header*/
@@ -275,7 +234,77 @@ function setLanguage(lang) {
   document.querySelectorAll(".footer-title").forEach((el, i) => {
     el.innerText = language[lang].footer.titles[i];
   });
+
+  if (lang == "tr") {
+    document.getElementById("lang-tr").classList.add("lang-active");
+    document.getElementById("lang-en").classList.remove("lang-active");
+  } else {
+    document.getElementById("lang-en").classList.add("lang-active");
+    document.getElementById("lang-tr").classList.remove("lang-active");
+  }
+
+  lastSetLanguage(lang);
 }
+
+function defaultLanguage() {
+  const savedLang = localStorage.getItem("preferredLang");
+
+  if (savedLang) {
+    setLanguage(savedLang);
+  } else {
+    const browserLang = navigator.language || navigator.userLanguage;
+    const shortLang = browserLang.split("-")[0];
+    let currentlang = shortLang === "tr" ? "tr" : "en";
+
+    setLanguage(currentlang);
+  }
+}
+
+function lastSetLanguage(lang) {
+  localStorage.setItem("preferredLang", lang);
+}
+
+defaultLanguage();
+
+document.body.classList.add("loading");
+
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    document.getElementById("loader").classList.add("slide-up");
+    setTimeout(() => {
+      document.body.classList.remove("loading");
+    }, 900);
+  }, 4000);
+});
+
+const pill = document.getElementById("scroll-pill");
+const track = document.getElementById("scroll-track");
+
+let fadeTimeout; // This holds our timer
+
+const updatePill = () => {
+  // 1. Show the track immediately when scrolling starts
+  track.classList.add("visible");
+
+  // 2. Clear the previous timer (so it doesn't fade while we are still moving)
+  clearTimeout(fadeTimeout);
+
+  // 3. Do the math we did before
+  const scrolled = window.scrollY;
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+
+  if (maxScroll > 0) {
+    const scrollPercent = scrolled / maxScroll;
+    const travelDistance = track.offsetHeight - pill.offsetHeight;
+    const finalPos = scrollPercent * travelDistance;
+    pill.style.transform = `translateY(${finalPos}px)`;
+  }
+
+  // 4. Set a new timer to hide the track after 1.5 seconds of no scrolling
+  fadeTimeout = setTimeout(() => {
+    track.classList.remove("visible");
+  }, 1500); // 1500ms = 1.5 seconds
+};
 
 window.addEventListener("scroll", updatePill, { passive: true });
 
@@ -285,6 +314,16 @@ document
 document
   .getElementById("lang-tr")
   .addEventListener("click", () => setLanguage("tr"));
+
+const heroBtn = document.getElementById("hero-btn");
+const pricingSection = document.getElementById("pricing");
+
+heroBtn.addEventListener("click", () => {
+  pricingSection.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+});
 
 const scroller = document.querySelector(".scroller");
 const links = scroller.querySelectorAll("a");

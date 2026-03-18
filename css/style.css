@@ -102,25 +102,25 @@ footer {
 }
 
 a,
-.hearder-btn {
+.header-btn {
   color: black;
   transition: transform 0.2s;
   display: inline-block;
 }
 
 a:hover,
-.hearder-btn:hover {
+.header-btn:hover {
   color: #ff4646;
   transform: scale(1.4);
 }
 
 a:hover,
-.hearder-btn:hover {
+.header-btn:hover {
   transition: transform 0.2s;
 }
 
 a:active,
-.hearder-btn:active {
+.header-btn:active {
   transform: scale(1);
 }
 
@@ -199,7 +199,7 @@ body.loading {
 }
 
 .fade-delay > h2 {
-  padding: 0 4%;
+  padding: 0 8%;
 }
 
 @keyframes fadeInOut {
@@ -225,7 +225,8 @@ body.loading {
   border-bottom: 2px solid black;
 }
 
-.header > div {
+.header-box-1,
+.header-box-2 {
   flex: 1;
 }
 
@@ -239,34 +240,45 @@ body.loading {
 
 .header-box-2 {
   height: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
-.header-box-2,
-.header-button-box {
+.header-box-label {
+  flex: 1;
   display: flex;
+  align-items: start;
   justify-content: end;
-  align-items: center;
-  gap: 0.8rem;
+  text-align: end;
 }
 
-.header-button-box {
-  align-items: center;
-  gap: 0.6rem;
-  padding-right: 8px;
+.header-box-button {
+  width: 68px;
   height: 100%;
-}
-
-.header-button-box > div {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  border-left: 2px solid black;
-  height: 100%;
 }
 
-.hearder-btn {
-  border: none;
+.header-box-button > div {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: ens;
+  border-left: 2px solid black;
+}
+
+.header-btn {
+  border: 0;
+  padding: 0;
   background-color: transparent;
+}
+
+.lang-active {
+  color: #ff4646;
 }
 
 /* hero section*/
@@ -761,6 +773,13 @@ footer {
    ========================================== */
 @media (max-width: 480px) {
   /* general properties (use in 2 section or more) */
+  #header-label,
+  .item,
+  .about-Product-box-week-item ul,
+  .pricing-box-item ul {
+    font-size: 0.9rem;
+  }
+
   #about-Product-title,
   #pricing-title {
     font-size: 1.8rem;
@@ -769,16 +788,6 @@ footer {
   .about-Product-box-week-title > h3,
   .pricing-box-name {
     font-size: 1.2rem;
-  }
-
-  .about-Product-box-week-item ul,
-  .pricing-box-item ul {
-    font-size: 1rem;
-  }
-
-  a:hover,
-  .hearder-btn:hover {
-    transform: scale(1.2);
   }
 
   /* hero section*/
@@ -831,13 +840,10 @@ footer {
 @media (max-width: 320px) {
   /* general properties (use in 2 section or more) */
   #header-label,
-  .item {
+  .item,
+  .about-Product-box-week-item ul,
+  .pricing-box-item ul {
     font-size: 0.8rem;
-  }
-
-  .hearder-btn:hover,
-  a:hover {
-    transform: scale(1.4);
   }
 
   #about-Product-title,
@@ -850,9 +856,9 @@ footer {
     font-size: 1.2rem;
   }
 
-  .about-Product-box-week-item ul,
-  .pricing-box-item ul {
-    font-size: 0.8rem;
+  /* Loader-page section */
+  .fade-text {
+    font-size: 1.6rem;
   }
 
   /* header section */
