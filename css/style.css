@@ -231,7 +231,7 @@ body.loading {
 }
 
 .header-box-1 {
-  padding-left: 8px;
+  padding-left: 6px;
 }
 
 .header-box-1 > h3 {
@@ -247,10 +247,12 @@ body.loading {
 
 .header-box-label {
   flex: 1;
+  height: 100%;
+  width: 100%;
   display: flex;
-  align-items: start;
+  align-items: center;
   justify-content: end;
-  text-align: end;
+  padding-top: 2px;
 }
 
 .header-box-button {
@@ -259,16 +261,16 @@ body.loading {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
 }
 
 .header-box-button > div {
-  display: flex;
   height: 100%;
   width: 100%;
+  display: flex;
   justify-content: center;
-  align-items: ens;
+  align-items: center;
   border-left: 2px solid black;
+  padding-top: 2px;
 }
 
 .header-btn {
@@ -294,7 +296,7 @@ body.loading {
   font-size: 6.8rem;
 }
 
-/* about product section */
+/* about-product section */
 .about-Product {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -390,7 +392,7 @@ body.loading {
   width: auto;
 }
 
-/* about owner section */
+/* about-owner section */
 .about-owner {
   display: flex;
   justify-content: center;

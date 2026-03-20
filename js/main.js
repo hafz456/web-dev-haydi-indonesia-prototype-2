@@ -1,5 +1,9 @@
 const language = {
   en: {
+    loarderPage: {
+      heading: "Welcome",
+      subheading: "Learn Indonesian with our language course",
+    },
     header: {
       label: "language",
     },
@@ -89,6 +93,10 @@ const language = {
     },
   },
   tr: {
+    loarderPage: {
+      heading: "Hoş Geldiniz",
+      subheading: "Dil kursumuzla Endonezce öğrenin",
+    },
     header: {
       label: "dil seçimi",
     },
@@ -181,15 +189,21 @@ const language = {
 
 function setLanguage(lang) {
   currentlang = lang;
-  /*header*/
+  /* Loader-page section */
+  document.querySelector(".fade-text h1").innerHTML =
+    language[lang].loarderPage.heading;
+  document.querySelector(".fade-text h2").innerHTML =
+    language[lang].loarderPage.subheading;
+
+  /* header section */
   document.getElementById("header-label").innerText =
     language[lang].header.label;
 
-  /*hero*/
+  /* hero section */
   document.getElementById("hero-title").innerHTML = language[lang].hero.title;
   document.getElementById("hero-btn").innerText = language[lang].hero.btn;
 
-  /*About-Product*/
+  /* About-Product section */
   document.getElementById("about-Product-title").innerText =
     language[lang].aboutProduct.title;
 
@@ -204,11 +218,11 @@ function setLanguage(lang) {
     }
   });
 
-  /*about-owner*/
+  /* about-owner section */
   document.getElementById("about-owner-paragraph").innerHTML =
     language[lang].aboutOwner.paragraphs;
 
-  /*pricing*/
+  /* pricing section */
   document.getElementById("pricing-title").innerText =
     language[lang].pricing.title;
 
@@ -230,7 +244,7 @@ function setLanguage(lang) {
     }
   });
 
-  /*footer*/
+  /* footer section */
   document.querySelectorAll(".footer-title").forEach((el, i) => {
     el.innerText = language[lang].footer.titles[i];
   });
@@ -262,6 +276,42 @@ function defaultLanguage() {
 
 function lastSetLanguage(lang) {
   localStorage.setItem("preferredLang", lang);
+}
+
+function slowScrollTo(targetId, duration) {
+  const target = document.querySelector(targetId);
+  const targetPosition =
+    target.getBoundingClientRect().top + window.pageYOffset;
+  const startPosition = window.pageYOffset;
+  const distance = targetPosition - startPosition;
+  let startTime = null;
+
+  function animation(currentTime) {
+    if (startTime == null) {
+      startTime = currentTime;
+    }
+
+    const timeElapsed = currentTime - startTime;
+
+    const run = ease(timeElapsed, startPosition, distance, duration);
+    window.scrollTo(0, run);
+
+    if (timeElapsed < duration) {
+      requestAnimationFrame(animation);
+    }
+  }
+
+  function ease(t, b, c, d) {
+    t /= d / 2;
+    if (t < 1) {
+      return (c / 2) * t * t + b;
+    }
+
+    t--;
+    return (-c / 2) * (t * (t - 2) - 1) + b;
+  }
+
+  requestAnimationFrame(animation);
 }
 
 defaultLanguage();
