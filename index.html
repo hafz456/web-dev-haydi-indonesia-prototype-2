@@ -194,7 +194,7 @@
           </div>
           <div class="pricing-box-price">
             <h3 class="price">Price: 2,500 TL</h3>
-            <button class="btn">Buy Now</button>
+            <button id="main-package-btn" class="btn">Buy Now</button>
           </div>
         </div>
         <div class="pricing-box pricing-box-5">
@@ -207,7 +207,48 @@
           </div>
           <div class="pricing-box-price">
             <h3 class="price">Price: 400 TL</h3>
-            <button class="btn">Buy Now</button>
+            <button id="flexible-package-btn" class="btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="billing-form">
+      <div id="modal" class="modal">
+        <div class="modal-form">
+          <div class="modal-form-header">
+            <span class="close-btn">&times;</span>
+          </div>
+          <div class="modal-form-body">
+            <form action="">
+              <div class="modal-form-body-first">
+                <label for="firstName">First Name:</label><br />
+                <input type="text" required /><br />
+                <label for="lastName">Last Name:</label><br />
+                <input type="text" required /><br />
+                <label for="email">E-mail:</label><br />
+                <input type="text" required /><br />
+              </div>
+              <div class="modal-form-body-first">
+                <label for="">
+                  <input
+                    type="radio"
+                    name="payment-method"
+                    required
+                  />Havale/EFT
+                </label>
+                <br />
+                <label for=""
+                  ><input
+                    type="radio"
+                    name="payment-method"
+                    required
+                  />Debit/Credit card</label
+                >
+              </div>
+            </form>
+          </div>
+          <div class="modal-form-footer">
+            <button class="btn">Confirm</button>
           </div>
         </div>
       </div>

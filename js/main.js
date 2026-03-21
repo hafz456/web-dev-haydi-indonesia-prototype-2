@@ -330,16 +330,13 @@ window.addEventListener("load", () => {
 const pill = document.getElementById("scroll-pill");
 const track = document.getElementById("scroll-track");
 
-let fadeTimeout; // This holds our timer
+let fadeTimeout;
 
 const updatePill = () => {
-  // 1. Show the track immediately when scrolling starts
   track.classList.add("visible");
 
-  // 2. Clear the previous timer (so it doesn't fade while we are still moving)
   clearTimeout(fadeTimeout);
 
-  // 3. Do the math we did before
   const scrolled = window.scrollY;
   const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
 
@@ -350,10 +347,9 @@ const updatePill = () => {
     pill.style.transform = `translateY(${finalPos}px)`;
   }
 
-  // 4. Set a new timer to hide the track after 1.5 seconds of no scrolling
   fadeTimeout = setTimeout(() => {
     track.classList.remove("visible");
-  }, 1500); // 1500ms = 1.5 seconds
+  }, 1500);
 };
 
 window.addEventListener("scroll", updatePill, { passive: true });
@@ -366,14 +362,33 @@ document
   .addEventListener("click", () => setLanguage("tr"));
 
 const heroBtn = document.getElementById("hero-btn");
-const pricingSection = document.getElementById("pricing");
 
 heroBtn.addEventListener("click", () => {
-  pricingSection.scrollIntoView({
-    behavior: "smooth",
-    block: "start",
-  });
+  slowScrollTo("#pricing", 2000);
 });
+
+var modal = document.getElementById("modal");
+var btn1 = document.getElementById("main-package-btn");
+var btn2 = document.getElementById("flexible-package-btn");
+var closeBtn = document.querySelector(".close-btn");
+
+btn1.onclick = function () {
+  modal.style.display = "block";
+};
+
+btn2.onclick = function () {
+  modal.style.display = "block";
+};
+
+closeBtn.onclick = function () {
+  modal.style.display = "none";
+};
+
+window.onclick = function () {
+  if (this.event.target == modal) {
+    modal.style.display = "none";
+  }
+};
 
 const scroller = document.querySelector(".scroller");
 const links = scroller.querySelectorAll("a");

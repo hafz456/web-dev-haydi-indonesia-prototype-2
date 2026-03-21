@@ -37,11 +37,16 @@ footer {
   height: 42px;
   width: 100%;
   position: fixed;
-  z-index: 10;
+  z-index: 100;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: white;
+}
+
+.header-box-label,
+.header-box-button > div {
+  padding-top: 2px;
 }
 
 .hero,
@@ -252,7 +257,6 @@ body.loading {
   display: flex;
   align-items: center;
   justify-content: end;
-  padding-top: 2px;
 }
 
 .header-box-button {
@@ -270,7 +274,6 @@ body.loading {
   justify-content: center;
   align-items: center;
   border-left: 2px solid black;
-  padding-top: 2px;
 }
 
 .header-btn {
@@ -501,6 +504,72 @@ body.loading {
   font-size: 1.6rem;
 }
 
+/* billing form section */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s;
+}
+
+.modal-form {
+  position: relative;
+  top: 100px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  margin: 15% auto;
+  padding: 20px;
+  border: 2px solid black;
+  width: 80%;
+  animation: animatetop;
+  animation-duration: 0.6s;
+  gap: 1rem;
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+  }
+  to {
+    top: 100px;
+  }
+}
+
+.close-btn {
+  color: black;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: #ff4646;
+  transform: scale(1.4);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-form-body-first {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  text-align: start;
+}
+
+.modal-form-body-first > input {
+  width: 100%;
+}
+
 /* footer section */
 footer {
   bottom: 0;
@@ -597,7 +666,6 @@ footer {
    TABLET (Under 1024px)
    ========================================== */
 @media (max-width: 1024px) {
-  /* general properties (use in 2 sections or more) */
   li,
   ul {
     text-align: start;
@@ -621,10 +689,6 @@ footer {
   .about-Product-box-week,
   .pricing-box-item {
     padding: 2rem 1rem;
-  }
-
-  #scroll-track.visible {
-    opacity: 0;
   }
 
   /* hero section*/
@@ -841,6 +905,11 @@ footer {
    ========================================== */
 @media (max-width: 320px) {
   /* general properties (use in 2 section or more) */
+  .header-box-label,
+  .header-box-button > div {
+    padding-top: 1px;
+  }
+
   #header-label,
   .item,
   .about-Product-box-week-item ul,
