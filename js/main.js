@@ -364,7 +364,15 @@ document
 const heroBtn = document.getElementById("hero-btn");
 
 heroBtn.addEventListener("click", () => {
-  slowScrollTo("#pricing", 2000);
+  const screenWidth = window.innerWidth;
+  const targetId = "#pricing";
+  const targetElement = document.querySelector(targetId);
+
+  if (screenWidth < 1024) {
+    targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+  } else {
+    slowScrollTo(targetId, 2000);
+  }
 });
 
 var modal = document.getElementById("modal");
@@ -372,23 +380,23 @@ var btn1 = document.getElementById("main-package-btn");
 var btn2 = document.getElementById("flexible-package-btn");
 var closeBtn = document.querySelector(".close-btn");
 
-btn1.onclick = function () {
+btn1.addEventListener("click", () => {
   modal.style.display = "block";
-};
+});
 
-btn2.onclick = function () {
+btn2.addEventListener("click", () => {
   modal.style.display = "block";
-};
+});
 
-closeBtn.onclick = function () {
+closeBtn.addEventListener("click", () => {
   modal.style.display = "none";
-};
+});
 
-window.onclick = function () {
+window.addEventListener("click", () => {
   if (this.event.target == modal) {
     modal.style.display = "none";
   }
-};
+});
 
 const scroller = document.querySelector(".scroller");
 const links = scroller.querySelectorAll("a");
