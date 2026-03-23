@@ -381,20 +381,24 @@ var btn2 = document.getElementById("flexible-package-btn");
 var closeBtn = document.querySelector(".close-btn");
 
 btn1.addEventListener("click", () => {
-  modal.style.display = "block";
+  modal.classList.add("open");
+  document.body.classList.add("loading");
 });
 
 btn2.addEventListener("click", () => {
-  modal.style.display = "block";
+  modal.classList.add("open");
+  document.body.classList.add("loading");
 });
 
 closeBtn.addEventListener("click", () => {
-  modal.style.display = "none";
+  modal.classList.remove("open");
+  document.body.classList.remove("loading");
 });
 
-window.addEventListener("click", () => {
-  if (this.event.target == modal) {
-    modal.style.display = "none";
+window.addEventListener("click", (e) => {
+  if (e.target == modal) {
+    modal.classList.remove("open");
+    document.body.classList.remove("loading");
   }
 });
 
