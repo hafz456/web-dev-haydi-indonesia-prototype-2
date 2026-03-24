@@ -314,15 +314,25 @@ function slowScrollTo(targetId, duration) {
   requestAnimationFrame(animation);
 }
 
+function openModal(modal) {
+  modal.classList.add("open");
+  document.body.classList.add("lockScroll");
+}
+
+function closeModal(modal) {
+  modal.classList.remove("open");
+  document.body.classList.remove("lockScroll");
+}
+
 defaultLanguage();
 
-document.body.classList.add("loading");
+document.body.classList.add("lockScroll");
 
 window.addEventListener("load", () => {
   setTimeout(() => {
     document.getElementById("loader").classList.add("slide-up");
     setTimeout(() => {
-      document.body.classList.remove("loading");
+      document.body.classList.remove("lockScroll");
     }, 900);
   }, 4000);
 });
@@ -371,34 +381,30 @@ heroBtn.addEventListener("click", () => {
   if (screenWidth < 1024) {
     targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
   } else {
-    slowScrollTo(targetId, 2000);
+    slowScrollTo(targetId, 1600);
   }
 });
 
-var modal = document.getElementById("modal");
-var btn1 = document.getElementById("main-package-btn");
-var btn2 = document.getElementById("flexible-package-btn");
-var closeBtn = document.querySelector(".close-btn");
+const modal = document.getElementById("modal");
+const btn1 = document.getElementById("main-package-btn");
+const btn2 = document.getElementById("flexible-package-btn");
+const closeBtn = document.getElementById("checkout-close-btn");
 
 btn1.addEventListener("click", () => {
-  modal.classList.add("open");
-  document.body.classList.add("loading");
+  openModal(modal);
 });
 
 btn2.addEventListener("click", () => {
-  modal.classList.add("open");
-  document.body.classList.add("loading");
+  openModal(modal);
 });
 
 closeBtn.addEventListener("click", () => {
-  modal.classList.remove("open");
-  document.body.classList.remove("loading");
+  closeModal(modal);
 });
 
 window.addEventListener("click", (e) => {
   if (e.target == modal) {
-    modal.classList.remove("open");
-    document.body.classList.remove("loading");
+    closeModal(modal);
   }
 });
 

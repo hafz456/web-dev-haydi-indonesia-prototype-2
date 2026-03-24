@@ -214,73 +214,81 @@
     </section>
     <section id="billing-form">
       <div id="modal" class="modal">
-        <div class="modal-form">
-          <div class="modal-form-header">
-            <span class="close-btn">&times;</span>
-            <h1>Payment Method</h1>
+        <div class="checkout">
+          <div class="checkout-title">
+            <span id="checkout-close-btn">&times;</span>
+            <h1>Checkout</h1>
           </div>
-          <div class="modal-form-body">
+          <div class="checkout-content">
             <form action="">
-              <div class="modal-form-body-input-text">
-                <div class="modal-form-input">
-                  <input
-                    type="text"
-                    name="firstName"
-                    id="firstName"
-                    placeholder=""
-                    autocomplete="off"
-                  /><br />
-                  <label class="modal-form-input-label" for="firstName"
-                    >First Name</label
-                  ><br />
+              <div class="checkout-content-container">
+                <div class="checkout-content-input-text">
+                  <div class="checkout-content-input-text-container">
+                    <input
+                      type="text"
+                      name="firstName"
+                      id="firstName"
+                      placeholder=""
+                      autocomplete="off"
+                      required
+                    /><br />
+                    <label
+                      class="checkout-content-input-text-label"
+                      for="firstName"
+                      >First Name</label
+                    ><br />
+                  </div>
+                  <div class="checkout-content-input-text-container">
+                    <input
+                      type="text"
+                      name="lastName"
+                      id="lastName"
+                      placeholder=""
+                      autocomplete="off"
+                      required
+                    /><br />
+                    <label
+                      class="checkout-content-input-text-label"
+                      for="lastName"
+                      >Last Name</label
+                    ><br />
+                  </div>
+                  <div class="checkout-content-input-text-container">
+                    <input
+                      type="email"
+                      name="email"
+                      id="email"
+                      placeholder=""
+                      autocomplete="off"
+                      required
+                    /><br />
+                    <label class="checkout-content-input-text-label" for="email"
+                      >E-mail</label
+                    ><br />
+                  </div>
                 </div>
-                <div class="modal-form-input">
-                  <input
-                    type="text"
-                    name="lastName"
-                    id="lastName"
-                    placeholder=""
-                    autocomplete="off"
-                    required
-                  /><br />
-                  <label class="modal-form-input-label" for="lastName"
-                    >Last Name</label
-                  ><br />
+                <div class="checkout-content-input-option">
+                  <div class="modal-form-body-input-option-title">
+                    <h4>Payment Method</h4>
+                  </div>
+                  <label class="payment-method payment-havale-eft">
+                    <input
+                      type="radio"
+                      name="payment-method"
+                      required
+                    />Havale/EFT
+                  </label>
+                  <label class="payment-method payment-method-debit-credit">
+                    <input
+                      type="radio"
+                      name="payment-method"
+                      required
+                    />Debit/Credit card</label
+                  >
                 </div>
-                <div class="modal-form-input">
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder=""
-                    autocomplete="off"
-                    required
-                  /><br />
-                  <label class="modal-form-input-label" for="email"
-                    >E-mail</label
-                  ><br />
-                </div>
-              </div>
-              <div class="modal-form-body-input-option">
-                <label class="payment-method payment-havale-eft" for="">
-                  <input
-                    type="radio"
-                    name="payment-method"
-                    required
-                  />Havale/EFT
-                </label>
-                <label class="payment-method payment-method-debit-credit" for=""
-                  ><input
-                    type="radio"
-                    name="payment-method"
-                    required
-                  />Debit/Credit card</label
-                >
+                <div><button type="submit" class="btn">Confirm</button></div>
               </div>
             </form>
-          </div>
-          <div class="modal-form-footer">
-            <button class="btn">Confirm</button>
           </div>
         </div>
       </div>
