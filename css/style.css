@@ -527,17 +527,26 @@ body.lockScroll {
   opacity: 1;
 }
 
-.checkout {
+.modal-form {
   position: relative;
   width: 500px;
-  height: 600px;
+  min-height: 600px;
+  height: auto;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
   background-color: white;
   border: 2px solid black;
   padding: 20px;
+}
+
+.checkout {
+  gap: 2rem;
   transform: translateY(-800px);
+  transition: all 0.3s ease-in-out;
+}
+
+.checkout.close {
+  opacity: 0;
 }
 
 .modal.open .checkout {
@@ -635,13 +644,13 @@ input[type="email"]:hover {
   gap: 0.4rem;
 }
 
-.modal-form-body-input-option-title {
+.checkout-content-input-option-title {
   display: flex;
   text-align: start;
   padding-bottom: 6px;
 }
 
-.payment-method {
+.checkout-content-input-option-payment-method {
   flex: 1;
   cursor: pointer;
   transition: 0.2s;
@@ -652,24 +661,28 @@ input[type="email"]:hover {
   cursor: pointer;
 }
 
-.payment-method:has(input:checked) {
+.checkout-content-input-option-payment-method:has(input:checked) {
   background-color: rgba(255, 70, 70, 0.2);
   border: 2px solid #ff4646;
 }
 
-.payment-method:hover {
+.checkout-content-input-option-payment-method:hover {
   color: #ff4646;
   background-color: rgba(255, 70, 70, 0.5);
   transition: 0.2s;
   border: 2px solid #ff4646;
 }
 
-.payment-method input[type="radio"] {
+.checkout-content-input-option-payment-method input[type="radio"] {
   pointer-events: none;
 }
 
 input[type="radio"] {
   accent-color: #ff4646;
+}
+
+.checkout-content-total {
+  text-align: start;
 }
 
 /* footer section */

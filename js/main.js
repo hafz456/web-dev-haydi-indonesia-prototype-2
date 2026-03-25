@@ -389,6 +389,7 @@ const modal = document.getElementById("modal");
 const btn1 = document.getElementById("main-package-btn");
 const btn2 = document.getElementById("flexible-package-btn");
 const closeBtn = document.getElementById("checkout-close-btn");
+const checkoutForm = document.querySelector(".checkout-content form");
 
 btn1.addEventListener("click", () => {
   openModal(modal);
@@ -400,6 +401,7 @@ btn2.addEventListener("click", () => {
 
 closeBtn.addEventListener("click", () => {
   closeModal(modal);
+  checkoutForm.reset();
 });
 
 window.addEventListener("click", (e) => {

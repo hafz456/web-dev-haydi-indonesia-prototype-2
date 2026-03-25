@@ -214,7 +214,7 @@
     </section>
     <section id="billing-form">
       <div id="modal" class="modal">
-        <div class="checkout">
+        <div class="checkout modal-form">
           <div class="checkout-title">
             <span id="checkout-close-btn">&times;</span>
             <h1>Checkout</h1>
@@ -268,17 +268,17 @@
                   </div>
                 </div>
                 <div class="checkout-content-input-option">
-                  <div class="modal-form-body-input-option-title">
+                  <div class="checkout-content-input-option-title">
                     <h4>Payment Method</h4>
                   </div>
-                  <label class="payment-method payment-havale-eft">
+                  <label class="checkout-content-input-option-payment-method">
                     <input
                       type="radio"
                       name="payment-method"
                       required
                     />Havale/EFT
                   </label>
-                  <label class="payment-method payment-method-debit-credit">
+                  <label class="checkout-content-input-option-payment-method">
                     <input
                       type="radio"
                       name="payment-method"
@@ -286,11 +286,20 @@
                     />Debit/Credit card</label
                   >
                 </div>
-                <div><button type="submit" class="btn">Confirm</button></div>
+                <div class="checkout-content-total">
+                  <h4>Total: 2500 tl</h4>
+                </div>
+                <div>
+                  <button type="submit" class="btn" id="checkout-btn">
+                    Confirm
+                  </button>
+                </div>
               </div>
             </form>
           </div>
         </div>
+        <div class=""></div>
+        <div class=""></div>
       </div>
     </section>
     <section id="footer">
