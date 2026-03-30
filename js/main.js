@@ -315,13 +315,51 @@ function slowScrollTo(targetId, duration) {
 }
 
 function openModal(modal) {
-  modal.classList.add("open");
+  modal.classList.add("open-modal");
   document.body.classList.add("lockScroll");
 }
 
+function openModalContent(modalContent) {
+  modalContent.classList.add("open-modal-content");
+}
+
 function closeModal(modal) {
-  modal.classList.remove("open");
+  modal.classList.remove("open-modal");
   document.body.classList.remove("lockScroll");
+}
+
+function closeModalContent(modalContent) {
+  modalContent.classList.remove("open-modal-content");
+  modalContent.classList.add("close-modal-content");
+  setTimeout(() => {
+    modalContent.classList.remove("close-modal-content");
+  }, 600);
+}
+
+function windowCloseMocalContent(
+  checkoutModal,
+  havaleEftModal,
+  debitCardOrCreditCardModal,
+) {
+  if (checkoutModal.classList.contains("open-modal-content")) {
+    checkoutModal.classList.remove("open-modal-content");
+    checkoutModal.classList.add("close-modal-content");
+    setTimeout(() => {
+      checkoutModal.classList.remove("close-modal-content");
+    }, 600);
+  } else if (havaleEftModal.classList.contains("open-modal-content")) {
+    havaleEftModal.classList.remove("open-modal-content");
+    havaleEftModal.classList.add("close-modal-content");
+    setTimeout(() => {
+      havaleEftModal.classList.remove("close-modal-content");
+    }, 600);
+  } else {
+    debitCardOrCreditCardModal.classList.remove("open-modal-content");
+    debitCardOrCreditCardModal.classList.add("close-modal-content");
+    setTimeout(() => {
+      debitCardOrCreditCardModal.classList.remove("close-modal-content");
+    }, 600);
+  }
 }
 
 defaultLanguage();
@@ -389,24 +427,45 @@ const modal = document.getElementById("modal");
 const btn1 = document.getElementById("main-package-btn");
 const btn2 = document.getElementById("flexible-package-btn");
 const closeBtn = document.getElementById("checkout-close-btn");
-const checkoutForm = document.querySelector(".checkout-content form");
+const checkout = document.querySelector(".checkout");
+const checkoutForm = document.getElementById("checkout-content");
+const checkoutTotal = document.getElementById("checkout-price");
+const checkoutBtn = document.getElementById("checkout-btn");
+
+var checkoutPrice = 0;
+var checkoutCurrency = "TL";
 
 btn1.addEventListener("click", () => {
+  checkoutPrice = 2500;
+  checkoutTotal.innerText = checkoutPrice + " " + checkoutCurrency;
   openModal(modal);
+  openModalContent(checkout);
 });
 
 btn2.addEventListener("click", () => {
+  checkoutPrice = 400;
+  checkoutTotal.innerText = checkoutPrice + " " + checkoutCurrency;
   openModal(modal);
+  openModalContent(checkout);
 });
 
 closeBtn.addEventListener("click", () => {
-  closeModal(modal);
+  closeModalContent(checkout);
+  setTimeout(() => {
+    closeModal(modal);
+  }, 380);
   checkoutForm.reset();
+  checkoutPrice = 0;
+  checkoutTotal.innerText = "0 " + checkoutCurrency;
 });
 
 window.addEventListener("click", (e) => {
   if (e.target == modal) {
-    closeModal(modal);
+    closeModalContent(checkout);
+    setTimeout(() => {
+      closeModal(modal);
+    }, 380);
+    checkoutTotal.innerText = "0 " + checkoutCurrency;
   }
 });
 

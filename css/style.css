@@ -522,35 +522,42 @@ body.lockScroll {
   transition: all 0.3s ease-in-out;
 }
 
-.modal.open {
+.modal.open-modal {
   z-index: 10;
   opacity: 1;
 }
 
-.modal-form {
+.modal-box {
   position: relative;
+  display: none;
   width: 500px;
   min-height: 600px;
   height: auto;
-  display: flex;
-  flex-direction: column;
   background-color: white;
   border: 2px solid black;
   padding: 20px;
+  opacity: 0;
+  z-index: -1;
+  transition: all 0.3s ease-in-out;
+  transform: translateY(-800px);
 }
 
 .checkout {
   gap: 2rem;
-  transform: translateY(-800px);
-  transition: all 0.3s ease-in-out;
+  flex-direction: column;
 }
 
-.checkout.close {
-  opacity: 0;
-}
-
-.modal.open .checkout {
+.open-modal-content {
+  display: flex;
+  opacity: 1;
+  z-index: 10;
   animation: modalFormSlideDown 0.6s ease-out forwards;
+}
+
+.close-modal-content {
+  display: flex;
+  opacity: 1;
+  animation: modalFormSlideUp 0.6s ease-out forwards;
 }
 
 @keyframes modalFormSlideDown {
@@ -559,6 +566,15 @@ body.lockScroll {
   }
   to {
     transform: translateY(0);
+  }
+}
+
+@keyframes modalFormSlideUp {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-800px);
   }
 }
 
@@ -682,7 +698,30 @@ input[type="radio"] {
 }
 
 .checkout-content-total {
+  display: flex;
+  flex-direction: row;
+}
+
+.checkout-content-total-label,
+.checkout-content-total-price {
+  flex: 1;
+}
+
+.checkout-content-total-label {
   text-align: start;
+}
+
+.checkout-content-total-price {
+  text-align: end;
+}
+
+.havale-eft-payment {
+  gap: 2;
+}
+
+.debit-creit-card-payment-method {
+  opacity: 0;
+  z-index: -1;
 }
 
 /* footer section */
