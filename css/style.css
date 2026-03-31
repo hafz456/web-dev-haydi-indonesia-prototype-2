@@ -527,22 +527,24 @@ body.lockScroll {
   opacity: 1;
 }
 
-.modal-box {
+.modal-content-box {
   position: relative;
   display: none;
-  width: 500px;
-  min-height: 600px;
   height: auto;
   background-color: white;
   border: 2px solid black;
-  padding: 20px;
   opacity: 0;
   z-index: -1;
   transition: all 0.3s ease-in-out;
   transform: translateY(-800px);
 }
 
-.checkout {
+.checkout,
+.havale-eft-payment-method,
+.debit-creit-card-payment-method {
+  width: 500px;
+  min-height: 600px;
+  padding: 20px;
   gap: 2rem;
   flex-direction: column;
 }
@@ -713,15 +715,6 @@ input[type="radio"] {
 
 .checkout-content-total-price {
   text-align: end;
-}
-
-.havale-eft-payment {
-  gap: 2;
-}
-
-.debit-creit-card-payment-method {
-  opacity: 0;
-  z-index: -1;
 }
 
 /* footer section */

@@ -214,92 +214,95 @@
     </section>
     <section id="billing-form">
       <div id="modal" class="modal">
-        <div class="checkout modal-form">
+        <div class="checkout modal-content-box">
           <div class="checkout-title">
             <span id="checkout-close-btn">&times;</span>
             <h1>Checkout</h1>
           </div>
-          <div class="checkout-content">
-            <form action="">
-              <div class="checkout-content-container">
-                <div class="checkout-content-input-text">
-                  <div class="checkout-content-input-text-container">
-                    <input
-                      type="text"
-                      name="firstName"
-                      id="firstName"
-                      placeholder=""
-                      autocomplete="off"
-                      required
-                    /><br />
-                    <label
-                      class="checkout-content-input-text-label"
-                      for="firstName"
-                      >First Name</label
-                    ><br />
-                  </div>
-                  <div class="checkout-content-input-text-container">
-                    <input
-                      type="text"
-                      name="lastName"
-                      id="lastName"
-                      placeholder=""
-                      autocomplete="off"
-                      required
-                    /><br />
-                    <label
-                      class="checkout-content-input-text-label"
-                      for="lastName"
-                      >Last Name</label
-                    ><br />
-                  </div>
-                  <div class="checkout-content-input-text-container">
-                    <input
-                      type="email"
-                      name="email"
-                      id="email"
-                      placeholder=""
-                      autocomplete="off"
-                      required
-                    /><br />
-                    <label class="checkout-content-input-text-label" for="email"
-                      >E-mail</label
-                    ><br />
-                  </div>
+          <form action="" id="checkout-content">
+            <div class="checkout-content-container">
+              <div class="checkout-content-input-text">
+                <div class="checkout-content-input-text-container">
+                  <input
+                    type="text"
+                    name="firstName"
+                    id="firstName"
+                    placeholder=""
+                    autocomplete="off"
+                    required
+                  /><br />
+                  <label
+                    class="checkout-content-input-text-label"
+                    for="firstName"
+                    >First Name</label
+                  ><br />
                 </div>
-                <div class="checkout-content-input-option">
-                  <div class="checkout-content-input-option-title">
-                    <h4>Payment Method</h4>
-                  </div>
-                  <label class="checkout-content-input-option-payment-method">
-                    <input
-                      type="radio"
-                      name="payment-method"
-                      required
-                    />Havale/EFT
-                  </label>
-                  <label class="checkout-content-input-option-payment-method">
-                    <input
-                      type="radio"
-                      name="payment-method"
-                      required
-                    />Debit/Credit card</label
-                  >
+                <div class="checkout-content-input-text-container">
+                  <input
+                    type="text"
+                    name="lastName"
+                    id="lastName"
+                    placeholder=""
+                    autocomplete="off"
+                    required
+                  /><br />
+                  <label
+                    class="checkout-content-input-text-label"
+                    for="lastName"
+                    >Last Name</label
+                  ><br />
                 </div>
-                <div class="checkout-content-total">
-                  <h4>Total: 2500 tl</h4>
-                </div>
-                <div>
-                  <button type="submit" class="btn" id="checkout-btn">
-                    Confirm
-                  </button>
+                <div class="checkout-content-input-text-container">
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder=""
+                    autocomplete="off"
+                    required
+                  /><br />
+                  <label class="checkout-content-input-text-label" for="email"
+                    >E-mail</label
+                  ><br />
                 </div>
               </div>
-            </form>
-          </div>
+              <div class="checkout-content-input-option">
+                <div class="checkout-content-input-option-title">
+                  <h4>Payment Method</h4>
+                </div>
+                <label class="checkout-content-input-option-payment-method">
+                  <input
+                    type="radio"
+                    name="payment-method"
+                    required
+                  />Havale/EFT
+                </label>
+                <label class="checkout-content-input-option-payment-method">
+                  <input
+                    type="radio"
+                    name="payment-method"
+                    required
+                  />Debit/Credit card</label
+                >
+              </div>
+              <div class="checkout-content-total">
+                <div class="checkout-content-total-label">
+                  <h4>Total:</h4>
+                </div>
+                <div class="checkout-content-total-price">
+                  <h3 id="checkout-price">0 tl</h3>
+                </div>
+              </div>
+              <div>
+                <button type="submit" class="btn" id="checkout-btn">
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-        <div class=""></div>
-        <div class=""></div>
+        <div class="havale-eft-payment-method modal-content-box"></div>
+        <div class="debit-creit-card-payment-method modal-content-box"></div>
       </div>
     </section>
     <section id="footer">

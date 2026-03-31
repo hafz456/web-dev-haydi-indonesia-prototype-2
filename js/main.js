@@ -314,50 +314,35 @@ function slowScrollTo(targetId, duration) {
   requestAnimationFrame(animation);
 }
 
-function openModal(modal) {
+function openModal() {
+  const modal = document.getElementById("modal");
   modal.classList.add("open-modal");
   document.body.classList.add("lockScroll");
 }
 
 function openModalContent(modalContent) {
-  modalContent.classList.add("open-modal-content");
+  document.querySelector(modalContent).classList.add("open-modal-content");
 }
 
-function closeModal(modal) {
-  modal.classList.remove("open-modal");
-  document.body.classList.remove("lockScroll");
-}
-
-function closeModalContent(modalContent) {
-  modalContent.classList.remove("open-modal-content");
-  modalContent.classList.add("close-modal-content");
+function closeModal() {
+  const modal = document.getElementById("modal");
+  closeModalContent();
   setTimeout(() => {
-    modalContent.classList.remove("close-modal-content");
-  }, 600);
+    modal.classList.remove("open-modal");
+    document.body.classList.remove("lockScroll");
+  }, 368);
 }
 
-function windowCloseMocalContent(
-  checkoutModal,
-  havaleEftModal,
-  debitCardOrCreditCardModal,
-) {
-  if (checkoutModal.classList.contains("open-modal-content")) {
-    checkoutModal.classList.remove("open-modal-content");
-    checkoutModal.classList.add("close-modal-content");
+function closeModalContent() {
+  const activeModalContent = document.querySelector(
+    ".modal-content-box.open-modal-content",
+  );
+
+  if (activeModalContent.classList.contains("open-modal-content")) {
+    activeModalContent.classList.remove("open-modal-content");
+    activeModalContent.classList.add("close-modal-content");
     setTimeout(() => {
-      checkoutModal.classList.remove("close-modal-content");
-    }, 600);
-  } else if (havaleEftModal.classList.contains("open-modal-content")) {
-    havaleEftModal.classList.remove("open-modal-content");
-    havaleEftModal.classList.add("close-modal-content");
-    setTimeout(() => {
-      havaleEftModal.classList.remove("close-modal-content");
-    }, 600);
-  } else {
-    debitCardOrCreditCardModal.classList.remove("open-modal-content");
-    debitCardOrCreditCardModal.classList.add("close-modal-content");
-    setTimeout(() => {
-      debitCardOrCreditCardModal.classList.remove("close-modal-content");
+      activeModalContent.classList.remove("close-modal-content");
     }, 600);
   }
 }
@@ -423,14 +408,12 @@ heroBtn.addEventListener("click", () => {
   }
 });
 
-const modal = document.getElementById("modal");
 const btn1 = document.getElementById("main-package-btn");
 const btn2 = document.getElementById("flexible-package-btn");
 const closeBtn = document.getElementById("checkout-close-btn");
-const checkout = document.querySelector(".checkout");
+const checkoutBtn = document.getElementById("checkout-btn");
 const checkoutForm = document.getElementById("checkout-content");
 const checkoutTotal = document.getElementById("checkout-price");
-const checkoutBtn = document.getElementById("checkout-btn");
 
 var checkoutPrice = 0;
 var checkoutCurrency = "TL";
@@ -438,22 +421,25 @@ var checkoutCurrency = "TL";
 btn1.addEventListener("click", () => {
   checkoutPrice = 2500;
   checkoutTotal.innerText = checkoutPrice + " " + checkoutCurrency;
-  openModal(modal);
-  openModalContent(checkout);
+  openModal();
+  openModalContent(".checkout");
 });
 
 btn2.addEventListener("click", () => {
   checkoutPrice = 400;
   checkoutTotal.innerText = checkoutPrice + " " + checkoutCurrency;
-  openModal(modal);
-  openModalContent(checkout);
+  openModal();
+  openModalContent(".checkout");
+});
+
+checkoutBtn.addEventListener("click", () => {
+  const seletedInputOptionPaymentMethod = document.querySelector(
+    'input[name="payment-method"]:checked',
+  );
 });
 
 closeBtn.addEventListener("click", () => {
-  closeModalContent(checkout);
-  setTimeout(() => {
-    closeModal(modal);
-  }, 380);
+  closeModal();
   checkoutForm.reset();
   checkoutPrice = 0;
   checkoutTotal.innerText = "0 " + checkoutCurrency;
@@ -461,10 +447,8 @@ closeBtn.addEventListener("click", () => {
 
 window.addEventListener("click", (e) => {
   if (e.target == modal) {
-    closeModalContent(checkout);
-    setTimeout(() => {
-      closeModal(modal);
-    }, 380);
+    closeModal();
+    checkoutPrice = 0;
     checkoutTotal.innerText = "0 " + checkoutCurrency;
   }
 });
