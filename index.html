@@ -214,7 +214,7 @@
     </section>
     <section id="billing-form">
       <div id="modal" class="modal">
-        <div class="checkout modal-content-box">
+        <div id="checkout" class="modal-content">
           <div class="checkout-title">
             <span id="checkout-close-btn">&times;</span>
             <h1>Checkout</h1>
@@ -274,6 +274,7 @@
                   <input
                     type="radio"
                     name="payment-method"
+                    value="havale-eft-payment-method"
                     required
                   />Havale/EFT
                 </label>
@@ -281,6 +282,7 @@
                   <input
                     type="radio"
                     name="payment-method"
+                    value="debit-credit-card-payment-method"
                     required
                   />Debit/Credit card</label
                 >
@@ -301,8 +303,12 @@
             </div>
           </form>
         </div>
-        <div class="havale-eft-payment-method modal-content-box"></div>
-        <div class="debit-creit-card-payment-method modal-content-box"></div>
+        <div id="havale-eft-payment-method" class="modal-content">
+          <h3>Havale</h3>
+        </div>
+        <div id="debit-credit-card-payment-method" class="modal-content">
+          <h3>iyizco</h3>
+        </div>
       </div>
     </section>
     <section id="footer">

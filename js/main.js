@@ -321,7 +321,7 @@ function openModal() {
 }
 
 function openModalContent(modalContent) {
-  document.querySelector(modalContent).classList.add("open-modal-content");
+  document.getElementById(modalContent).classList.add("open-modal-content");
 }
 
 function closeModal() {
@@ -335,7 +335,7 @@ function closeModal() {
 
 function closeModalContent() {
   const activeModalContent = document.querySelector(
-    ".modal-content-box.open-modal-content",
+    ".modal-content.open-modal-content",
   );
 
   if (activeModalContent.classList.contains("open-modal-content")) {
@@ -422,34 +422,45 @@ btn1.addEventListener("click", () => {
   checkoutPrice = 2500;
   checkoutTotal.innerText = checkoutPrice + " " + checkoutCurrency;
   openModal();
-  openModalContent(".checkout");
+  openModalContent("checkout");
 });
 
 btn2.addEventListener("click", () => {
   checkoutPrice = 400;
   checkoutTotal.innerText = checkoutPrice + " " + checkoutCurrency;
   openModal();
-  openModalContent(".checkout");
+  openModalContent("checkout");
 });
 
-checkoutBtn.addEventListener("click", () => {
-  const seletedInputOptionPaymentMethod = document.querySelector(
+checkoutForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const targetId = document.querySelector(
     'input[name="payment-method"]:checked',
-  );
+  ).value;
+
+  closeModalContent();
+  setTimeout(() => {
+    openModalContent(targetId);
+  }, 540);
 });
 
 closeBtn.addEventListener("click", () => {
   closeModal();
-  checkoutForm.reset();
-  checkoutPrice = 0;
-  checkoutTotal.innerText = "0 " + checkoutCurrency;
+  setTimeout(() => {
+    checkoutForm.reset();
+    checkoutPrice = 0;
+    checkoutTotal.innerText = "0 " + checkoutCurrency;
+  }, 600);
 });
 
 window.addEventListener("click", (e) => {
   if (e.target == modal) {
     closeModal();
-    checkoutPrice = 0;
-    checkoutTotal.innerText = "0 " + checkoutCurrency;
+    setTimeout(() => {
+      checkoutPrice = 0;
+      checkoutTotal.innerText = "0 " + checkoutCurrency;
+    }, 600);
   }
 });
 

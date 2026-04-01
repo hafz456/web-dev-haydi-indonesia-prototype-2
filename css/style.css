@@ -527,7 +527,7 @@ body.lockScroll {
   opacity: 1;
 }
 
-.modal-content-box {
+.modal-content {
   position: relative;
   display: none;
   height: auto;
@@ -537,11 +537,6 @@ body.lockScroll {
   z-index: -1;
   transition: all 0.3s ease-in-out;
   transform: translateY(-800px);
-}
-
-.checkout,
-.havale-eft-payment-method,
-.debit-creit-card-payment-method {
   width: 500px;
   min-height: 600px;
   padding: 20px;
