@@ -536,7 +536,7 @@ body.lockScroll {
   opacity: 0;
   z-index: -1;
   transition: all 0.3s ease-in-out;
-  transform: translateY(-800px);
+  transform: translateY(800px);
   width: 500px;
   min-height: 600px;
   padding: 20px;
@@ -548,25 +548,25 @@ body.lockScroll {
   display: flex;
   opacity: 1;
   z-index: 10;
-  animation: modalFormSlideDown 0.6s ease-out forwards;
+  animation: modalFormSlideUp 0.6s ease-out forwards;
 }
 
 .close-modal-content {
   display: flex;
   opacity: 1;
-  animation: modalFormSlideUp 0.6s ease-out forwards;
+  animation: modalFormSlideDown 0.6s ease-out forwards;
 }
 
-@keyframes modalFormSlideDown {
+@keyframes modalFormSlideUp {
   from {
-    transform: translateY(-800px);
+    transform: translateY(800px);
   }
   to {
     transform: translateY(0);
   }
 }
 
-@keyframes modalFormSlideUp {
+@keyframes modalFormSlideDown {
   from {
     transform: translateY(0);
   }
@@ -581,7 +581,8 @@ body.lockScroll {
   gap: 1rem;
 }
 
-#checkout-close-btn {
+.modal-close-btn,
+.modal-return-btn {
   color: black;
   float: right;
   font-size: 28px;
@@ -589,8 +590,10 @@ body.lockScroll {
   transition: 0.2s;
 }
 
-#checkout-close-btn:hover,
-#checkout-close-btn:focus {
+.modal-close-btn:hover,
+.modal-close-btn:focus,
+.modal-return-btn:hover,
+.modal-return-btn:focus {
   color: #ff4646;
   transform: scale(1.4);
   text-decoration: none;

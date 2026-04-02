@@ -410,7 +410,7 @@ heroBtn.addEventListener("click", () => {
 
 const btn1 = document.getElementById("main-package-btn");
 const btn2 = document.getElementById("flexible-package-btn");
-const closeBtn = document.getElementById("checkout-close-btn");
+const modalCloseBtn = document.querySelectorAll(".modal-close-btn");
 const checkoutBtn = document.getElementById("checkout-btn");
 const checkoutForm = document.getElementById("checkout-content");
 const checkoutTotal = document.getElementById("checkout-price");
@@ -442,16 +442,18 @@ checkoutForm.addEventListener("submit", (e) => {
   closeModalContent();
   setTimeout(() => {
     openModalContent(targetId);
-  }, 540);
+  }, 580);
 });
 
-closeBtn.addEventListener("click", () => {
-  closeModal();
-  setTimeout(() => {
-    checkoutForm.reset();
-    checkoutPrice = 0;
-    checkoutTotal.innerText = "0 " + checkoutCurrency;
-  }, 600);
+modalCloseBtn.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    closeModal();
+    setTimeout(() => {
+      checkoutForm.reset();
+      checkoutPrice = 0;
+      checkoutTotal.innerText = "0 " + checkoutCurrency;
+    }, 600);
+  });
 });
 
 window.addEventListener("click", (e) => {
