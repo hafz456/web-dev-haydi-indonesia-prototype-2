@@ -221,75 +221,106 @@
           </div>
           <div>
             <form action="" id="checkout-content">
-              <div class="checkout-content-container">
-                <div class="checkout-content-input-text">
-                  <div class="checkout-content-input-text-container">
-                    <input
-                      type="text"
-                      name="firstName"
-                      id="firstName"
-                      placeholder=""
-                      autocomplete="off"
-                      required
-                    /><br />
-                    <label
-                      class="checkout-content-input-text-label"
-                      for="firstName"
-                      >First Name</label
-                    ><br />
+              <div class="checkout-content">
+                <div class="checkout-content-payment-option">
+                  <div class="checkout-content-payment-option-input-text">
+                    <div
+                      class="checkout-content-payment-option-input-text-container"
+                    >
+                      <input
+                        type="text"
+                        name="firstName"
+                        id="firstName"
+                        placeholder=""
+                        autocomplete="off"
+                        required
+                      /><br />
+                      <label
+                        class="checkout-content-payment-option-input-text-label"
+                        for="firstName"
+                        >First Name</label
+                      ><br />
+                    </div>
+                    <div
+                      class="checkout-content-payment-option-input-text-container"
+                    >
+                      <input
+                        type="text"
+                        name="lastName"
+                        id="lastName"
+                        placeholder=""
+                        autocomplete="off"
+                        required
+                      /><br />
+                      <label
+                        class="checkout-content-payment-option-input-text-label"
+                        for="lastName"
+                        >Last Name</label
+                      ><br />
+                    </div>
+                    <div
+                      class="checkout-content-payment-option-input-text-container"
+                    >
+                      <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder=""
+                        autocomplete="off"
+                        required
+                      /><br />
+                      <label
+                        class="checkout-content-payment-option-input-text-label"
+                        for="email"
+                        >E-mail</label
+                      ><br />
+                    </div>
                   </div>
-                  <div class="checkout-content-input-text-container">
-                    <input
-                      type="text"
-                      name="lastName"
-                      id="lastName"
-                      placeholder=""
-                      autocomplete="off"
-                      required
-                    /><br />
-                    <label
-                      class="checkout-content-input-text-label"
-                      for="lastName"
-                      >Last Name</label
-                    ><br />
-                  </div>
-                  <div class="checkout-content-input-text-container">
-                    <input
-                      type="email"
-                      name="email"
-                      id="email"
-                      placeholder=""
-                      autocomplete="off"
-                      required
-                    /><br />
-                    <label class="checkout-content-input-text-label" for="email"
-                      >E-mail</label
-                    ><br />
+                  <div class="checkout-content-payment-option-input-option">
+                    <div
+                      class="checkout-content-payment-option-input-option-title"
+                    >
+                      <h4>Payment Method</h4>
+                    </div>
+                    <div>
+                      <label
+                        class="checkout-content-payment-option-input-option-payment-method"
+                      >
+                        <input
+                          type="radio"
+                          name="payment-method"
+                          value="havale-eft-payment-method"
+                          required
+                        />Havale/EFT
+                      </label>
+                    </div>
+                    <div>
+                      <label
+                        class="checkout-content-payment-option-input-option-payment-method"
+                      >
+                        <input
+                          type="radio"
+                          name="payment-method"
+                          value="debit-credit-card-payment-method"
+                          required
+                        />Debit/Credit card</label
+                      >
+                    </div>
                   </div>
                 </div>
-                <div class="checkout-content-input-option">
-                  <div class="checkout-content-input-option-title">
-                    <h4>Payment Method</h4>
-                  </div>
-                  <div>
-                    <label class="checkout-content-input-option-payment-method">
-                      <input
-                        type="radio"
-                        name="payment-method"
-                        value="havale-eft-payment-method"
-                        required
-                      />Havale/EFT
-                    </label>
-                  </div>
-                  <div>
-                    <label class="checkout-content-input-option-payment-method">
-                      <input
-                        type="radio"
-                        name="payment-method"
-                        value="debit-credit-card-payment-method"
-                        required
-                      />Debit/Credit card</label
-                    >
+                <div
+                  id="havale-eft-payment-method"
+                  class="checkout-content-payment-detail"
+                >
+                  <p>Check your email for the IBAN and transfer steps.</p>
+                  <div id="havale-eft-payment-method-timer">00:60</div>
+                </div>
+                <div
+                  id="debit-credit-card-payment-method"
+                  class="checkout-content-payment-detail"
+                >
+                  <div id="iyzipay-checkout-form">
+                    iyzico interface will load here
                   </div>
                 </div>
                 <div class="checkout-content-total">
@@ -307,18 +338,6 @@
                 </div>
               </div>
             </form>
-          </div>
-        </div>
-        <div id="havale-eft-payment-method" class="modal-content">
-          <div>
-            <span class="modal-return-btn" data-target="checkout">&larr;</span>
-            <span class="modal-close-btn">&times;</span>
-          </div>
-        </div>
-        <div id="debit-credit-card-payment-method" class="modal-content">
-          <div>
-            <span class="modal-return-btn" data-target="checkout">&larr;</span>
-            <span class="modal-close-btn">&times;</span>
           </div>
         </div>
       </div>

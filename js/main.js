@@ -362,6 +362,7 @@ window.addEventListener("load", () => {
 
 const pill = document.getElementById("scroll-pill");
 const track = document.getElementById("scroll-track");
+const modalContainer = document.querySelector(".checkout-content");
 
 let fadeTimeout;
 
@@ -386,6 +387,7 @@ const updatePill = () => {
 };
 
 window.addEventListener("scroll", updatePill, { passive: true });
+modalContainer.addEventListener("scroll", updatePill);
 
 document
   .getElementById("lang-en")
@@ -430,19 +432,6 @@ btn2.addEventListener("click", () => {
   checkoutTotal.innerText = checkoutPrice + " " + checkoutCurrency;
   openModal();
   openModalContent("checkout");
-});
-
-checkoutForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const targetId = document.querySelector(
-    'input[name="payment-method"]:checked',
-  ).value;
-
-  closeModalContent();
-  setTimeout(() => {
-    openModalContent(targetId);
-  }, 580);
 });
 
 modalCloseBtn.forEach((btn) => {
