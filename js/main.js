@@ -410,28 +410,27 @@ heroBtn.addEventListener("click", () => {
   }
 });
 
-const btn1 = document.getElementById("main-package-btn");
-const btn2 = document.getElementById("flexible-package-btn");
+const pricingBtn = document.querySelectorAll(".pricing-btn");
 const modalCloseBtn = document.querySelectorAll(".modal-close-btn");
 const checkoutBtn = document.getElementById("checkout-btn");
-const checkoutForm = document.getElementById("checkout-content");
+const checkoutForm = document.getElementById("checkout-form");
 const checkoutTotal = document.getElementById("checkout-price");
 
-var checkoutPrice = 0;
-var checkoutCurrency = "TL";
+let checkoutPrice = 0;
+let checkoutCurrency = "TL";
 
-btn1.addEventListener("click", () => {
-  checkoutPrice = 2500;
-  checkoutTotal.innerText = checkoutPrice + " " + checkoutCurrency;
-  openModal();
-  openModalContent("checkout");
-});
+pricingBtn.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    let price = btn.getAttribute("data-price");
+    checkoutPrice = price;
+    checkoutTotal.innerText =
+      price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") +
+      " " +
+      checkoutCurrency;
 
-btn2.addEventListener("click", () => {
-  checkoutPrice = 400;
-  checkoutTotal.innerText = checkoutPrice + " " + checkoutCurrency;
-  openModal();
-  openModalContent("checkout");
+    openModal();
+    openModalContent("checkout");
+  });
 });
 
 modalCloseBtn.forEach((btn) => {
