@@ -433,6 +433,8 @@ pricingBtn.forEach((btn) => {
   });
 });
 
+checkoutBtn.addEventListener(() => {});
+
 modalCloseBtn.forEach((btn) => {
   btn.addEventListener("click", () => {
     closeModal();

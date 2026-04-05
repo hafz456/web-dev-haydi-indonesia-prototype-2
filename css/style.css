@@ -554,9 +554,14 @@ body.lockScroll {
 .checkout {
   height: auto;
   width: 500px;
-  min-height: 600px;
+  min-height: 640px;
   padding: 20px;
   gap: 2rem;
+  flex-direction: column;
+}
+
+.checkout-title {
+  display: flex;
   flex-direction: column;
 }
 
