@@ -347,6 +347,20 @@ function closeModalContent() {
   }
 }
 
+function billingFowardModalContent() {
+  const activeModalContent = document.querySelector(
+    ".modal-content.open-modal-content",
+  );
+
+  if (activeModalContent.classList.contains("open-modal-content")) {
+    activeModalContent.classList.remove("open-modal-content");
+    activeModalContent.classList.add("close-modal-content-slide-up");
+    setTimeout(() => {
+      activeModalContent.classList.remove("close-modal-content-slide-up");
+    }, 600);
+  }
+}
+
 defaultLanguage();
 
 document.body.classList.add("lockScroll");
@@ -412,7 +426,6 @@ heroBtn.addEventListener("click", () => {
 
 const pricingBtn = document.querySelectorAll(".pricing-btn");
 const modalCloseBtn = document.querySelectorAll(".modal-close-btn");
-const checkoutBtn = document.getElementById("checkout-btn");
 const checkoutForm = document.getElementById("checkout-form");
 const checkoutTotal = document.getElementById("checkout-price");
 
@@ -433,7 +446,18 @@ pricingBtn.forEach((btn) => {
   });
 });
 
-checkoutBtn.addEventListener(() => {});
+checkoutForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const userOption = document.querySelector(
+    "input[name='payment-method']:checked",
+  );
+
+  billingFowardModalContent();
+  setTimeout(() => {
+    openModalContent(userOption.value);
+  }, 556);
+});
 
 modalCloseBtn.forEach((btn) => {
   btn.addEventListener("click", () => {

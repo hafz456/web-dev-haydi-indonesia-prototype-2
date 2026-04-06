@@ -542,16 +542,24 @@ body.lockScroll {
   display: flex;
   opacity: 1;
   z-index: 10;
-  animation: modalFormSlideUp 0.6s ease-out forwards;
+  animation: modalFormSlideUp 0.56s ease-out forwards;
 }
 
 .close-modal-content {
   display: flex;
   opacity: 1;
-  animation: modalFormSlideDown 0.6s ease-out forwards;
+  animation: modalFormSlideDownClose 0.6s ease-out forwards;
 }
 
-.checkout {
+.close-modal-content-slide-up {
+  display: flex;
+  opacity: 1;
+  animation: modalFormSlideUpClose 0.6s ease-out forwards;
+}
+
+.checkout,
+.havale-eft-payment-method,
+.iyzico-payment-method {
   height: auto;
   width: 500px;
   min-height: 640px;
@@ -574,7 +582,16 @@ body.lockScroll {
   }
 }
 
-@keyframes modalFormSlideDown {
+@keyframes modalFormSlideDownClose {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(800px);
+  }
+}
+
+@keyframes modalFormSlideUpClose {
   from {
     transform: translateY(0);
   }
