@@ -538,44 +538,43 @@ body.lockScroll {
   transform: translateY(800px);
 }
 
-.open-modal-content {
-  display: flex;
-  opacity: 1;
-  z-index: 10;
-  animation: modalFormSlideUp 0.56s ease-out forwards;
-}
-
-.close-modal-content {
-  display: flex;
-  opacity: 1;
-  animation: modalFormSlideDownClose 0.6s ease-out forwards;
-}
-
+.open-modal-content,
+.close-modal-content,
+.open-modal-content-slide-down,
 .close-modal-content-slide-up {
   display: flex;
   opacity: 1;
+  z-index: 10;
+}
+
+.open-modal-content {
+  animation: modalFormSlideUpOpen 0.56s ease-out forwards;
+}
+
+.close-modal-content {
+  animation: modalFormSlideDownClose 0.6s ease-out forwards;
+}
+
+.open-modal-content-slide-down {
+  animation: modalFormSlideDownOpen 0.56s ease-out forwards;
+}
+
+.close-modal-content-slide-up {
   animation: modalFormSlideUpClose 0.6s ease-out forwards;
 }
 
-.checkout,
-.havale-eft-payment-method,
-.iyzico-payment-method {
-  height: auto;
-  width: 500px;
-  min-height: 640px;
-  padding: 20px;
-  gap: 2rem;
-  flex-direction: column;
-}
-
-.checkout-title {
-  display: flex;
-  flex-direction: column;
-}
-
-@keyframes modalFormSlideUp {
+@keyframes modalFormSlideUpOpen {
   from {
     transform: translateY(800px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalFormSlideDownOpen {
+  from {
+    transform: translateY(-800px);
   }
   to {
     transform: translateY(0);
@@ -600,6 +599,22 @@ body.lockScroll {
   }
 }
 
+.checkout,
+.havale-eft-payment-method,
+.iyzico-payment-method {
+  height: auto;
+  width: 500px;
+  min-height: 640px;
+  padding: 20px;
+  gap: 2rem;
+  flex-direction: column;
+}
+
+.checkout-title {
+  display: flex;
+  flex-direction: column;
+}
+
 .checkout-content,
 .checkout-content-payment-option {
   display: flex;
@@ -614,6 +629,10 @@ body.lockScroll {
   font-size: 28px;
   font-weight: bold;
   transition: 0.2s;
+}
+
+.modal-return-btn {
+  float: left;
 }
 
 .modal-close-btn:hover,
@@ -746,6 +765,23 @@ input[type="radio"] {
 
 .checkout-content-total-price {
   text-align: end;
+}
+
+.payment-method-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.payment-method-header > div {
+  flex: 1;
+}
+
+.iyzico-payment-method .payment-method-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 /* footer section */

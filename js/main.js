@@ -358,7 +358,24 @@ function billingFowardModalContent() {
     setTimeout(() => {
       activeModalContent.classList.remove("close-modal-content-slide-up");
     }, 600);
+  } else if (
+    activeModalContent.classList.contains("open-modal-content-slide-down")
+  ) {
+    activeModalContent.classList.remove("open-modal-content-slide-down");
+    activeModalContent.classList.add("close-modal-content-slide-up");
+    setTimeout(() => {
+      activeModalContent.classList.remove("close-modal-content-slide-up");
+    }, 600);
   }
+}
+
+function billingReturnModalContent() {
+  closeModalContent();
+  setTimeout(() => {
+    document
+      .getElementById("checkout")
+      .classList.add("open-modal-content-slide-down");
+  }, 570);
 }
 
 defaultLanguage();
@@ -426,6 +443,7 @@ heroBtn.addEventListener("click", () => {
 
 const pricingBtn = document.querySelectorAll(".pricing-btn");
 const modalCloseBtn = document.querySelectorAll(".modal-close-btn");
+const modalReturnBtn = document.querySelectorAll(".modal-return-btn");
 const checkoutForm = document.getElementById("checkout-form");
 const checkoutTotal = document.getElementById("checkout-price");
 
@@ -456,7 +474,13 @@ checkoutForm.addEventListener("submit", (e) => {
   billingFowardModalContent();
   setTimeout(() => {
     openModalContent(userOption.value);
-  }, 556);
+  }, 568);
+});
+
+modalReturnBtn.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    billingReturnModalContent();
+  });
 });
 
 modalCloseBtn.forEach((btn) => {
