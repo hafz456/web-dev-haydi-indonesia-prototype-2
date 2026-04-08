@@ -528,7 +528,7 @@ body.lockScroll {
 }
 
 .modal-content {
-  position: relative;
+  position: absolute;
   display: none;
   background-color: white;
   border: 2px solid black;
@@ -542,6 +542,7 @@ body.lockScroll {
 .close-modal-content,
 .open-modal-content-slide-down,
 .close-modal-content-slide-up {
+  position: relative;
   display: flex;
   opacity: 1;
   z-index: 10;

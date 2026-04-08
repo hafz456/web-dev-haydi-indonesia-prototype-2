@@ -336,10 +336,14 @@ function closeModal() {
 function closeModalContent() {
   const activeModalContent = document.querySelector(
     ".modal-content.open-modal-content",
+    ".modal-content.open-modal-content-slide-down",
   );
 
-  if (activeModalContent.classList.contains("open-modal-content")) {
-    activeModalContent.classList.remove("open-modal-content");
+  if (activeModalContent) {
+    activeModalContent.classList.remove(
+      "open-modal-content",
+      "open-modal-content-slide-down",
+    );
     activeModalContent.classList.add("close-modal-content");
     setTimeout(() => {
       activeModalContent.classList.remove("close-modal-content");
