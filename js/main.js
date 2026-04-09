@@ -321,7 +321,9 @@ function openModal() {
 }
 
 function openModalContent(modalContent) {
-  document.getElementById(modalContent).classList.add("open-modal-content");
+  document
+    .getElementById(modalContent)
+    .classList.add("modal-content-slide-in-up");
 }
 
 function closeModal() {
@@ -335,40 +337,32 @@ function closeModal() {
 
 function closeModalContent() {
   const activeModalContent = document.querySelector(
-    ".modal-content.open-modal-content",
-    ".modal-content.open-modal-content-slide-down",
+    ".modal-content.modal-content-slide-in-up",
+    ".modal-content.modal-content-slide-in-down",
   );
 
   if (activeModalContent) {
     activeModalContent.classList.remove(
-      "open-modal-content",
-      "open-modal-content-slide-down",
+      "modal-content-slide-in-up",
+      "modal-content-slide-in-down",
     );
-    activeModalContent.classList.add("close-modal-content");
+    activeModalContent.classList.add("modal-content-slide-out-down");
     setTimeout(() => {
-      activeModalContent.classList.remove("close-modal-content");
+      activeModalContent.classList.remove("modal-content-slide-out-down");
     }, 600);
   }
 }
 
 function billingFowardModalContent() {
   const activeModalContent = document.querySelector(
-    ".modal-content.open-modal-content",
+    ".modal-content.modal-content-slide-in-up",
   );
 
-  if (activeModalContent.classList.contains("open-modal-content")) {
-    activeModalContent.classList.remove("open-modal-content");
-    activeModalContent.classList.add("close-modal-content-slide-up");
+  if (activeModalContent.classList.contains("modal-content-slide-in-up")) {
+    activeModalContent.classList.remove("modal-content-slide-in-up");
+    activeModalContent.classList.add("modal-content-slide-out-up");
     setTimeout(() => {
-      activeModalContent.classList.remove("close-modal-content-slide-up");
-    }, 600);
-  } else if (
-    activeModalContent.classList.contains("open-modal-content-slide-down")
-  ) {
-    activeModalContent.classList.remove("open-modal-content-slide-down");
-    activeModalContent.classList.add("close-modal-content-slide-up");
-    setTimeout(() => {
-      activeModalContent.classList.remove("close-modal-content-slide-up");
+      activeModalContent.classList.remove("modal-content-slide-out-up");
     }, 600);
   }
 }

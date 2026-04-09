@@ -538,33 +538,33 @@ body.lockScroll {
   transform: translateY(800px);
 }
 
-.open-modal-content,
-.close-modal-content,
-.open-modal-content-slide-down,
-.close-modal-content-slide-up {
+.modal-content-slide-in-up,
+.modal-content-slide-in-down,
+.modal-content-slide-out-up,
+.modal-content-slide-out-down {
   position: relative;
   display: flex;
   opacity: 1;
   z-index: 10;
 }
 
-.open-modal-content {
-  animation: modalFormSlideUpOpen 0.56s ease-out forwards;
+.modal-content-slide-in-up {
+  animation: modalFormSlideInUp 0.56s ease-out forwards;
 }
 
-.close-modal-content {
-  animation: modalFormSlideDownClose 0.6s ease-out forwards;
+.modal-content-slide-in-down {
+  animation: modalFormSlideInDown 0.56s ease-out forwards;
 }
 
-.open-modal-content-slide-down {
-  animation: modalFormSlideDownOpen 0.56s ease-out forwards;
+.modal-content-slide-out-up {
+  animation: modalFormSlideOutUp 0.6s ease-out forwards;
 }
 
-.close-modal-content-slide-up {
-  animation: modalFormSlideUpClose 0.6s ease-out forwards;
+.modal-content-slide-out-down {
+  animation: modalFormSlideOutDown 0.6s ease-out forwards;
 }
 
-@keyframes modalFormSlideUpOpen {
+@keyframes modalFormSlideInUp {
   from {
     transform: translateY(800px);
   }
@@ -573,7 +573,7 @@ body.lockScroll {
   }
 }
 
-@keyframes modalFormSlideDownOpen {
+@keyframes modalFormSlideInDown {
   from {
     transform: translateY(-800px);
   }
@@ -582,21 +582,21 @@ body.lockScroll {
   }
 }
 
-@keyframes modalFormSlideDownClose {
+@keyframes modalFormSlideOutUp {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-800px);
+  }
+}
+
+@keyframes modalFormSlideOutDown {
   from {
     transform: translateY(0);
   }
   to {
     transform: translateY(800px);
-  }
-}
-
-@keyframes modalFormSlideUpClose {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-800px);
   }
 }
 
