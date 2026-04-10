@@ -337,8 +337,7 @@ function closeModal() {
 
 function closeModalContent() {
   const activeModalContent = document.querySelector(
-    ".modal-content.modal-content-slide-in-up",
-    ".modal-content.modal-content-slide-in-down",
+    ".modal-content.modal-content-slide-in-up, .modal-content.modal-content-slide-in-down",
   );
 
   if (activeModalContent) {
@@ -355,11 +354,14 @@ function closeModalContent() {
 
 function billingFowardModalContent() {
   const activeModalContent = document.querySelector(
-    ".modal-content.modal-content-slide-in-up",
+    ".modal-content.modal-content-slide-in-up, .modal-content.modal-content-slide-in-down",
   );
 
-  if (activeModalContent.classList.contains("modal-content-slide-in-up")) {
-    activeModalContent.classList.remove("modal-content-slide-in-up");
+  if (activeModalContent) {
+    activeModalContent.classList.remove(
+      "modal-content-slide-in-up",
+      "modal-content-slide-in-down",
+    );
     activeModalContent.classList.add("modal-content-slide-out-up");
     setTimeout(() => {
       activeModalContent.classList.remove("modal-content-slide-out-up");
@@ -372,8 +374,8 @@ function billingReturnModalContent() {
   setTimeout(() => {
     document
       .getElementById("checkout")
-      .classList.add("open-modal-content-slide-down");
-  }, 570);
+      .classList.add("modal-content-slide-in-down");
+  }, 580);
 }
 
 defaultLanguage();
@@ -472,7 +474,7 @@ checkoutForm.addEventListener("submit", (e) => {
   billingFowardModalContent();
   setTimeout(() => {
     openModalContent(userOption.value);
-  }, 568);
+  }, 580);
 });
 
 modalReturnBtn.forEach((btn) => {

@@ -781,8 +781,13 @@ input[type="radio"] {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  width: 100%;
+  flex-grow: 1;
+}
+
+.iyzico-payment-method .payment-method-content > p {
+  font-size: 2rem;
+  padding: 0 6%;
+  padding-bottom: 12%;
 }
 
 /* footer section */
