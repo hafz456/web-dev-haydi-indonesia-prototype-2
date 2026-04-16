@@ -337,7 +337,32 @@
             <div><span class="modal-return-btn">&laquo;</span></div>
             <div><span class="modal-close-btn">&times;</span></div>
           </div>
-          <div class="payment-method-content"></div>
+          <div class="payment-method-content">
+            <div>
+              <p>
+                Instructions for your Havale payment are now in the inbox of
+                <strong id="havale-eft-payment-method-user-email"
+                  >[user@email.com]</strong
+                >. Check your spam folder if it doesn't appear. You can resend
+                the request once the timer below ends.
+              </p>
+            </div>
+            <div>
+              <strong id="resend-email-timer" class="resend-email-timer"
+                >00:30</strong
+              >
+            </div>
+            <button
+              class="btn"
+              id="havale-eft-payment-method-resend-email-btn"
+              disabled
+            >
+              Resend
+            </button>
+            <button class="btn" id="havale-eft-payment-method-confirm-btn">
+              Confirm
+            </button>
+          </div>
         </div>
         <div
           id="iyzico-payment-method"
@@ -356,7 +381,10 @@
             </p>
           </div>
         </div>
-        <div class="modal-confirmation modal-content"></div>
+        <div
+          id="payment-confirmation"
+          class="payment-confirmation modal-content"
+        ></div>
       </div>
     </section>
     <section id="footer">

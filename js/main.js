@@ -88,6 +88,7 @@ const language = {
         },
       ],
     },
+    billingForm: {},
     footer: {
       titles: ["Contact us", "Follow us"],
     },
@@ -320,6 +321,52 @@ function openModal() {
   document.body.classList.add("lockScroll");
 }
 
+function modalContentSlideInUp(modalContentId) {
+  document
+    .getElementById(modalContentId)
+    .classList.add("modal-content-slide-in-up");
+}
+
+function modalContentSlideInDown(modalContentId) {
+  document
+    .getElementById(modalContentId)
+    .classList.add("modal-content-slide-in-up");
+}
+
+function modalContentSlideOutUp() {
+  const activeModalContent = document.querySelector(
+    ".modal-content.modal-content-slide-in-up, .modal-content.modal-content-slide-in-down",
+  );
+
+  if (activeModalContent) {
+    activeModalContent.classList.remove(
+      "modal-content-slide-in-up",
+      "modal-content-slide-in-down",
+    );
+    activeModalContent.classList.add("modal-content-slide-out-up");
+    setTimeout(() => {
+      activeModalContent.classList.remove("modal-content-slide-out-up");
+    }, 600);
+  }
+}
+
+function modalContentSlideOutDown() {
+  const activeModalContent = document.querySelector(
+    ".modal-content.modal-content-slide-in-up, .modal-content.modal-content-slide-in-down",
+  );
+
+  if (activeModalContent) {
+    activeModalContent.classList.remove(
+      "modal-content-slide-in-up",
+      "modal-content-slide-in-down",
+    );
+    activeModalContent.classList.add("modal-content-slide-out-down");
+    setTimeout(() => {
+      activeModalContent.classList.remove("modal-content-slide-out-down");
+    }, 600);
+  }
+}
+
 function openModalContent(modalContent) {
   document
     .getElementById(modalContent)
@@ -446,6 +493,9 @@ const modalCloseBtn = document.querySelectorAll(".modal-close-btn");
 const modalReturnBtn = document.querySelectorAll(".modal-return-btn");
 const checkoutForm = document.getElementById("checkout-form");
 const checkoutTotal = document.getElementById("checkout-price");
+const havaleEftPaymentMethodConfirmBtn = document.getElementById(
+  "havale-eft-payment-method-confirm-btn",
+);
 
 let checkoutPrice = 0;
 let checkoutCurrency = "TL";

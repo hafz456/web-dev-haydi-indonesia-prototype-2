@@ -603,12 +603,32 @@ body.lockScroll {
 .checkout,
 .havale-eft-payment-method,
 .iyzico-payment-method {
-  height: auto;
-  width: 500px;
-  min-height: 640px;
   padding: 20px;
   gap: 2rem;
   flex-direction: column;
+}
+
+.havale-eft-payment-method,
+.iyzico-payment-method,
+.payment-confirmation {
+  width: 400px;
+}
+
+.havale-eft-payment-method {
+  height: 380px;
+}
+
+.iyzico-payment-method {
+  height: 340px;
+}
+
+.payment-confirmation {
+  height: 300px;
+}
+
+.checkout {
+  height: 634px;
+  width: 500px;
 }
 
 .checkout-title {
@@ -777,16 +797,36 @@ input[type="radio"] {
   flex: 1;
 }
 
-.iyzico-payment-method .payment-method-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.payment-method-content {
   flex-grow: 1;
 }
 
+.havale-eft-payment-method .payment-method-content,
+.iyzico-payment-method .payment-method-content {
+  display: flex;
+  align-items: center;
+}
+
+.havale-eft-payment-method .payment-method-content {
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.resend-email-timer {
+  font-size: 1.6rem;
+}
+
+.havale-eft-payment-method .payment-method-content > p,
 .iyzico-payment-method .payment-method-content > p {
-  font-size: 2rem;
-  padding: 0 6%;
+  font-size: 16px;
+}
+
+.havale-eft-payment-method .payment-method-content > p {
+  padding: 0 10%;
+}
+
+.iyzico-payment-method .payment-method-content > p {
+  padding: 0 16%;
   padding-bottom: 12%;
 }
 
