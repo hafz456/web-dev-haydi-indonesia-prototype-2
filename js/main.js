@@ -330,7 +330,7 @@ function modalContentSlideInUp(modalContentId) {
 function modalContentSlideInDown(modalContentId) {
   document
     .getElementById(modalContentId)
-    .classList.add("modal-content-slide-in-up");
+    .classList.add("modal-content-slide-in-down");
 }
 
 function modalContentSlideOutUp() {
@@ -375,11 +375,8 @@ function openModalContent(modalContent) {
 
 function closeModal() {
   const modal = document.getElementById("modal");
-  closeModalContent();
-  setTimeout(() => {
-    modal.classList.remove("open-modal");
-    document.body.classList.remove("lockScroll");
-  }, 368);
+  modal.classList.remove("open-modal");
+  document.body.classList.remove("lockScroll");
 }
 
 function closeModalContent() {
@@ -510,7 +507,7 @@ pricingBtn.forEach((btn) => {
       checkoutCurrency;
 
     openModal();
-    openModalContent("checkout");
+    modalContentSlideInUp("checkout");
   });
 });
 
@@ -523,7 +520,7 @@ checkoutForm.addEventListener("submit", (e) => {
 
   billingFowardModalContent();
   setTimeout(() => {
-    openModalContent(userOption.value);
+    modalContentSlideInUp(userOption.value);
   }, 580);
 });
 
