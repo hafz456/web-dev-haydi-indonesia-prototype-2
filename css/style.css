@@ -622,10 +622,6 @@ body.lockScroll {
   height: 340px;
 }
 
-.payment-confirmation {
-  height: 300px;
-}
-
 .checkout {
   height: 634px;
   width: 500px;
@@ -828,6 +824,14 @@ input[type="radio"] {
 .iyzico-payment-method .payment-method-content > p {
   padding: 0 16%;
   padding-bottom: 12%;
+}
+
+.payment-confirmation {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* footer section */

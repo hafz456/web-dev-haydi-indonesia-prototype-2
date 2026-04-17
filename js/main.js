@@ -367,10 +367,11 @@ function modalContentSlideOutDown() {
   }
 }
 
-function openModalContent(modalContent) {
-  document
-    .getElementById(modalContent)
-    .classList.add("modal-content-slide-in-up");
+function closeModalContent() {
+  modalContentSlideOutDown();
+  setTimeout(() => {
+    closeModal();
+  }, 600);
 }
 
 function closeModal() {
@@ -379,186 +380,194 @@ function closeModal() {
   document.body.classList.remove("lockScroll");
 }
 
-function closeModalContent() {
-  const activeModalContent = document.querySelector(
-    ".modal-content.modal-content-slide-in-up, .modal-content.modal-content-slide-in-down",
+function startResendTimer(duration) {
+  let timeLeft = duration;
+  const timerDisplay = document.getElementById("resend-email-timer");
+
+  const intervalId = setInterval(() => {
+    timeLeft--;
+
+    const minutes = Math.floor(timeLeft / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = (timeLeft % 60).toString().padStart(2, "0");
+
+    timerDisplay.textContent = `${minutes}:${seconds}`;
+
+    if (timeLeft <= 0) {
+      clearInterval(intervalId);
+      console.log("Timer finished!");
+    }
+  }, 1000);
+}
+
+function run() {
+  defaultLanguage();
+
+  document.body.classList.add("lockScroll");
+
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      document.getElementById("loader").classList.add("slide-up");
+      setTimeout(() => {
+        document.body.classList.remove("lockScroll");
+      }, 900);
+    }, 4000);
+  });
+
+  const pill = document.getElementById("scroll-pill");
+  const track = document.getElementById("scroll-track");
+  const modalContainer = document.querySelector(".checkout-content");
+
+  let fadeTimeout;
+
+  const updatePill = () => {
+    track.classList.add("visible");
+
+    clearTimeout(fadeTimeout);
+
+    const scrolled = window.scrollY;
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+
+    if (maxScroll > 0) {
+      const scrollPercent = scrolled / maxScroll;
+      const travelDistance = track.offsetHeight - pill.offsetHeight;
+      const finalPos = scrollPercent * travelDistance;
+      pill.style.transform = `translateY(${finalPos}px)`;
+    }
+
+    fadeTimeout = setTimeout(() => {
+      track.classList.remove("visible");
+    }, 1500);
+  };
+
+  window.addEventListener("scroll", updatePill, { passive: true });
+  modalContainer.addEventListener("scroll", updatePill);
+
+  document
+    .getElementById("lang-en")
+    .addEventListener("click", () => setLanguage("en"));
+  document
+    .getElementById("lang-tr")
+    .addEventListener("click", () => setLanguage("tr"));
+
+  const heroBtn = document.getElementById("hero-btn");
+
+  heroBtn.addEventListener("click", () => {
+    const screenWidth = window.innerWidth;
+    const targetId = "#pricing";
+    const targetElement = document.querySelector(targetId);
+
+    if (screenWidth < 1024) {
+      targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      slowScrollTo(targetId, 1600);
+    }
+  });
+
+  const pricingBtn = document.querySelectorAll(".pricing-btn");
+  const modalCloseBtn = document.querySelectorAll(".modal-close-btn");
+  const modalReturnBtn = document.querySelectorAll(".modal-return-btn");
+  const checkoutForm = document.getElementById("checkout-form");
+  const checkoutTotal = document.getElementById("checkout-price");
+  const havaleEftPaymentMethodConfirmBtn = document.getElementById(
+    "havale-eft-payment-method-confirm-btn",
   );
 
-  if (activeModalContent) {
-    activeModalContent.classList.remove(
-      "modal-content-slide-in-up",
-      "modal-content-slide-in-down",
+  let checkoutPrice = 0;
+  let checkoutCurrency = "TL";
+
+  pricingBtn.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      let price = btn.getAttribute("data-price");
+      checkoutPrice = price;
+      checkoutTotal.innerText =
+        price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") +
+        " " +
+        checkoutCurrency;
+
+      openModal();
+      modalContentSlideInUp("checkout");
+    });
+  });
+
+  checkoutForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const userOption = document.querySelector(
+      "input[name='payment-method']:checked",
     );
-    activeModalContent.classList.add("modal-content-slide-out-down");
+
+    modalContentSlideOutUp();
     setTimeout(() => {
-      activeModalContent.classList.remove("modal-content-slide-out-down");
-    }, 600);
-  }
-}
+      modalContentSlideInUp(userOption.value);
 
-function billingFowardModalContent() {
-  const activeModalContent = document.querySelector(
-    ".modal-content.modal-content-slide-in-up, .modal-content.modal-content-slide-in-down",
-  );
+      if (userOption.value == "havale-eft-payment-method") {
+        startResendTimer(30);
+      }
+    }, 580);
+  });
 
-  if (activeModalContent) {
-    activeModalContent.classList.remove(
-      "modal-content-slide-in-up",
-      "modal-content-slide-in-down",
+  havaleEftPaymentMethodConfirmBtn.addEventListener("click", () => {
+    modalContentSlideOutUp();
+    setTimeout(() => {
+      modalContentSlideInUp("payment-confirmation");
+    }, 540);
+  });
+
+  modalReturnBtn.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      modalContentSlideOutDown();
+      setTimeout(() => {
+        modalContentSlideInDown("checkout");
+      }, 580);
+    });
+  });
+
+  modalCloseBtn.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      closeModalContent();
+      setTimeout(() => {
+        checkoutForm.reset();
+        checkoutPrice = 0;
+        checkoutTotal.innerText = "0 " + checkoutCurrency;
+      }, 600);
+    });
+  });
+
+  window.addEventListener("click", (e) => {
+    const transactionConfirmation = document.querySelector(
+      ".payment-confirmation.modal-content.modal-content-slide-in-up",
     );
-    activeModalContent.classList.add("modal-content-slide-out-up");
-    setTimeout(() => {
-      activeModalContent.classList.remove("modal-content-slide-out-up");
-    }, 600);
-  }
+
+    if (transactionConfirmation) {
+      modalContentSlideOutUp();
+      setTimeout(() => {
+        closeModal();
+      }, 600);
+    } else {
+      if (e.target == modal) {
+        closeModalContent();
+        setTimeout(() => {
+          checkoutPrice = 0;
+          checkoutTotal.innerText = "0 " + checkoutCurrency;
+        }, 600);
+      }
+    }
+  });
+
+  const scroller = document.querySelector(".scroller");
+  const links = scroller.querySelectorAll("a");
+
+  links.forEach((link) => {
+    link.addEventListener("mouseenter", () => {
+      scroller.classList.add("paused");
+    });
+    link.addEventListener("mouseleave", () => {
+      scroller.classList.remove("paused");
+    });
+  });
 }
 
-function billingReturnModalContent() {
-  closeModalContent();
-  setTimeout(() => {
-    document
-      .getElementById("checkout")
-      .classList.add("modal-content-slide-in-down");
-  }, 580);
-}
-
-defaultLanguage();
-
-document.body.classList.add("lockScroll");
-
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    document.getElementById("loader").classList.add("slide-up");
-    setTimeout(() => {
-      document.body.classList.remove("lockScroll");
-    }, 900);
-  }, 4000);
-});
-
-const pill = document.getElementById("scroll-pill");
-const track = document.getElementById("scroll-track");
-const modalContainer = document.querySelector(".checkout-content");
-
-let fadeTimeout;
-
-const updatePill = () => {
-  track.classList.add("visible");
-
-  clearTimeout(fadeTimeout);
-
-  const scrolled = window.scrollY;
-  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-
-  if (maxScroll > 0) {
-    const scrollPercent = scrolled / maxScroll;
-    const travelDistance = track.offsetHeight - pill.offsetHeight;
-    const finalPos = scrollPercent * travelDistance;
-    pill.style.transform = `translateY(${finalPos}px)`;
-  }
-
-  fadeTimeout = setTimeout(() => {
-    track.classList.remove("visible");
-  }, 1500);
-};
-
-window.addEventListener("scroll", updatePill, { passive: true });
-modalContainer.addEventListener("scroll", updatePill);
-
-document
-  .getElementById("lang-en")
-  .addEventListener("click", () => setLanguage("en"));
-document
-  .getElementById("lang-tr")
-  .addEventListener("click", () => setLanguage("tr"));
-
-const heroBtn = document.getElementById("hero-btn");
-
-heroBtn.addEventListener("click", () => {
-  const screenWidth = window.innerWidth;
-  const targetId = "#pricing";
-  const targetElement = document.querySelector(targetId);
-
-  if (screenWidth < 1024) {
-    targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
-  } else {
-    slowScrollTo(targetId, 1600);
-  }
-});
-
-const pricingBtn = document.querySelectorAll(".pricing-btn");
-const modalCloseBtn = document.querySelectorAll(".modal-close-btn");
-const modalReturnBtn = document.querySelectorAll(".modal-return-btn");
-const checkoutForm = document.getElementById("checkout-form");
-const checkoutTotal = document.getElementById("checkout-price");
-const havaleEftPaymentMethodConfirmBtn = document.getElementById(
-  "havale-eft-payment-method-confirm-btn",
-);
-
-let checkoutPrice = 0;
-let checkoutCurrency = "TL";
-
-pricingBtn.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    let price = btn.getAttribute("data-price");
-    checkoutPrice = price;
-    checkoutTotal.innerText =
-      price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") +
-      " " +
-      checkoutCurrency;
-
-    openModal();
-    modalContentSlideInUp("checkout");
-  });
-});
-
-checkoutForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const userOption = document.querySelector(
-    "input[name='payment-method']:checked",
-  );
-
-  billingFowardModalContent();
-  setTimeout(() => {
-    modalContentSlideInUp(userOption.value);
-  }, 580);
-});
-
-modalReturnBtn.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    billingReturnModalContent();
-  });
-});
-
-modalCloseBtn.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    closeModal();
-    setTimeout(() => {
-      checkoutForm.reset();
-      checkoutPrice = 0;
-      checkoutTotal.innerText = "0 " + checkoutCurrency;
-    }, 600);
-  });
-});
-
-window.addEventListener("click", (e) => {
-  if (e.target == modal) {
-    closeModal();
-    setTimeout(() => {
-      checkoutPrice = 0;
-      checkoutTotal.innerText = "0 " + checkoutCurrency;
-    }, 600);
-  }
-});
-
-const scroller = document.querySelector(".scroller");
-const links = scroller.querySelectorAll("a");
-
-links.forEach((link) => {
-  link.addEventListener("mouseenter", () => {
-    scroller.classList.add("paused");
-  });
-  link.addEventListener("mouseleave", () => {
-    scroller.classList.remove("paused");
-  });
-});
+run();
