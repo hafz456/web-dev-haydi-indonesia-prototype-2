@@ -88,7 +88,32 @@ const language = {
         },
       ],
     },
-    billingForm: {},
+    billingForm: {
+      checkout: {
+        title: "Checkout",
+        inputLabels: ["First Name", "Last Name", "E-mail"],
+        paymentMethodLabel: "Payment Method",
+        paymentMethodOption: "Debit/Credit card",
+        totalLabel: "Total:",
+        btn: "Confirm",
+      },
+      havaleEftPaymentMethod: {
+        instruction: [
+          "Payment instructions have been sent to your <strong>registered email address</strong>.",
+          "Check your <strong>spam folder</strong> if it doesn't appear. You can <strong>resend the request</strong> once the <strong>timer below ends</strong>.",
+        ],
+        resendEmailBtn: "Resend",
+        confirmBtn: "Confirm",
+      },
+      iyzicoPaymentMethod: {
+        availabilityNotice:
+          "I am currently integrating <strong>iyzico</strong> to provide a secure payment experience. This method is not available in the current preview, but will be fully functional once the site is live. Please try another payment method for this demo.",
+      },
+      paymentConfirmation: {
+        title: "Thank you",
+        instruction: "Tap anywhere to dismiss",
+      },
+    },
     footer: {
       titles: ["Contact us", "Follow us"],
     },
@@ -182,6 +207,32 @@ const language = {
         },
       ],
     },
+    billingForm: {
+      checkout: {
+        title: "Ödeme",
+        inputLabels: ["Adı", "Soyadı", "E-posta"],
+        paymentMethodLabel: "Ödeme Yöntemi",
+        paymentMethodOption: "Banka/Kredi Kartı",
+        totalLabel: "Toplam:",
+        btn: "Onayla",
+      },
+      havaleEftPaymentMethod: {
+        instruction: [
+          "Ödeme talimatları <strong>kayıtlı e-posta adresinize</strong> gönderilmiştir.",
+          "E-posta kutunuzda görünmüyorsa <strong>spam klasörünü</strong> kontrol edin. <strong>Aşağıdaki süre</strong> dolduğunda talebi <strong>tekrar gönderebilirsiniz</strong>.",
+        ],
+        resendEmailBtn: "Tekrar Gönder",
+        confirmBtn: "Onayla",
+      },
+      iyzicoPaymentMethod: {
+        availabilityNotice:
+          "Güvenli bir ödeme deneyimi sunmak için şu anda <strong>iyzico</strong> entegrasyonu üzerinde çalışıyorum. Bu yöntem şu anki önizlemede mevcut değildir, ancak site yayına girdiğinde tamamen işlevsel olacaktır. Lütfen bu demo için başka bir ödeme yöntemi deneyin.",
+      },
+      paymentConfirmation: {
+        title: "Teşekkür ederiz",
+        instruction: "Kapatmak için herhangi bir yere dokunun",
+      },
+    },
     footer: {
       titles: ["İletişim", "Takip edin"],
     },
@@ -244,6 +295,22 @@ function setLanguage(lang) {
       packagesInfo.querySelector(".pricing .btn").innerText = package.btn;
     }
   });
+
+  /* billing form section */
+  document.querySelector(".checkout h1").innerText =
+    language[lang].billingForm.checkout.title;
+  document
+    .querySelectorAll(".checkout-content-payment-option-input-text-label")
+    .forEach((el, i) => {
+      el.innerText = language[lang].billingForm.checkout.inputLabels[i];
+    });
+  document.querySelector(
+    ".checkout-content-payment-option-input-option-title h4",
+  ).innerText = language[lang].billingForm.checkout.paymentMethodLabel;
+  document.querySelector(".checkout-content-total-label h4").innerText =
+    language[lang].billingForm.checkout.totalLabel;
+
+  language[lang].billingForm.havaleEftPaymentMethod;
 
   /* footer section */
   document.querySelectorAll(".footer-title").forEach((el, i) => {
@@ -380,8 +447,8 @@ function closeModal() {
   document.body.classList.remove("lockScroll");
 }
 
-function startResendTimer(duration) {
-  let timeLeft = duration;
+function startResendTimer() {
+  let timeLeft = 30;
   const timerDisplay = document.getElementById("resend-email-timer");
 
   const intervalId = setInterval(() => {
@@ -470,19 +537,19 @@ function run() {
   const modalCloseBtn = document.querySelectorAll(".modal-close-btn");
   const modalReturnBtn = document.querySelectorAll(".modal-return-btn");
   const checkoutForm = document.getElementById("checkout-form");
-  const checkoutTotal = document.getElementById("checkout-price");
   const havaleEftPaymentMethodConfirmBtn = document.getElementById(
     "havale-eft-payment-method-confirm-btn",
   );
 
+  const checkoutCurrency = "TL";
+  let email;
   let checkoutPrice = 0;
-  let checkoutCurrency = "TL";
 
   pricingBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
-      let price = btn.getAttribute("data-price");
+      const price = btn.getAttribute("data-price");
       checkoutPrice = price;
-      checkoutTotal.innerText =
+      document.getElementById("checkout-price").innerText =
         price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") +
         " " +
         checkoutCurrency;
@@ -499,13 +566,12 @@ function run() {
       "input[name='payment-method']:checked",
     );
 
+    const userEmail = document.getElementById("email");
+    email = userEmail.value;
+
     modalContentSlideOutUp();
     setTimeout(() => {
       modalContentSlideInUp(userOption.value);
-
-      if (userOption.value == "havale-eft-payment-method") {
-        startResendTimer(30);
-      }
     }, 580);
   });
 

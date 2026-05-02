@@ -615,7 +615,7 @@ body.lockScroll {
 }
 
 .havale-eft-payment-method {
-  height: 380px;
+  height: 440px;
 }
 
 .iyzico-payment-method {
@@ -623,7 +623,7 @@ body.lockScroll {
 }
 
 .checkout {
-  height: 634px;
+  height: 632px;
   width: 500px;
 }
 
@@ -817,8 +817,13 @@ input[type="radio"] {
   font-size: 16px;
 }
 
-.havale-eft-payment-method .payment-method-content > p {
-  padding: 0 10%;
+.havale-eft-payment-method .payment-method-content > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.havale-eft-payment-method .payment-method-content > div > p {
+  padding: 0 12%;
 }
 
 .iyzico-payment-method .payment-method-content > p {
