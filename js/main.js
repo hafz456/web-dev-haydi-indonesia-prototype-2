@@ -93,7 +93,10 @@ const language = {
         title: "Checkout",
         inputLabels: ["First Name", "Last Name", "E-mail"],
         paymentMethodLabel: "Payment Method",
-        paymentMethodOption: "Debit/Credit card",
+        paymentMethodOption: [
+          "Turkish Domestic Bank Transfer/EFT",
+          "Debit/Credit Card",
+        ],
         totalLabel: "Total:",
         btn: "Confirm",
       },
@@ -212,7 +215,7 @@ const language = {
         title: "Ödeme",
         inputLabels: ["Adı", "Soyadı", "E-posta"],
         paymentMethodLabel: "Ödeme Yöntemi",
-        paymentMethodOption: "Banka/Kredi Kartı",
+        paymentMethodOption: ["Havale/EFT", "Banka/Kredi Kartı"],
         totalLabel: "Toplam:",
         btn: "Onayla",
       },
@@ -307,10 +310,13 @@ function setLanguage(lang) {
   document.querySelector(
     ".checkout-content-payment-option-input-option-title h4",
   ).innerText = language[lang].billingForm.checkout.paymentMethodLabel;
+  document.querySelectorAll(".radio-label").forEach((el, i) => {
+    el.innerText = language[lang].billingForm.checkout.paymentMethodOption[i];
+  });
   document.querySelector(".checkout-content-total-label h4").innerText =
     language[lang].billingForm.checkout.totalLabel;
-
-  language[lang].billingForm.havaleEftPaymentMethod;
+  document.getElementById("checkout-btn").innerText =
+    language[lang].billingForm.checkout.btn;
 
   /* footer section */
   document.querySelectorAll(".footer-title").forEach((el, i) => {
