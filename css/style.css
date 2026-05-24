@@ -826,6 +826,15 @@ input[type="radio"] {
   padding: 0 12%;
 }
 
+#havale-eft-payment-method-resend-email-btn:disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #2d2d2d;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 .iyzico-payment-method .payment-method-content > p {
   padding: 0 16%;
   padding-bottom: 12%;
