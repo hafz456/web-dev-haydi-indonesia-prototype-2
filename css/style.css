@@ -92,20 +92,18 @@ footer {
   height: 50px;
   width: 120px;
   background: var(--bg);
-  box-shadow: 0.12rem 0.12rem var(--text-border-shadow);
+  box-shadow: 0.16rem 0.16rem var(--text-border-shadow);
   transition: 0.2s;
-}
-
-.btn:hover {
-  color: var(--text-border-shadow);
-  transform: translate(-0.26rem, -0.26rem);
-  background: var(--hover-bg);
-  box-shadow: 0.26rem 0.26rem var(--text-border-shadow);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn:active {
   transform: translate(0);
-  box-shadow: none;
+  background: var(--hover-bg);
+  transform: translate(0.12rem, 0.12rem);
+  box-shadow: 0 0 var(--text-border-shadow);
+  background-color: #ff4646;
+  transition: 0.5s;
 }
 
 a,
@@ -113,18 +111,14 @@ a,
   color: black;
   transition: 0.2s;
   display: inline-block;
-}
-
-a:hover,
-.header-btn:hover {
-  color: #ff4646;
-  transform: scale(1.4);
-  transition: 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 
 a:active,
 .header-btn:active {
-  transform: scale(1);
+  color: #ff4646;
+  transform: scale(0.86);
+  transition: 0.05s;
 }
 
 /* web-scroller */
@@ -646,20 +640,18 @@ body.lockScroll {
   font-size: 28px;
   font-weight: bold;
   transition: 0.2s;
+  cursor: pointer;
 }
 
 .modal-return-btn {
   float: left;
 }
 
-.modal-close-btn:hover,
-.modal-close-btn:focus,
-.modal-return-btn:hover,
-.modal-return-btn:focus {
+.modal-close-btn:active,
+.modal-return-btn:active {
   color: #ff4646;
-  transform: scale(1.4);
+  transform: scale(0.86);
   text-decoration: none;
-  cursor: pointer;
   transition: 0.2s;
 }
 
@@ -831,8 +823,8 @@ input[type="radio"] {
   cursor: not-allowed;
   background-color: rgba(0, 0, 0, 0.4);
   color: #2d2d2d;
-  transform: none !important;
-  box-shadow: none !important;
+  transform: none;
+  box-shadow: none;
 }
 
 .iyzico-payment-method .payment-method-content > p {

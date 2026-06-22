@@ -318,6 +318,19 @@ function setLanguage(lang) {
   document.getElementById("checkout-btn").innerText =
     language[lang].billingForm.checkout.btn;
 
+  document
+    .querySelectorAll(".havale-eft-payment-method-instruction")
+    .forEach((el, i) => {
+      el.innerHTML =
+        language[lang].billingForm.havaleEftPaymentMethod.instruction[i];
+    });
+  document.getElementById(
+    "havale-eft-payment-method-resend-email-btn",
+  ).innerText =
+    language[lang].billingForm.havaleEftPaymentMethod.resendEmailBtn;
+  document.getElementById("havale-eft-payment-method-confirm-btn").innerText =
+    language[lang].billingForm.havaleEftPaymentMethod.confirmBtn;
+
   document.getElementById("iyzico-notice").innerHTML =
     language[lang].billingForm.iyzicoPaymentMethod.availabilityNotice;
 
