@@ -33,6 +33,10 @@ button {
   cursor: pointer;
 }
 
+button * {
+  pointer-events: none;
+}
+
 .header,
 footer {
   height: 42px;
@@ -82,28 +86,53 @@ footer {
 }
 
 .btn {
-  --text-border-shadow: black;
-  --bg: white;
-  --hover-bg: #ff4646;
-  color: var(--text-border-shadow);
+  position: relative;
+  background: transparent;
+  padding: 0px;
+  border: none;
   cursor: pointer;
-  border: 2px solid var(--text-border-shadow);
-  border-radius: 4px;
-  height: 50px;
-  width: 120px;
-  background: var(--bg);
-  box-shadow: 0.16rem 0.16rem var(--text-border-shadow);
-  transition: 0.2s;
-  -webkit-tap-highlight-color: transparent;
+  outline-offset: 4px;
+  transition: filter 250ms;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-.btn:active {
-  transform: translate(0);
-  background: var(--hover-bg);
-  transform: translate(0.12rem, 0.12rem);
-  box-shadow: 0 0 var(--text-border-shadow);
-  background-color: #ff4646;
-  transition: 0.5s;
+.edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 8px;
+  background: black;
+}
+
+.front {
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-radius: 6px;
+  background: white;
+  height: 50px;
+  width: 120px;
+  color: black;
+  transform: translateY(-4px);
+  transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+.btn:active .front {
+  transform: translateY(0);
+  transition: transform 34ms;
+}
+
+.btn:active .shadow {
+  transform: translateY(1px);
+  transition: transform 34ms;
+}
+
+.btn:focus:not(:focus-visible) {
+  outline: none;
 }
 
 a,
@@ -649,7 +678,6 @@ body.lockScroll {
 
 .modal-close-btn:active,
 .modal-return-btn:active {
-  color: #ff4646;
   transform: scale(0.86);
   text-decoration: none;
   transition: 0.2s;
@@ -682,12 +710,6 @@ input[type="email"] {
   transition: 0.2s;
 }
 
-input[type="text"]:hover ~ label,
-input[type="email"]:hover ~ label {
-  color: #ff4646;
-  transition: 0.2s;
-}
-
 input[type="text"]:focus ~ label,
 input[type="text"]:not(:placeholder-shown) ~ label,
 input[type="email"]:focus ~ label,
@@ -700,12 +722,6 @@ input[type="email"]:not(:placeholder-shown) ~ label {
 input[type="text"]:focus,
 input[type="email"]:focus {
   border-bottom: 2px solid #ff4646;
-}
-
-input[type="text"]:hover,
-input[type="email"]:hover {
-  border-bottom: 2px solid #ff4646;
-  transition: 0.2s;
 }
 
 .checkout-content-payment-option-input-option {
@@ -735,13 +751,6 @@ input[type="email"]:hover {
   input:checked
 ) {
   background-color: rgba(255, 70, 70, 0.2);
-  border: 2px solid #ff4646;
-}
-
-.checkout-content-payment-option-input-option-payment-method:hover {
-  color: #ff4646;
-  background-color: rgba(255, 70, 70, 0.5);
-  transition: 0.2s;
   border: 2px solid #ff4646;
 }
 

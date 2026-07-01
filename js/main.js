@@ -115,7 +115,7 @@ function setLanguage(lang) {
         },
         paymentConfirmation: {
           title: "Thank you",
-          instruction: "Tap anywhere to dismiss",
+          instruction: "Tap here or the gray area to dismiss",
         },
       },
       footer: {
@@ -234,7 +234,7 @@ function setLanguage(lang) {
         },
         paymentConfirmation: {
           title: "Teşekkür ederiz",
-          instruction: "Kapatmak için herhangi bir yere dokunun",
+          instruction: "Kapatmak için buraya veya gri alana dokunun.",
         },
       },
       footer: {
@@ -256,7 +256,7 @@ function setLanguage(lang) {
 
   /* hero section */
   document.getElementById("hero-title").innerHTML = language[lang].hero.title;
-  document.getElementById("hero-btn").innerText = language[lang].hero.btn;
+  document.getElementById("hero-btn-text").innerText = language[lang].hero.btn;
 
   /* About-Product section */
   document.getElementById("about-Product-title").innerText =
@@ -295,7 +295,8 @@ function setLanguage(lang) {
         .join("");
 
       packagesInfo.querySelector(".price").innerText = package.price;
-      packagesInfo.querySelector(".pricing .btn").innerText = package.btn;
+      packagesInfo.querySelector(".pricing .pricing-btn-text").innerText =
+        package.btn;
     }
   });
 
@@ -315,7 +316,7 @@ function setLanguage(lang) {
   });
   document.querySelector(".checkout-content-total-label h4").innerText =
     language[lang].billingForm.checkout.totalLabel;
-  document.getElementById("checkout-btn").innerText =
+  document.getElementById("checkout-btn-text").innerText =
     language[lang].billingForm.checkout.btn;
 
   document
@@ -325,14 +326,20 @@ function setLanguage(lang) {
         language[lang].billingForm.havaleEftPaymentMethod.instruction[i];
     });
   document.getElementById(
-    "havale-eft-payment-method-resend-email-btn",
+    "havale-eft-payment-method-resend-email-btn-text",
   ).innerText =
     language[lang].billingForm.havaleEftPaymentMethod.resendEmailBtn;
-  document.getElementById("havale-eft-payment-method-confirm-btn").innerText =
-    language[lang].billingForm.havaleEftPaymentMethod.confirmBtn;
+  document.getElementById(
+    "havale-eft-payment-method-confirm-btn-text",
+  ).innerText = language[lang].billingForm.havaleEftPaymentMethod.confirmBtn;
 
   document.getElementById("iyzico-notice").innerHTML =
     language[lang].billingForm.iyzicoPaymentMethod.availabilityNotice;
+
+  document.querySelector(".payment-confirmation h1").innerHTML =
+    language[lang].billingForm.paymentConfirmation.title;
+  document.querySelector(".payment-confirmation p").innerHTML =
+    language[lang].billingForm.paymentConfirmation.instruction;
 
   /* footer section */
   document.querySelectorAll(".footer-title").forEach((el, i) => {
@@ -647,10 +654,10 @@ function run() {
     );
 
     if (transactionConfirmation) {
-      modalContentSlideOutUp();
-      setTimeout(() => {
-        closeModal();
-      }, 600);
+      if (e.target === modal || e.target.closest(".payment-confirmation")) {
+        modalContentSlideOutUp();
+        setTimeout(() => closeModal(), 600);
+      }
     } else {
       if (e.target == modal) {
         clearInterval(timerState.countdownInterval);
