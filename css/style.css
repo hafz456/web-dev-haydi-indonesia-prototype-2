@@ -28,15 +28,6 @@ label {
   margin: 0;
 }
 
-button {
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button * {
-  pointer-events: none;
-}
-
 .header,
 footer {
   height: 42px;
@@ -83,6 +74,16 @@ footer {
 .pricing-box-item ul {
   font-size: 1.2rem;
   line-height: 1.4;
+}
+
+/* button */
+button {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button * {
+  pointer-events: none;
 }
 
 .btn {
@@ -148,6 +149,34 @@ a:active,
   color: #ff4646;
   transform: scale(0.86);
   transition: 0.05s;
+}
+
+.header-btn,
+.modal-close-btn,
+.modal-return-btn {
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+.modal-close-btn,
+.modal-return-btn {
+  color: black;
+  float: right;
+  font-size: 28px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.modal-return-btn {
+  float: left;
+}
+
+.modal-close-btn:active,
+.modal-return-btn:active {
+  transform: scale(0.66);
+  text-decoration: none;
+  transition: 0.2s;
 }
 
 /* web-scroller */
@@ -299,12 +328,6 @@ body.lockScroll {
   justify-content: center;
   align-items: center;
   border-left: 2px solid black;
-}
-
-.header-btn {
-  border: 0;
-  padding: 0;
-  background-color: transparent;
 }
 
 .lang-active {
@@ -662,27 +685,6 @@ body.lockScroll {
   gap: 1rem;
 }
 
-.modal-close-btn,
-.modal-return-btn {
-  color: black;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-.modal-return-btn {
-  float: left;
-}
-
-.modal-close-btn:active,
-.modal-return-btn:active {
-  transform: scale(0.86);
-  text-decoration: none;
-  transition: 0.2s;
-}
-
 .checkout-content-payment-option-input-text-container {
   position: relative;
   margin-top: 20px;
@@ -827,13 +829,14 @@ input[type="radio"] {
   padding: 0 12%;
 }
 
-#havale-eft-payment-method-resend-email-btn:disabled {
+#havale-eft-payment-method-resend-email-btn:disabled > .front {
   pointer-events: none;
   cursor: not-allowed;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: hsla(0, 0%, 90%, 0.6);
   color: #2d2d2d;
   transform: none;
   box-shadow: none;
+  transition: 0.3s ease-out;
 }
 
 .iyzico-payment-method .payment-method-content > p {
@@ -972,7 +975,7 @@ footer {
 
   /* hero section*/
   #hero-title {
-    font-size: 5.5rem;
+    font-size: 4rem;
     padding: 0 10%;
   }
 
@@ -1049,6 +1052,12 @@ footer {
 
   .pricing-box-item {
     align-items: start;
+    flex: 2;
+  }
+
+  .pricing-box-price {
+    flex: 8;
+    gap: 1rem;
   }
 }
 
@@ -1063,12 +1072,12 @@ footer {
 
   #about-Product-title,
   #pricing-title {
-    font-size: 2.5rem;
+    font-size: 1.6rem;
   }
 
   .about-Product-box-week-title > h3,
   .pricing-box-name {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
 
   .about-Product-box-week-item ul,
@@ -1078,7 +1087,7 @@ footer {
 
   /* hero section*/
   #hero-title {
-    font-size: 4.5rem;
+    font-size: 3rem;
   }
 
   /* about product section */
@@ -1088,12 +1097,12 @@ footer {
 
   /* about owner section */
   #about-owner-paragraph {
-    font-size: 2.2rem;
+    font-size: 1.6rem;
     padding: 0 8%;
   }
 
   .about-owner-container > h2 {
-    font-size: 1.6rem;
+    font-size: 1rem;
     padding: 0 8%;
   }
 
@@ -1103,7 +1112,6 @@ footer {
   }
 
   .pricing-box-item {
-    padding: 4rem 1rem;
     justify-content: start;
     align-items: start;
   }
@@ -1117,65 +1125,63 @@ footer {
    STANDARD PHONE (Under 480px)
    ========================================== */
 @media (max-width: 480px) {
-  /* general properties (use in 2 section or more) */
+  /* general properties */
   #header-label,
   .item,
   .about-Product-box-week-item ul,
   .pricing-box-item ul {
-    font-size: 0.9rem;
+    font-size: 0.85rem; /* Slightly smaller base text */
   }
 
   #about-Product-title,
   #pricing-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem; /* Scaled down from 1.8rem */
   }
 
   .about-Product-box-week-title > h3,
   .pricing-box-name {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
-  /* hero section*/
+  /* hero section */
   .hero {
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   #hero-title {
-    font-size: 3.5rem;
-    padding: 0 8%;
+    font-size: 2.4rem;
+    padding: 0 4%;
   }
 
   /* about product section */
   .about-Product {
     height: 218svh;
-  }
-
-  .about-Product {
     grid-template-rows: 180px repeat(4, 1fr);
   }
 
   /* about owner section */
   #about-owner-paragraph {
-    font-size: 1.6rem;
-    line-height: 1.5;
+    font-size: 1.3rem; /* Scaled down from 1.6rem */
+    line-height: 1.4;
   }
+
   .about-owner-container > h2 {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   /* pricing section */
   .pricing {
-    grid-template-rows: 180px 0.52fr 2.48fr;
-    height: 96svh;
+    grid-template-rows: auto auto auto;
+    height: auto; /* Hardcoded svh heights often break on mobile when content pushes down */
   }
 
   .pricing-box-2,
   .pricing-box-3 {
-    padding: 0 28%;
+    padding: 0 5%; /* Fixed: 28% padding was crushing your content into a tiny column */
   }
 
   .price {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 }
 
@@ -1183,7 +1189,7 @@ footer {
    SMALL PHONE (Under 320px)
    ========================================== */
 @media (max-width: 320px) {
-  /* general properties (use in 2 section or more) */
+  /* general properties */
   .header-box-label,
   .header-box-button > div {
     padding-top: 1px;
@@ -1193,33 +1199,33 @@ footer {
   .item,
   .about-Product-box-week-item ul,
   .pricing-box-item ul {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 
   #about-Product-title,
   #pricing-title {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
   }
 
   .about-Product-box-week-title > h3,
   .pricing-box-name {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   /* Loader-page section */
   .fade-text {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
   }
 
   /* header section */
   .header-box-1 > h3 {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
-  /* hero section*/
+  /* hero section */
   #hero-title {
-    font-size: 2.8rem;
-    padding: 0 6%;
+    font-size: 1.8rem;
+    padding: 0 4%;
   }
 
   /* about product section */
@@ -1230,15 +1236,15 @@ footer {
 
   /* about owner section */
   #about-owner-paragraph {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
   }
 
   .about-owner-container > h2 {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   /* pricing section */
   .pricing {
-    grid-template-rows: 140px 0.52fr 2.48fr;
+    grid-template-rows: auto auto auto;
   }
 }

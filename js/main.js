@@ -569,12 +569,6 @@ function run() {
     .getElementById("lang-tr")
     .addEventListener("click", () => setLanguage("tr"));
 
-  if (resendEmailBtn) {
-    resendEmailBtn.addEventListener("click", () => {
-      startHavaleEftTimer(timerState);
-    });
-  }
-
   heroBtn.addEventListener("click", () => {
     const screenWidth = window.innerWidth;
     const targetId = "#pricing";
@@ -619,6 +613,14 @@ function run() {
       }
     }, 580);
   });
+
+  if (resendEmailBtn) {
+    resendEmailBtn.addEventListener("click", () => {
+      setTimeout(() => {
+        startHavaleEftTimer(timerState);
+      }, 20);
+    });
+  }
 
   havaleEftPaymentMethodConfirmBtn.addEventListener("click", () => {
     modalContentSlideOutUp();
