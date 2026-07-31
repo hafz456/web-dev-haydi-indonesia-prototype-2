@@ -800,6 +800,46 @@ input[type="radio"] {
   flex-grow: 1;
 }
 
+/* Container for absolute positioning */
+.field-wrapper {
+  position: relative;
+}
+
+/* Floating Tooltip Bubble */
+.custom-tooltip {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background-color: #0f172a;
+  color: #f8fafc;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  pointer-events: none;
+}
+
+/* Upward pointing arrow */
+.custom-tooltip .tooltip-arrow {
+  position: absolute;
+  bottom: 100%;
+  left: 14px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #0f172a;
+}
+
+/* Hidden State */
+.custom-tooltip.hidden {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
 .havale-eft-payment-method .payment-method-content,
 .iyzico-payment-method .payment-method-content {
   display: flex;

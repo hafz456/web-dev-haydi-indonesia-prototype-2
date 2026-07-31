@@ -502,15 +502,51 @@ function startHavaleEftTimer(stateHolder) {
   }, 1000);
 }
 
+function showTooltip(inputElement, tooltipId, message) {
+  const tooltip = document.getElementById(tooltipId);
+  if (!tooltip) return;
+
+  const tooltipText = tooltip.querySelector(".tooltip-text");
+  if (tooltipText) {
+    tooltipText.textContent = message;
+  }
+
+  tooltip.classList.remove("hidden");
+}
+
+function hideTooltip(inputElement, tooltipId) {
+  const tooltip = document.getElementById(tooltipId);
+  if (tooltip) {
+    tooltip.classList.add("hidden");
+  }
+}
+
+function resetCheckoutModal() {
+  const checkoutForm = document.getElementById("checkout-form");
+  if (checkoutForm) {
+    checkoutForm.reset(); // Resets input values & radio selections
+  }
+
+  const firstNameInput = document.getElementById("firstName");
+  const lastNameInput = document.getElementById("lastName");
+  const emailInput = document.getElementById("email");
+
+  // Hide all tooltips & remove error highlights
+  hideTooltip(firstNameInput, "firstNameTooltip");
+  hideTooltip(lastNameInput, "lastNameTooltip");
+  hideTooltip(emailInput, "emailTooltip");
+  hideTooltip(null, "paymentTooltip");
+}
+
 function run() {
   let fadeTimeout;
-  let email;
   let checkoutPrice = 0;
 
   const checkoutCurrency = "TL";
   const pill = document.getElementById("scroll-pill");
   const track = document.getElementById("scroll-track");
   const modalContainer = document.querySelector(".checkout-content");
+
   const updatePill = () => {
     track.classList.add("visible");
 
@@ -531,6 +567,7 @@ function run() {
       track.classList.remove("visible");
     }, 1500);
   };
+
   const heroBtn = document.getElementById("hero-btn");
   const pricingBtn = document.querySelectorAll(".pricing-btn");
   const modalCloseBtn = document.querySelectorAll(".modal-close-btn");
@@ -544,7 +581,7 @@ function run() {
     "havale-eft-payment-method-resend-email-btn",
   );
   const scroller = document.querySelector(".scroller");
-  const links = scroller.querySelectorAll("a");
+  const links = scroller ? scroller.querySelectorAll("a") : [];
 
   defaultLanguage();
 
@@ -560,7 +597,9 @@ function run() {
   });
 
   window.addEventListener("scroll", updatePill, { passive: true });
-  modalContainer.addEventListener("scroll", updatePill);
+  if (modalContainer) {
+    modalContainer.addEventListener("scroll", updatePill);
+  }
 
   document
     .getElementById("lang-en")
@@ -569,17 +608,19 @@ function run() {
     .getElementById("lang-tr")
     .addEventListener("click", () => setLanguage("tr"));
 
-  heroBtn.addEventListener("click", () => {
-    const screenWidth = window.innerWidth;
-    const targetId = "#pricing";
-    const targetElement = document.querySelector(targetId);
+  if (heroBtn) {
+    heroBtn.addEventListener("click", () => {
+      const screenWidth = window.innerWidth;
+      const targetId = "#pricing";
+      const targetElement = document.querySelector(targetId);
 
-    if (screenWidth < 1024) {
-      targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      slowScrollTo(targetId, 1600);
-    }
-  });
+      if (screenWidth < 1024) {
+        targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        slowScrollTo(targetId, 1600);
+      }
+    });
+  }
 
   pricingBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -595,24 +636,143 @@ function run() {
     });
   });
 
-  checkoutForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+  // ==========================================
+  // SINGLE CONSOLIDATED FORM SUBMIT HANDLER
+  // ==========================================
+  if (checkoutForm) {
+    checkoutForm.addEventListener("submit", async (e) => {
+      e.preventDefault(); // Stop native form submission
 
-    const userOption = document.querySelector(
-      "input[name='payment-method']:checked",
-    );
+      const firstNameInput = document.getElementById("firstName");
+      const lastNameInput = document.getElementById("lastName");
+      const emailInput = document.getElementById("email");
 
-    const userEmail = document.getElementById("email");
-    email = userEmail.value;
+      const firstName = firstNameInput ? firstNameInput.value.trim() : "";
+      const lastName = lastNameInput ? lastNameInput.value.trim() : "";
+      const email = emailInput ? emailInput.value.trim() : "";
 
-    modalContentSlideOutUp();
-    setTimeout(() => {
-      modalContentSlideInUp(userOption.value);
-      if (userOption.value === "havale-eft-payment-method") {
-        startHavaleEftTimer(timerState);
+      // Clear all existing warnings first
+      hideTooltip(firstNameInput, "firstNameTooltip");
+      hideTooltip(lastNameInput, "lastNameTooltip");
+      hideTooltip(emailInput, "emailTooltip");
+      hideTooltip(null, "paymentTooltip");
+
+      // 1. STEP 1: FIRST NAME
+      if (!firstName) {
+        showTooltip(
+          firstNameInput,
+          "firstNameTooltip",
+          "Please enter your first name.",
+        );
+        firstNameInput.focus();
+        return; // HARD STOP
       }
-    }, 580);
-  });
+
+      // 2. STEP 2: LAST NAME
+      if (!lastName) {
+        showTooltip(
+          lastNameInput,
+          "lastNameTooltip",
+          "Please enter your last name.",
+        );
+        lastNameInput.focus();
+        return; // HARD STOP
+      }
+
+      // 3. STEP 3: EMAIL (PRESENCE & SYNTAX)
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!email) {
+        showTooltip(
+          emailInput,
+          "emailTooltip",
+          "Please enter your email address.",
+        );
+        emailInput.focus();
+        return; // HARD STOP
+      }
+
+      if (!emailPattern.test(email)) {
+        showTooltip(
+          emailInput,
+          "emailTooltip",
+          "Please enter a valid email address.",
+        );
+        emailInput.focus();
+        return; // HARD STOP
+      }
+
+      // 4. STEP 4: PAYMENT METHOD RADIO SELECTION
+      const selectedRadio = document.querySelector(
+        "input[name='payment-method']:checked",
+      );
+
+      if (!selectedRadio) {
+        showTooltip(null, "paymentTooltip", "Please select a payment method.");
+
+        // Clear warning dynamically once user checks an option
+        const radioInputs = document.querySelectorAll(
+          "input[name='payment-method']",
+        );
+        radioInputs.forEach((radio) => {
+          radio.addEventListener(
+            "change",
+            () => hideTooltip(null, "paymentTooltip"),
+            { once: true },
+          );
+        });
+
+        return; // HARD STOP: Form cannot proceed!
+      }
+
+      const paymentMethodValue = selectedRadio.value;
+
+      // 5. STEP 5: BACKEND API SUBMISSION
+      try {
+        const response = await fetch("/api/checkout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            paymentMethod: paymentMethodValue,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          showTooltip(
+            emailInput,
+            "emailTooltip",
+            result.message || "Please enter a valid email address.",
+          );
+          emailInput.focus();
+          return; // HARD STOP
+        }
+
+        // SUCCESS: Proceed to slide modal
+        resetCheckoutModal();
+        modalContentSlideOutUp();
+        setTimeout(() => {
+          modalContentSlideInUp(paymentMethodValue);
+          if (paymentMethodValue === "havale-eft-payment-method") {
+            startHavaleEftTimer(timerState);
+          }
+        }, 580);
+      } catch (error) {
+        console.error("Server Communication Error:", error);
+        showTooltip(
+          emailInput,
+          "emailTooltip",
+          "Could not reach backend server. Make sure Node server is running.",
+        );
+      }
+    });
+  }
 
   if (resendEmailBtn) {
     resendEmailBtn.addEventListener("click", () => {
@@ -622,12 +782,14 @@ function run() {
     });
   }
 
-  havaleEftPaymentMethodConfirmBtn.addEventListener("click", () => {
-    modalContentSlideOutUp();
-    setTimeout(() => {
-      modalContentSlideInUp("payment-confirmation");
-    }, 540);
-  });
+  if (havaleEftPaymentMethodConfirmBtn) {
+    havaleEftPaymentMethodConfirmBtn.addEventListener("click", () => {
+      modalContentSlideOutUp();
+      setTimeout(() => {
+        modalContentSlideInUp("payment-confirmation");
+      }, 540);
+    });
+  }
 
   modalReturnBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -644,13 +806,16 @@ function run() {
       clearInterval(timerState.countdownInterval);
       closeModalContent();
       setTimeout(() => {
-        checkoutForm.reset();
+        resetCheckoutModal();
         checkoutPrice = 0;
       }, 600);
     });
   });
 
+  // Modal Backdrop Click
   window.addEventListener("click", (e) => {
+    if (typeof modal === "undefined") return;
+
     const transactionConfirmation = document.querySelector(
       ".payment-confirmation.modal-content.modal-content-slide-in-up",
     );
@@ -661,10 +826,11 @@ function run() {
         setTimeout(() => closeModal(), 600);
       }
     } else {
-      if (e.target == modal) {
+      if (e.target === modal) {
         clearInterval(timerState.countdownInterval);
         closeModalContent();
         setTimeout(() => {
+          resetCheckoutModal();
           checkoutPrice = 0;
         }, 600);
       }
@@ -673,10 +839,10 @@ function run() {
 
   links.forEach((link) => {
     link.addEventListener("mouseenter", () => {
-      scroller.classList.add("paused");
+      if (scroller) scroller.classList.add("paused");
     });
     link.addEventListener("mouseleave", () => {
-      scroller.classList.remove("paused");
+      if (scroller) scroller.classList.remove("paused");
     });
   });
 }

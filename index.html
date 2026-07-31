@@ -233,12 +233,14 @@
             </div>
           </div>
           <div>
-            <form action="" id="checkout-form">
+            <!-- Enabled 'novalidate' to stop native browser popups -->
+            <form action="" id="checkout-form" novalidate>
               <div class="checkout-content">
                 <div class="checkout-content-payment-option">
                   <div class="checkout-content-payment-option-input-text">
+                    <!-- First Name -->
                     <div
-                      class="checkout-content-payment-option-input-text-container"
+                      class="checkout-content-payment-option-input-text-container field-wrapper"
                     >
                       <input
                         type="text"
@@ -253,9 +255,19 @@
                         for="firstName"
                         >First Name</label
                       ><br />
+                      <div
+                        id="firstNameTooltip"
+                        class="custom-tooltip hidden"
+                        role="alert"
+                      >
+                        <span class="tooltip-arrow"></span>
+                        <span class="tooltip-text"></span>
+                      </div>
                     </div>
+
+                    <!-- Last Name -->
                     <div
-                      class="checkout-content-payment-option-input-text-container"
+                      class="checkout-content-payment-option-input-text-container field-wrapper"
                     >
                       <input
                         type="text"
@@ -270,9 +282,19 @@
                         for="lastName"
                         >Last Name</label
                       ><br />
+                      <div
+                        id="lastNameTooltip"
+                        class="custom-tooltip hidden"
+                        role="alert"
+                      >
+                        <span class="tooltip-arrow"></span>
+                        <span class="tooltip-text"></span>
+                      </div>
                     </div>
+
+                    <!-- Email -->
                     <div
-                      class="checkout-content-payment-option-input-text-container"
+                      class="checkout-content-payment-option-input-text-container field-wrapper"
                     >
                       <input
                         type="email"
@@ -287,9 +309,21 @@
                         for="email"
                         >E-mail</label
                       ><br />
+                      <div
+                        id="emailTooltip"
+                        class="custom-tooltip hidden"
+                        role="alert"
+                      >
+                        <span class="tooltip-arrow"></span>
+                        <span class="tooltip-text"></span>
+                      </div>
                     </div>
                   </div>
-                  <div class="checkout-content-payment-option-input-option">
+
+                  <!-- Payment Options -->
+                  <div
+                    class="checkout-content-payment-option-input-option field-wrapper"
+                  >
                     <div
                       class="checkout-content-payment-option-input-option-title"
                     >
@@ -319,8 +353,17 @@
                         /><span class="radio-label">Debit/Credit card</span>
                       </label>
                     </div>
+                    <div
+                      id="paymentTooltip"
+                      class="custom-tooltip hidden"
+                      role="alert"
+                    >
+                      <span class="tooltip-arrow"></span>
+                      <span class="tooltip-text"></span>
+                    </div>
                   </div>
                 </div>
+
                 <div class="checkout-content-total">
                   <div class="checkout-content-total-label">
                     <h4>Total:</h4>
