@@ -94,10 +94,6 @@ function setLanguage(lang) {
           title: "Checkout",
           inputLabels: ["First Name", "Last Name", "E-mail"],
           paymentMethodLabel: "Payment Method",
-          paymentMethodOption: [
-            "Turkish Domestic Bank Transfer/EFT",
-            "Debit/Credit Card",
-          ],
           totalLabel: "Total:",
           btn: "Confirm",
         },
@@ -108,10 +104,6 @@ function setLanguage(lang) {
           ],
           resendEmailBtn: "Resend",
           confirmBtn: "Confirm",
-        },
-        iyzicoPaymentMethod: {
-          availabilityNotice:
-            "I am currently integrating <strong>iyzico</strong> to provide a secure payment experience. This method is not available in the current preview, but will be fully functional once the site is live. Please try another payment method for this demo.",
         },
         paymentConfirmation: {
           title: "Thank you",
@@ -216,7 +208,6 @@ function setLanguage(lang) {
           title: "Ödeme",
           inputLabels: ["Adı", "Soyadı", "E-posta"],
           paymentMethodLabel: "Ödeme Yöntemi",
-          paymentMethodOption: ["Havale/EFT", "Banka/Kredi Kartı"],
           totalLabel: "Toplam:",
           btn: "Onayla",
         },
@@ -227,10 +218,6 @@ function setLanguage(lang) {
           ],
           resendEmailBtn: "Tekrar Gönder",
           confirmBtn: "Onayla",
-        },
-        iyzicoPaymentMethod: {
-          availabilityNotice:
-            "Güvenli bir ödeme deneyimi sunmak için şu anda <strong>iyzico</strong> entegrasyonu üzerinde çalışıyorum. Bu yöntem şu anki önizlemede mevcut değildir, ancak site yayına girdiğinde tamamen işlevsel olacaktır. Lütfen bu demo için başka bir ödeme yöntemi deneyin.",
         },
         paymentConfirmation: {
           title: "Teşekkür ederiz",
@@ -311,9 +298,6 @@ function setLanguage(lang) {
   document.querySelector(
     ".checkout-content-payment-option-input-option-title h4",
   ).innerText = language[lang].billingForm.checkout.paymentMethodLabel;
-  document.querySelectorAll(".radio-label").forEach((el, i) => {
-    el.innerText = language[lang].billingForm.checkout.paymentMethodOption[i];
-  });
   document.querySelector(".checkout-content-total-label h4").innerText =
     language[lang].billingForm.checkout.totalLabel;
   document.getElementById("checkout-btn-text").innerText =
@@ -332,9 +316,6 @@ function setLanguage(lang) {
   document.getElementById(
     "havale-eft-payment-method-confirm-btn-text",
   ).innerText = language[lang].billingForm.havaleEftPaymentMethod.confirmBtn;
-
-  document.getElementById("iyzico-notice").innerHTML =
-    language[lang].billingForm.iyzicoPaymentMethod.availabilityNotice;
 
   document.querySelector(".payment-confirmation h1").innerHTML =
     language[lang].billingForm.paymentConfirmation.title;
@@ -488,7 +469,6 @@ function startHavaleEftTimer(stateHolder) {
   resendBtn.disabled = true;
   timerDisplay.innerText = "00:30";
 
-  // Clear any existing active interval to prevent duplicate runners
   clearInterval(stateHolder.countdownInterval);
 
   stateHolder.countdownInterval = setInterval(() => {
@@ -524,18 +504,16 @@ function hideTooltip(inputElement, tooltipId) {
 function resetCheckoutModal() {
   const checkoutForm = document.getElementById("checkout-form");
   if (checkoutForm) {
-    checkoutForm.reset(); // Resets input values & radio selections
+    checkoutForm.reset();
   }
 
   const firstNameInput = document.getElementById("firstName");
   const lastNameInput = document.getElementById("lastName");
   const emailInput = document.getElementById("email");
 
-  // Hide all tooltips & remove error highlights
   hideTooltip(firstNameInput, "firstNameTooltip");
   hideTooltip(lastNameInput, "lastNameTooltip");
   hideTooltip(emailInput, "emailTooltip");
-  hideTooltip(null, "paymentTooltip");
 }
 
 function run() {
@@ -637,11 +615,11 @@ function run() {
   });
 
   // ==========================================
-  // SINGLE CONSOLIDATED FORM SUBMIT HANDLER
+  // DIRECT HAVALE / EFT FORM SUBMISSION HANDLER
   // ==========================================
   if (checkoutForm) {
     checkoutForm.addEventListener("submit", async (e) => {
-      e.preventDefault(); // Stop native form submission
+      e.preventDefault();
 
       const firstNameInput = document.getElementById("firstName");
       const lastNameInput = document.getElementById("lastName");
@@ -651,13 +629,11 @@ function run() {
       const lastName = lastNameInput ? lastNameInput.value.trim() : "";
       const email = emailInput ? emailInput.value.trim() : "";
 
-      // Clear all existing warnings first
       hideTooltip(firstNameInput, "firstNameTooltip");
       hideTooltip(lastNameInput, "lastNameTooltip");
       hideTooltip(emailInput, "emailTooltip");
-      hideTooltip(null, "paymentTooltip");
 
-      // 1. STEP 1: FIRST NAME
+      // 1. FIRST NAME VALIDATION
       if (!firstName) {
         showTooltip(
           firstNameInput,
@@ -665,10 +641,10 @@ function run() {
           "Please enter your first name.",
         );
         firstNameInput.focus();
-        return; // HARD STOP
+        return;
       }
 
-      // 2. STEP 2: LAST NAME
+      // 2. LAST NAME VALIDATION
       if (!lastName) {
         showTooltip(
           lastNameInput,
@@ -676,10 +652,10 @@ function run() {
           "Please enter your last name.",
         );
         lastNameInput.focus();
-        return; // HARD STOP
+        return;
       }
 
-      // 3. STEP 3: EMAIL (PRESENCE & SYNTAX)
+      // 3. EMAIL VALIDATION
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       if (!email) {
@@ -689,7 +665,7 @@ function run() {
           "Please enter your email address.",
         );
         emailInput.focus();
-        return; // HARD STOP
+        return;
       }
 
       if (!emailPattern.test(email)) {
@@ -699,35 +675,12 @@ function run() {
           "Please enter a valid email address.",
         );
         emailInput.focus();
-        return; // HARD STOP
+        return;
       }
 
-      // 4. STEP 4: PAYMENT METHOD RADIO SELECTION
-      const selectedRadio = document.querySelector(
-        "input[name='payment-method']:checked",
-      );
+      // 4. DIRECT HAVALE/EFT BACKEND SUBMISSION
+      const paymentMethodValue = "havale-eft-payment-method";
 
-      if (!selectedRadio) {
-        showTooltip(null, "paymentTooltip", "Please select a payment method.");
-
-        // Clear warning dynamically once user checks an option
-        const radioInputs = document.querySelectorAll(
-          "input[name='payment-method']",
-        );
-        radioInputs.forEach((radio) => {
-          radio.addEventListener(
-            "change",
-            () => hideTooltip(null, "paymentTooltip"),
-            { once: true },
-          );
-        });
-
-        return; // HARD STOP: Form cannot proceed!
-      }
-
-      const paymentMethodValue = selectedRadio.value;
-
-      // 5. STEP 5: BACKEND API SUBMISSION
       try {
         const response = await fetch("/api/checkout", {
           method: "POST",
@@ -751,17 +704,15 @@ function run() {
             result.message || "Please enter a valid email address.",
           );
           emailInput.focus();
-          return; // HARD STOP
+          return;
         }
 
-        // SUCCESS: Proceed to slide modal
+        // DIRECT TRANSITION TO HAVALE SLIDE
         resetCheckoutModal();
         modalContentSlideOutUp();
         setTimeout(() => {
           modalContentSlideInUp(paymentMethodValue);
-          if (paymentMethodValue === "havale-eft-payment-method") {
-            startHavaleEftTimer(timerState);
-          }
+          startHavaleEftTimer(timerState);
         }, 580);
       } catch (error) {
         console.error("Server Communication Error:", error);
@@ -812,7 +763,6 @@ function run() {
     });
   });
 
-  // Modal Backdrop Click
   window.addEventListener("click", (e) => {
     if (typeof modal === "undefined") return;
 

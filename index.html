@@ -233,7 +233,6 @@
             </div>
           </div>
           <div>
-            <!-- Enabled 'novalidate' to stop native browser popups -->
             <form action="" id="checkout-form" novalidate>
               <div class="checkout-content">
                 <div class="checkout-content-payment-option">
@@ -320,7 +319,7 @@
                     </div>
                   </div>
 
-                  <!-- Payment Options -->
+                  <!-- Payment Info Block (No Radios) -->
                   <div
                     class="checkout-content-payment-option-input-option field-wrapper"
                   >
@@ -329,38 +328,11 @@
                     >
                       <h4>Payment Method</h4>
                     </div>
-                    <div>
-                      <label
-                        class="checkout-content-payment-option-input-option-payment-method"
-                      >
-                        <input
-                          type="radio"
-                          name="payment-method"
-                          value="havale-eft-payment-method"
-                          required
-                        /><span class="radio-label">Havale/EFT</span>
-                      </label>
-                    </div>
-                    <div>
-                      <label
-                        class="checkout-content-payment-option-input-option-payment-method"
-                      >
-                        <input
-                          type="radio"
-                          name="payment-method"
-                          value="iyzico-payment-method"
-                          required
-                        /><span class="radio-label">Debit/Credit card</span>
-                      </label>
-                    </div>
-                    <div
-                      id="paymentTooltip"
-                      class="custom-tooltip hidden"
-                      role="alert"
-                    >
-                      <span class="tooltip-arrow"></span>
-                      <span class="tooltip-text"></span>
-                    </div>
+                    <p class="payment-method-info">
+                      Payment will be processed via
+                      <strong>Havale / EFT</strong>. Details will be provided
+                      after placing your order.
+                    </p>
                   </div>
                 </div>
 
@@ -433,25 +405,6 @@
                 >Confirm</span
               >
             </button>
-          </div>
-        </div>
-        <div
-          id="iyzico-payment-method"
-          class="iyzico-payment-method modal-content"
-        >
-          <div class="payment-method-header">
-            <div>
-              <button class="modal-return-btn">&laquo;</button>
-            </div>
-            <div><button class="modal-close-btn">&times;</button></div>
-          </div>
-          <div class="payment-method-content">
-            <p id="iyzico-notice">
-              I am currently integrating <strong>iyzico</strong> to provide a
-              secure payment experience. This method is not available in the
-              current preview, but will be fully functional once the site is
-              live. Please try another payment method for this demo.
-            </p>
           </div>
         </div>
         <div

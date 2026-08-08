@@ -647,15 +647,13 @@ body.lockScroll {
 }
 
 .checkout,
-.havale-eft-payment-method,
-.iyzico-payment-method {
+.havale-eft-payment-method {
   padding: 20px;
   gap: 2rem;
   flex-direction: column;
 }
 
 .havale-eft-payment-method,
-.iyzico-payment-method,
 .payment-confirmation {
   width: 400px;
 }
@@ -664,12 +662,8 @@ body.lockScroll {
   height: 440px;
 }
 
-.iyzico-payment-method {
-  height: 340px;
-}
-
 .checkout {
-  height: 632px;
+  height: 560px;
   width: 500px;
 }
 
@@ -738,31 +732,11 @@ input[type="email"]:focus {
   padding-bottom: 6px;
 }
 
-.checkout-content-payment-option-input-option-payment-method {
-  flex: 1;
-  cursor: pointer;
-  transition: 0.2s;
-  border: 2px solid black;
-  display: block;
+.payment-method-info {
   text-align: start;
-  padding: 15px;
-  cursor: pointer;
-}
-
-.checkout-content-payment-option-input-option-payment-method:has(
-  input:checked
-) {
-  background-color: rgba(255, 70, 70, 0.2);
-  border: 2px solid #ff4646;
-}
-
-.checkout-content-payment-option-input-option-payment-method
-  input[type="radio"] {
-  pointer-events: none;
-}
-
-input[type="radio"] {
-  accent-color: #ff4646;
+  font-size: 0.95rem;
+  margin: 0;
+  color: #333;
 }
 
 .checkout-content-payment-detail {
@@ -840,13 +814,9 @@ input[type="radio"] {
   transform: translateY(-4px);
 }
 
-.havale-eft-payment-method .payment-method-content,
-.iyzico-payment-method .payment-method-content {
+.havale-eft-payment-method .payment-method-content {
   display: flex;
   align-items: center;
-}
-
-.havale-eft-payment-method .payment-method-content {
   flex-direction: column;
   gap: 1rem;
 }
@@ -855,8 +825,7 @@ input[type="radio"] {
   font-size: 1.6rem;
 }
 
-.havale-eft-payment-method .payment-method-content > p,
-.iyzico-payment-method .payment-method-content > p {
+.havale-eft-payment-method .payment-method-content > p {
   font-size: 16px;
 }
 
@@ -877,11 +846,6 @@ input[type="radio"] {
   transform: none;
   box-shadow: none;
   transition: 0.3s ease-out;
-}
-
-.iyzico-payment-method .payment-method-content > p {
-  padding: 0 16%;
-  padding-bottom: 12%;
 }
 
 .payment-confirmation {
@@ -1170,12 +1134,12 @@ footer {
   .item,
   .about-Product-box-week-item ul,
   .pricing-box-item ul {
-    font-size: 0.85rem; /* Slightly smaller base text */
+    font-size: 0.85rem;
   }
 
   #about-Product-title,
   #pricing-title {
-    font-size: 1.6rem; /* Scaled down from 1.8rem */
+    font-size: 1.6rem;
   }
 
   .about-Product-box-week-title > h3,
@@ -1201,7 +1165,7 @@ footer {
 
   /* about owner section */
   #about-owner-paragraph {
-    font-size: 1.3rem; /* Scaled down from 1.6rem */
+    font-size: 1.3rem;
     line-height: 1.4;
   }
 
@@ -1212,12 +1176,12 @@ footer {
   /* pricing section */
   .pricing {
     grid-template-rows: auto auto auto;
-    height: auto; /* Hardcoded svh heights often break on mobile when content pushes down */
+    height: auto;
   }
 
   .pricing-box-2,
   .pricing-box-3 {
-    padding: 0 5%; /* Fixed: 28% padding was crushing your content into a tiny column */
+    padding: 0 5%;
   }
 
   .price {
