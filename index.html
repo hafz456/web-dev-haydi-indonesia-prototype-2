@@ -415,6 +415,92 @@
           <div><p>Tap here or the gray area to dismiss</p></div>
         </div>
       </div>
+
+      <div
+        class="checkout-content-payment-option-input-text-container field-wrapper"
+      >
+        <input
+          type="text"
+          name="firstName"
+          id="firstName"
+          placeholder=""
+          autocomplete="off"
+          required
+        /><br />
+        <label
+          class="checkout-content-payment-option-input-text-label"
+          for="firstName"
+          >First Name</label
+        ><br />
+
+        <!-- Hidden validation text containers -->
+        <span class="val-msg val-empty hidden" style="display: none"
+          >Please enter your first name.</span
+        >
+
+        <div id="firstNameTooltip" class="custom-tooltip hidden" role="alert">
+          <span class="tooltip-arrow"></span>
+          <span class="tooltip-text"></span>
+        </div>
+      </div>
+
+      <!-- Last Name Field Wrapper -->
+      <div
+        class="checkout-content-payment-option-input-text-container field-wrapper"
+      >
+        <input
+          type="text"
+          name="lastName"
+          id="lastName"
+          placeholder=""
+          autocomplete="off"
+          required
+        /><br />
+        <label
+          class="checkout-content-payment-option-input-text-label"
+          for="lastName"
+          >Last Name</label
+        ><br />
+
+        <span class="val-msg val-empty hidden" style="display: none"
+          >Please enter your last name.</span
+        >
+
+        <div id="lastNameTooltip" class="custom-tooltip hidden" role="alert">
+          <span class="tooltip-arrow"></span>
+          <span class="tooltip-text"></span>
+        </div>
+      </div>
+      <!-- Email Field Wrapper -->
+      <div
+        class="checkout-content-payment-option-input-text-container field-wrapper"
+      >
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder=""
+          autocomplete="off"
+          required
+        /><br />
+        <label
+          class="checkout-content-payment-option-input-text-label"
+          for="email"
+          >E-mail</label
+        ><br />
+
+        <span class="val-msg val-empty hidden" style="display: none"
+          >Please enter your email address.</span
+        >
+        <span class="val-msg val-invalid hidden" style="display: none"
+          >Please enter a valid email address.</span
+        >
+
+        <div id="emailTooltip" class="custom-tooltip hidden" role="alert">
+          <span class="tooltip-arrow"></span>
+          <span class="tooltip-text"></span>
+        </div>
+      </div>
     </section>
     <section id="footer">
       <footer>

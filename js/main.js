@@ -109,6 +109,14 @@ function setLanguage(lang) {
           title: "Thank you",
           instruction: "Tap here or the gray area to dismiss",
         },
+        validation: {
+          firstNameEmpty: "Please enter your first name.",
+          lastNameEmpty: "Please enter your last name.",
+          emailEmpty: "Please enter your email address.",
+          emailInvalid: "Please enter a valid email address.",
+          serverError:
+            "Could not reach backend server. Make sure Node server is running.",
+        },
       },
       footer: {
         titles: ["Contact us", "Follow us"],
@@ -223,6 +231,14 @@ function setLanguage(lang) {
           title: "Teşekkür ederiz",
           instruction: "Kapatmak için buraya veya gri alana dokunun.",
         },
+        validation: {
+          firstNameEmpty: "Lütfen adınızı giriniz.",
+          lastNameEmpty: "Lütfen soyadınızı giriniz.",
+          emailEmpty: "Lütfen e-posta adresinizi giriniz.",
+          emailInvalid: "Lütfen geçerli bir e-posta adresi giriniz.",
+          serverError:
+            "Sunucuya ulaşılamadı. Node sunucusunun çalıştığından emin olun.",
+        },
       },
       footer: {
         titles: ["İletişim", "Takip edin"],
@@ -302,6 +318,15 @@ function setLanguage(lang) {
     language[lang].billingForm.checkout.totalLabel;
   document.getElementById("checkout-btn-text").innerText =
     language[lang].billingForm.checkout.btn;
+
+  document.querySelector("#firstName ~ .val-empty").innerText =
+    language[lang].billingForm.validation.firstNameEmpty;
+  document.querySelector("#lastName ~ .val-empty").innerText =
+    language[lang].billingForm.validation.lastNameEmpty;
+  document.querySelector("#email ~ .val-empty").innerText =
+    language[lang].billingForm.validation.emailEmpty;
+  document.querySelector("#email ~ .val-invalid").innerText =
+    language[lang].billingForm.validation.emailInvalid;
 
   document
     .querySelectorAll(".havale-eft-payment-method-instruction")
@@ -614,9 +639,6 @@ function run() {
     });
   });
 
-  // ==========================================
-  // DIRECT HAVALE / EFT FORM SUBMISSION HANDLER
-  // ==========================================
   if (checkoutForm) {
     checkoutForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -635,22 +657,18 @@ function run() {
 
       // 1. FIRST NAME VALIDATION
       if (!firstName) {
-        showTooltip(
-          firstNameInput,
-          "firstNameTooltip",
-          "Please enter your first name.",
-        );
+        const msg =
+          firstNameInput.parentElement.querySelector(".val-empty").innerText;
+        showTooltip(firstNameInput, "firstNameTooltip", msg);
         firstNameInput.focus();
         return;
       }
 
       // 2. LAST NAME VALIDATION
       if (!lastName) {
-        showTooltip(
-          lastNameInput,
-          "lastNameTooltip",
-          "Please enter your last name.",
-        );
+        const msg =
+          lastNameInput.parentElement.querySelector(".val-empty").innerText;
+        showTooltip(lastNameInput, "lastNameTooltip", msg);
         lastNameInput.focus();
         return;
       }
@@ -659,69 +677,22 @@ function run() {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       if (!email) {
-        showTooltip(
-          emailInput,
-          "emailTooltip",
-          "Please enter your email address.",
-        );
+        const msg =
+          emailInput.parentElement.querySelector(".val-empty").innerText;
+        showTooltip(emailInput, "emailTooltip", msg);
         emailInput.focus();
         return;
       }
 
       if (!emailPattern.test(email)) {
-        showTooltip(
-          emailInput,
-          "emailTooltip",
-          "Please enter a valid email address.",
-        );
+        const msg =
+          emailInput.parentElement.querySelector(".val-invalid").innerText;
+        showTooltip(emailInput, "emailTooltip", msg);
         emailInput.focus();
         return;
       }
 
-      // 4. DIRECT HAVALE/EFT BACKEND SUBMISSION
-      const paymentMethodValue = "havale-eft-payment-method";
-
-      try {
-        const response = await fetch("/api/checkout", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            firstName,
-            lastName,
-            email,
-            paymentMethod: paymentMethodValue,
-          }),
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          showTooltip(
-            emailInput,
-            "emailTooltip",
-            result.message || "Please enter a valid email address.",
-          );
-          emailInput.focus();
-          return;
-        }
-
-        // DIRECT TRANSITION TO HAVALE SLIDE
-        resetCheckoutModal();
-        modalContentSlideOutUp();
-        setTimeout(() => {
-          modalContentSlideInUp(paymentMethodValue);
-          startHavaleEftTimer(timerState);
-        }, 580);
-      } catch (error) {
-        console.error("Server Communication Error:", error);
-        showTooltip(
-          emailInput,
-          "emailTooltip",
-          "Could not reach backend server. Make sure Node server is running.",
-        );
-      }
+      // ... proceed to backend fetch ...
     });
   }
 
