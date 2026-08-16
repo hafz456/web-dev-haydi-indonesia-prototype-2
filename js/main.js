@@ -94,8 +94,18 @@ function setLanguage(lang) {
           title: "Checkout",
           inputLabels: ["First Name", "Last Name", "E-mail"],
           paymentMethodLabel: "Payment Method",
+          instruction:
+            "Payment will be processed via <strong>Havale / EFT</strong>. Details will be provided after placing your order.",
           totalLabel: "Total:",
           btn: "Confirm",
+        },
+        validation: {
+          firstNameEmpty: "Please enter your first name.",
+          lastNameEmpty: "Please enter your last name.",
+          emailEmpty: "Please enter your email address.",
+          emailInvalid: "Please enter a valid email address.",
+          serverError:
+            "Could not reach backend server. Make sure Node server is running.",
         },
         havaleEftPaymentMethod: {
           instruction: [
@@ -108,14 +118,6 @@ function setLanguage(lang) {
         paymentConfirmation: {
           title: "Thank you",
           instruction: "Tap here or the gray area to dismiss",
-        },
-        validation: {
-          firstNameEmpty: "Please enter your first name.",
-          lastNameEmpty: "Please enter your last name.",
-          emailEmpty: "Please enter your email address.",
-          emailInvalid: "Please enter a valid email address.",
-          serverError:
-            "Could not reach backend server. Make sure Node server is running.",
         },
       },
       footer: {
@@ -216,8 +218,18 @@ function setLanguage(lang) {
           title: "Ödeme",
           inputLabels: ["Adı", "Soyadı", "E-posta"],
           paymentMethodLabel: "Ödeme Yöntemi",
+          instruction:
+            "Ödeme <strong>Havale / EFT</strong> ile işlenecektir. Detaylar siparişinizi verdikten sonra verilecektir.",
           totalLabel: "Toplam:",
           btn: "Onayla",
+        },
+        validation: {
+          firstNameEmpty: "Lütfen adınızı giriniz.",
+          lastNameEmpty: "Lütfen soyadınızı giriniz.",
+          emailEmpty: "Lütfen e-posta adresinizi giriniz.",
+          emailInvalid: "Lütfen geçerli bir e-posta adresi giriniz.",
+          serverError:
+            "Sunucuya ulaşılamadı. Node sunucusunun çalıştığından emin olun.",
         },
         havaleEftPaymentMethod: {
           instruction: [
@@ -230,14 +242,6 @@ function setLanguage(lang) {
         paymentConfirmation: {
           title: "Teşekkür ederiz",
           instruction: "Kapatmak için buraya veya gri alana dokunun.",
-        },
-        validation: {
-          firstNameEmpty: "Lütfen adınızı giriniz.",
-          lastNameEmpty: "Lütfen soyadınızı giriniz.",
-          emailEmpty: "Lütfen e-posta adresinizi giriniz.",
-          emailInvalid: "Lütfen geçerli bir e-posta adresi giriniz.",
-          serverError:
-            "Sunucuya ulaşılamadı. Node sunucusunun çalıştığından emin olun.",
         },
       },
       footer: {
@@ -316,6 +320,8 @@ function setLanguage(lang) {
   ).innerText = language[lang].billingForm.checkout.paymentMethodLabel;
   document.querySelector(".checkout-content-total-label h4").innerText =
     language[lang].billingForm.checkout.totalLabel;
+  document.querySelector(".payment-method-info").innerHTML =
+    language[lang].billingForm.checkout.instruction;
   document.getElementById("checkout-btn-text").innerText =
     language[lang].billingForm.checkout.btn;
 
@@ -351,6 +357,80 @@ function setLanguage(lang) {
   document.querySelectorAll(".footer-title").forEach((el, i) => {
     el.innerText = language[lang].footer.titles[i];
   });
+
+  if (
+    !document.getElementById("firstNameTooltip").classList.contains("hidden")
+  ) {
+    showTooltip(
+      null,
+      "firstNameTooltip",
+      document.querySelector("#firstName ~ .val-empty").innerText,
+    );
+  }
+
+  if (
+    !document.getElementById("lastNameTooltip").classList.contains("hidden")
+  ) {
+    showTooltip(
+      null,
+      "lastNameTooltip",
+      document.querySelector("#lastName ~ .val-empty").innerText,
+    );
+  }
+
+  if (!document.getElementById("emailTooltip").classList.contains("hidden")) {
+    // Check whether email field is empty or invalid to show appropriate text
+    if (!document.getElementById("email").value.trim()) {
+      showTooltip(
+        null,
+        "emailTooltip",
+        document.querySelector("#email ~ .val-empty").innerText,
+      );
+    } else {
+      showTooltip(
+        null,
+        "emailTooltip",
+        document.querySelector("#email ~ .val-invalid").innerText,
+      );
+    }
+  }
+
+  if (
+    !document.getElementById("firstNameTooltip").classList.contains("hidden")
+  ) {
+    showTooltip(
+      null,
+      "firstNameTooltip",
+      document.querySelector("#firstName ~ .val-empty").innerText,
+    );
+  }
+
+  if (
+    !document.getElementById("lastNameTooltip").classList.contains("hidden")
+  ) {
+    showTooltip(
+      null,
+      "lastNameTooltip",
+      document.querySelector("#lastName ~ .val-empty").innerText,
+    );
+  }
+
+  if (!document.getElementById("emailTooltip").classList.contains("hidden")) {
+    // Check whether email field is empty or invalid to show appropriate text
+    if (!document.getElementById("email").value.trim()) {
+      showTooltip(
+        null,
+        "emailTooltip",
+        document.querySelector("#email ~ .val-empty").innerText,
+      );
+    } else {
+      showTooltip(
+        null,
+        "emailTooltip",
+        document.querySelector("#email ~ .val-invalid").innerText,
+      );
+    }
+  }
 
   if (lang == "tr") {
     document.getElementById("lang-tr").classList.add("lang-active");
@@ -519,26 +599,30 @@ function showTooltip(inputElement, tooltipId, message) {
   tooltip.classList.remove("hidden");
 }
 
+function showTooltip(inputElement, tooltipId, message) {
+  if (!document.getElementById(tooltipId)) return;
+
+  if (document.querySelector(`#${tooltipId} .tooltip-text`)) {
+    document.querySelector(`#${tooltipId} .tooltip-text`).textContent = message;
+  }
+
+  document.getElementById(tooltipId).classList.remove("hidden");
+}
+
 function hideTooltip(inputElement, tooltipId) {
-  const tooltip = document.getElementById(tooltipId);
-  if (tooltip) {
-    tooltip.classList.add("hidden");
+  if (document.getElementById(tooltipId)) {
+    document.getElementById(tooltipId).classList.add("hidden");
   }
 }
 
 function resetCheckoutModal() {
-  const checkoutForm = document.getElementById("checkout-form");
-  if (checkoutForm) {
-    checkoutForm.reset();
+  if (document.getElementById("checkout-form")) {
+    document.getElementById("checkout-form").reset();
   }
 
-  const firstNameInput = document.getElementById("firstName");
-  const lastNameInput = document.getElementById("lastName");
-  const emailInput = document.getElementById("email");
-
-  hideTooltip(firstNameInput, "firstNameTooltip");
-  hideTooltip(lastNameInput, "lastNameTooltip");
-  hideTooltip(emailInput, "emailTooltip");
+  hideTooltip(null, "firstNameTooltip");
+  hideTooltip(null, "lastNameTooltip");
+  hideTooltip(null, "emailTooltip");
 }
 
 function run() {
@@ -640,60 +724,64 @@ function run() {
   });
 
   if (checkoutForm) {
-    checkoutForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    document
+      .getElementById("checkout-form")
+      .addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-      const firstNameInput = document.getElementById("firstName");
-      const lastNameInput = document.getElementById("lastName");
-      const emailInput = document.getElementById("email");
+        hideTooltip(null, "firstNameTooltip");
+        hideTooltip(null, "lastNameTooltip");
+        hideTooltip(null, "emailTooltip");
 
-      const firstName = firstNameInput ? firstNameInput.value.trim() : "";
-      const lastName = lastNameInput ? lastNameInput.value.trim() : "";
-      const email = emailInput ? emailInput.value.trim() : "";
+        // 1. FIRST NAME VALIDATION
+        if (!document.getElementById("firstName").value.trim()) {
+          showTooltip(
+            null,
+            "firstNameTooltip",
+            document.querySelector("#firstName ~ .val-empty").innerText,
+          );
+          document.getElementById("firstName").focus();
+          return;
+        }
 
-      hideTooltip(firstNameInput, "firstNameTooltip");
-      hideTooltip(lastNameInput, "lastNameTooltip");
-      hideTooltip(emailInput, "emailTooltip");
+        // 2. LAST NAME VALIDATION
+        if (!document.getElementById("lastName").value.trim()) {
+          showTooltip(
+            null,
+            "lastNameTooltip",
+            document.querySelector("#lastName ~ .val-empty").innerText,
+          );
+          document.getElementById("lastName").focus();
+          return;
+        }
 
-      // 1. FIRST NAME VALIDATION
-      if (!firstName) {
-        const msg =
-          firstNameInput.parentElement.querySelector(".val-empty").innerText;
-        showTooltip(firstNameInput, "firstNameTooltip", msg);
-        firstNameInput.focus();
-        return;
-      }
+        // 3. EMAIL VALIDATION
+        if (!document.getElementById("email").value.trim()) {
+          showTooltip(
+            null,
+            "emailTooltip",
+            document.querySelector("#email ~ .val-empty").innerText,
+          );
+          document.getElementById("email").focus();
+          return;
+        }
 
-      // 2. LAST NAME VALIDATION
-      if (!lastName) {
-        const msg =
-          lastNameInput.parentElement.querySelector(".val-empty").innerText;
-        showTooltip(lastNameInput, "lastNameTooltip", msg);
-        lastNameInput.focus();
-        return;
-      }
+        if (
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+            document.getElementById("email").value.trim(),
+          )
+        ) {
+          showTooltip(
+            null,
+            "emailTooltip",
+            document.querySelector("#email ~ .val-invalid").innerText,
+          );
+          document.getElementById("email").focus();
+          return;
+        }
 
-      // 3. EMAIL VALIDATION
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!email) {
-        const msg =
-          emailInput.parentElement.querySelector(".val-empty").innerText;
-        showTooltip(emailInput, "emailTooltip", msg);
-        emailInput.focus();
-        return;
-      }
-
-      if (!emailPattern.test(email)) {
-        const msg =
-          emailInput.parentElement.querySelector(".val-invalid").innerText;
-        showTooltip(emailInput, "emailTooltip", msg);
-        emailInput.focus();
-        return;
-      }
-
-      // ... proceed to backend fetch ...
-    });
+        // ... proceed to backend fetch ...
+      });
   }
 
   if (resendEmailBtn) {

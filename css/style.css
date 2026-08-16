@@ -22,7 +22,8 @@ h1,
 h2,
 h3,
 h4,
-label {
+label,
+.payment-method-info {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   margin: 0;
