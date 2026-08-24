@@ -723,83 +723,38 @@ function run() {
     });
   });
 
-  if (checkoutForm) {
-    document
-      .getElementById("checkout-form")
-      .addEventListener("submit", async (e) => {
-        e.preventDefault();
+  checkoutForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        hideTooltip(null, "firstNameTooltip");
-        hideTooltip(null, "lastNameTooltip");
-        hideTooltip(null, "emailTooltip");
+    const formData = {
+      firstName: document.getElementById("firstName").value.trim(),
+      lastName: document.getElementById("lastName").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      paymentMethod: document.getElementById("paymentMethod").value,
+    };
 
-        // 1. FIRST NAME VALIDATION
-        if (!document.getElementById("firstName").value.trim()) {
-          showTooltip(
-            null,
-            "firstNameTooltip",
-            document.querySelector("#firstName ~ .val-empty").innerText,
-          );
-          document.getElementById("firstName").focus();
-          return;
-        }
-
-        // 2. LAST NAME VALIDATION
-        if (!document.getElementById("lastName").value.trim()) {
-          showTooltip(
-            null,
-            "lastNameTooltip",
-            document.querySelector("#lastName ~ .val-empty").innerText,
-          );
-          document.getElementById("lastName").focus();
-          return;
-        }
-
-        // 3. EMAIL VALIDATION
-        if (!document.getElementById("email").value.trim()) {
-          showTooltip(
-            null,
-            "emailTooltip",
-            document.querySelector("#email ~ .val-empty").innerText,
-          );
-          document.getElementById("email").focus();
-          return;
-        }
-
-        if (
-          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-            document.getElementById("email").value.trim(),
-          )
-        ) {
-          showTooltip(
-            null,
-            "emailTooltip",
-            document.querySelector("#email ~ .val-invalid").innerText,
-          );
-          document.getElementById("email").focus();
-          return;
-        }
-
-        // ... proceed to backend fetch ...
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
-  }
 
-  if (resendEmailBtn) {
-    resendEmailBtn.addEventListener("click", () => {
-      setTimeout(() => {
-        startHavaleEftTimer(timerState);
-      }, 20);
-    });
-  }
+      const data = await response.json();
 
-  if (havaleEftPaymentMethodConfirmBtn) {
-    havaleEftPaymentMethodConfirmBtn.addEventListener("click", () => {
-      modalContentSlideOutUp();
-      setTimeout(() => {
-        modalContentSlideInUp("payment-confirmation");
-      }, 540);
-    });
-  }
+      // Trigger your existing JS warnings based on server signal
+      if (!data.emailValid) {
+        showInvalidEmailWarning();
+      } else if (!data.success) {
+        showMailDeliveryWarning();
+      } else {
+        showSuccessUI();
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      showMailDeliveryWarning();
+    }
+  });
 
   modalReturnBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
