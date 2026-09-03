@@ -726,33 +726,90 @@ function run() {
   checkoutForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const formData = {
-      firstName: document.getElementById("firstName").value.trim(),
-      lastName: document.getElementById("lastName").value.trim(),
-      email: document.getElementById("email").value.trim(),
-      paymentMethod: document.getElementById("paymentMethod").value,
-    };
+    const firstNameInput = document.getElementById("firstName");
+    const lastNameInput = document.getElementById("lastName");
+    const emailInput = document.getElementById("email");
 
+    const firstName = firstNameInput.value.trim();
+    const lastName = lastNameInput.value.trim();
+    const email = emailInput.value.trim();
+
+    let hasError = false;
+
+    // 1. Validate First Name (Client-side)
+    if (!firstName) {
+      showTooltip(
+        firstNameInput,
+        "firstNameTooltip",
+        document.querySelector("#firstName ~ .val-empty").innerText,
+      );
+      hasError = true;
+    } else {
+      hideTooltip(firstNameInput, "firstNameTooltip");
+    }
+
+    // 2. Validate Last Name (Client-side)
+    if (!lastName) {
+      showTooltip(
+        lastNameInput,
+        "lastNameTooltip",
+        document.querySelector("#lastName ~ .val-empty").innerText,
+      );
+      hasError = true;
+    } else {
+      hideTooltip(lastNameInput, "lastNameTooltip");
+    }
+
+    // 3. Validate Empty Email (Client-side)
+    if (!email) {
+      showTooltip(
+        emailInput,
+        "emailTooltip",
+        document.querySelector("#email ~ .val-empty").innerText,
+      );
+      hasError = true;
+    } else {
+      hideTooltip(emailInput, "emailTooltip");
+    }
+
+    // Stop here if any field is empty
+    if (hasError) return;
+
+    // 4. Send request to Node server
     try {
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ firstName, lastName, email }),
       });
 
       const data = await response.json();
 
-      // Trigger your existing JS warnings based on server signal
-      if (!data.emailValid) {
-        showInvalidEmailWarning();
-      } else if (!data.success) {
-        showMailDeliveryWarning();
-      } else {
-        showSuccessUI();
+      // 5. Handle Server Signals
+      if (data.code === "EMAIL_INVALID") {
+        showTooltip(
+          emailInput,
+          "emailTooltip",
+          document.querySelector("#email ~ .val-invalid").innerText,
+        );
+      } else if (data.code === "EMAIL_SENT") {
+        hideTooltip(emailInput, "emailTooltip");
+
+        // Slide to next modal step and start timer
+        modalContentSlideOutDown();
+        setTimeout(() => {
+          modalContentSlideInUp("havale-eft-payment-method");
+          startHavaleEftTimer(timerState);
+        }, 580);
       }
     } catch (error) {
       console.error("Network error:", error);
-      showMailDeliveryWarning();
+      // Display server connection error tooltip
+      showTooltip(
+        emailInput,
+        "emailTooltip",
+        language[currentlang].billingForm.validation.serverError,
+      );
     }
   });
 
