@@ -2,169 +2,276 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Haydi Indonesia</title>
-    <link rel="icon" href="./image/favicon.svg" type="image/svg+xml" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Learn Bahasa Indonesia Online | Hilmy Abdullah Azzam</title>
+    <meta
+      name="description"
+      content="Online Bahasa Indonesia course with a native teacher: 8 weeks from the alphabet to writing your own stories."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800;9..144,900&family=DM+Sans:wght@500;700&display=swap"
       rel="stylesheet"
     />
+    <script>
+      // Animate only if the visitor is new, or was last here more than 2 hours ago.
+      // Add ?animate=1 to the address to force it while testing.
+      (function () {
+        var animate = true;
+        try {
+          var last = Number(localStorage.getItem("lastSeen"));
+          animate = !last || Date.now() - last > 2 * 60 * 60 * 1000;
+        } catch (e) {}
+        if (/[?&]animate=1/.test(location.search)) animate = true;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+          animate = false;
+        if (animate) {
+          var root = document.documentElement;
+          root.classList.add("animate", "intro-playing");
+          if ("scrollRestoration" in history)
+            history.scrollRestoration = "manual";
+          // safety net: if app.js ever fails to run, never leave the visitor stuck behind the welcome screen
+          setTimeout(function () {
+            root.classList.remove("intro-playing");
+            var l = document.getElementById("loader");
+            if (l) l.style.display = "none";
+          }, 9000);
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
-    <section id="loader-page">
-      <div id="loader">
-        <div class="text-container">
-          <div class="fade-text"><h1>Welcome</h1></div>
-          <div class="fade-text fade-delay">
-            <h2>Learn Indonesian with our language course</h2>
-          </div>
-          <div></div>
+    <div id="loader" aria-hidden="true">
+      <div class="loader-inner">
+        <div class="loader-msg">
+          <p class="loader-title">Selamat datang</p>
+          <p class="loader-sub" data-tr="Hoş geldiniz">Welcome</p>
+        </div>
+        <div class="loader-msg loader-msg-2">
+          <p
+            class="loader-title loader-title-2"
+            data-tr="Dil kursumuzla Endonezce öğrenin"
+          >
+            Learn Indonesian with our language course
+          </p>
         </div>
       </div>
-    </section>
-    <section id="web-scroller">
-      <div id="scroll-track">
-        <div id="scroll-pill"></div>
-      </div>
-    </section>
-    <section id="header">
+      <div class="loader-bar"></div>
+    </div>
+
+    <header id="header">
       <div class="header">
         <div class="header-box-1"><h3>Haydi Indonesia</h3></div>
         <div class="header-box-2">
-          <div class="header-box-label"><p id="header-label">language</p></div>
+          <div class="header-box-label">
+            <p id="header-label" data-tr="dil">language</p>
+          </div>
           <div class="header-box-button">
-            <div>
-              <button id="lang-en" class="header-btn">En</button>
-            </div>
-            <div>
-              <button id="lang-tr" class="header-btn">Tr</button>
-            </div>
+            <button id="lang-en" class="header-btn" aria-pressed="true">
+              En
+            </button>
+            <button id="lang-tr" class="header-btn" aria-pressed="false">
+              Tr
+            </button>
           </div>
         </div>
       </div>
-    </section>
+    </header>
+
     <section id="hero">
       <div class="hero">
-        <h1 id="hero-title">
+        <h1
+          id="hero-title"
+          data-tr="Yeni Dünyanı<br />Endonezce ile<br />Keşfet."
+        >
           Discover Your<br />New World Through<br />Bahasa Indonesia.
         </h1>
         <button id="hero-btn" class="btn">
           <span class="edge"></span>
-          <span class="front" id="hero-btn-text">Get Started</span>
+          <span class="front" id="hero-btn-text" data-tr="Hemen Başla"
+            >Get Started</span
+          >
         </button>
       </div>
-    </section>
-    <section id="about-Product">
-      <div class="about-Product">
-        <div class="about-Product-title about-Product-box-1">
-          <h2 id="about-Product-title">Curriculum</h2>
+      <div class="ticker">
+        <div class="track">
+          <ul class="phrases">
+            <li><b>Halo</b> <span data-tr="Merhaba">Hello</span></li>
+            <li>
+              <b>Apa kabar?</b> <span data-tr="Nasılsın?">How are you?</span>
+            </li>
+            <li>
+              <b>Terima kasih</b> <span data-tr="Teşekkürler">Thank you</span>
+            </li>
+            <li>
+              <b>Selamat pagi</b> <span data-tr="Günaydın">Good morning</span>
+            </li>
+            <li>
+              <b>Sama-sama</b> <span data-tr="Rica ederim">You're welcome</span>
+            </li>
+            <li>
+              <b>Ayo belajar</b>
+              <span data-tr="Haydi öğrenelim">Let's learn</span>
+            </li>
+            <li>
+              <b>Sampai jumpa</b>
+              <span data-tr="Sonra görüşürüz">See you later</span>
+            </li>
+          </ul>
+          <ul class="phrases" aria-hidden="true">
+            <li><b>Halo</b> <span data-tr="Merhaba">Hello</span></li>
+            <li>
+              <b>Apa kabar?</b> <span data-tr="Nasılsın?">How are you?</span>
+            </li>
+            <li>
+              <b>Terima kasih</b> <span data-tr="Teşekkürler">Thank you</span>
+            </li>
+            <li>
+              <b>Selamat pagi</b> <span data-tr="Günaydın">Good morning</span>
+            </li>
+            <li>
+              <b>Sama-sama</b> <span data-tr="Rica ederim">You're welcome</span>
+            </li>
+            <li>
+              <b>Ayo belajar</b>
+              <span data-tr="Haydi öğrenelim">Let's learn</span>
+            </li>
+            <li>
+              <b>Sampai jumpa</b>
+              <span data-tr="Sonra görüşürüz">See you later</span>
+            </li>
+          </ul>
         </div>
-        <div class="about-Product-box-week about-Product-box-2">
-          <div class="about-Product-box-week-title">
-            <h3>Week 1</h3>
-          </div>
-          <div class="about-Product-box-week-item">
-            <ul>
-              <li>Letters</li>
-              <li>SPOK Concept (Subject–Predicate–Object–Complement)</li>
-              <li>Present tense</li>
-              <li>
+      </div>
+    </section>
+
+    <section id="about-Product" class="dots">
+      <div class="wrap">
+        <h2 id="about-Product-title" class="section-title" data-tr="Müfredat">
+          Curriculum
+        </h2>
+        <p
+          class="intro"
+          data-tr="Alfabeden kendi hikâyelerini yazıp sunmaya kadar götüren sekiz hafta."
+        >
+          Eight weeks that take you from the alphabet to writing and presenting
+          your own stories.
+        </p>
+        <ol class="weeks">
+          <li class="week">
+            <h3>
+              <span class="label" data-tr="Hafta">Week</span
+              ><span class="num">1</span>
+            </h3>
+            <ul class="diamonds">
+              <li data-tr="Harfler">Letters</li>
+              <li data-tr="SPOK kavramı (Özne–Yüklem–Nesne–Tümleç)">
+                SPOK concept (Subject–Predicate–Object–Complement)
+              </li>
+              <li data-tr="Şimdiki zaman">Present tense</li>
+              <li
+                data-tr="Özne (S) kavramının incelenmesi (resmî ve gayriresmî kullanım)"
+              >
                 Examination of the Subject (S) concept (formal and informal
                 usage)
               </li>
             </ul>
-          </div>
-        </div>
-        <div class="about-Product-box-week about-Product-box-3">
-          <div class="about-Product-box-week-title">
-            <h3>Week 2</h3>
-          </div>
-          <div class="about-Product-box-week-item">
-            <ul>
-              <li>
+          </li>
+          <li class="week">
+            <h3>
+              <span class="label" data-tr="Hafta">Week</span
+              ><span class="num">2</span>
+            </h3>
+            <ul class="diamonds">
+              <li
+                data-tr="Yüklem (P) kavramının incelenmesi (fiiller ve sıfatlar)"
+              >
                 Examination of the Predicate (P) concept (verbs and adjectives)
               </li>
-              <li>Prepositions</li>
-              <li>Examination of the Object (O) concept</li>
+              <li data-tr="Edatlar">Prepositions</li>
+              <li data-tr="Nesne (O) kavramının incelenmesi">
+                Examination of the Object (O) concept
+              </li>
             </ul>
-          </div>
-        </div>
-        <div class="about-Product-box-week about-Product-box-4">
-          <div class="about-Product-box-week-title">
-            <h3>Week 3</h3>
-          </div>
-          <div class="about-Product-box-week-item">
-            <ul>
-              <li>Prepositions (continued)</li>
-              <li>Past tense</li>
+          </li>
+          <li class="week">
+            <h3>
+              <span class="label" data-tr="Hafta">Week</span
+              ><span class="num">3</span>
+            </h3>
+            <ul class="diamonds">
+              <li data-tr="Edatlar (devamı)">Prepositions (continued)</li>
+              <li data-tr="Geçmiş zaman">Past tense</li>
             </ul>
-          </div>
-        </div>
-        <div class="about-Product-box-week about-Product-box-5">
-          <div class="about-Product-box-week-title">
-            <h3>Week 4</h3>
-          </div>
-          <div class="about-Product-box-week-item">
-            <ul>
-              <li>Future tense</li>
-              <li>Demonstratives</li>
-              <li>Possessive suffixes</li>
+          </li>
+          <li class="week">
+            <h3>
+              <span class="label" data-tr="Hafta">Week</span
+              ><span class="num">4</span>
+            </h3>
+            <ul class="diamonds">
+              <li data-tr="Gelecek zaman">Future tense</li>
+              <li data-tr="İşaret sözcükleri">Demonstratives</li>
+              <li data-tr="İyelik ekleri">Possessive suffixes</li>
             </ul>
-          </div>
-        </div>
-        <div class="about-Product-box-week about-Product-box-6">
-          <div class="about-Product-box-week-title">
-            <h3>Week 5</h3>
-          </div>
-          <div class="about-Product-box-week-item">
-            <ul>
-              <li>Conversation practice</li>
+          </li>
+          <li class="week">
+            <h3>
+              <span class="label" data-tr="Hafta">Week</span
+              ><span class="num">5</span>
+            </h3>
+            <ul class="diamonds">
+              <li data-tr="Konuşma pratiği">Conversation practice</li>
             </ul>
-          </div>
-        </div>
-        <div class="about-Product-box-week about-Product-box-7">
-          <div class="about-Product-box-week-title">
-            <h3>Week 6</h3>
-          </div>
-          <div class="about-Product-box-week-item">
-            <ul>
-              <li>Listening practice</li>
-              <li>Conjunctions</li>
+          </li>
+          <li class="week">
+            <h3>
+              <span class="label" data-tr="Hafta">Week</span
+              ><span class="num">6</span>
+            </h3>
+            <ul class="diamonds">
+              <li data-tr="Dinleme pratiği">Listening practice</li>
+              <li data-tr="Bağlaçlar">Conjunctions</li>
             </ul>
-          </div>
-        </div>
-        <div class="about-Product-box-week about-Product-box-8">
-          <div class="about-Product-box-week-title">
-            <h3>Week 7</h3>
-          </div>
-          <div class="about-Product-box-week-item">
-            <ul>
-              <li>Writing short stories and presenting them</li>
+          </li>
+          <li class="week">
+            <h3>
+              <span class="label" data-tr="Hafta">Week</span
+              ><span class="num">7</span>
+            </h3>
+            <ul class="diamonds">
+              <li data-tr="Kısa hikâyeler yazma ve sunma">
+                Writing short stories and presenting them
+              </li>
             </ul>
-          </div>
-        </div>
-        <div class="about-Product-box-week about-Product-box-9">
-          <div class="about-Product-box-week-title">
-            <h3>Week 8</h3>
-          </div>
-          <div class="about-Product-box-week-item">
-            <ul>
-              <li>
+          </li>
+          <li class="week">
+            <h3>
+              <span class="label" data-tr="Hafta">Week</span
+              ><span class="num">8</span>
+            </h3>
+            <ul class="diamonds">
+              <li
+                data-tr="Okuma, yazma, konuşma ve dinleme becerilerinin bütünleşik gelişimi"
+              >
                 Integrated development of reading, writing, speaking, and
                 listening skills
               </li>
             </ul>
-          </div>
-        </div>
+          </li>
+        </ol>
       </div>
     </section>
+
     <section id="about-owner">
       <div class="about-owner">
         <div class="about-owner-container">
-          <p id="about-owner-paragraph">
+          <p
+            id="about-owner-paragraph"
+            data-tr="&quot;Herkese merhaba, tanıştığımıza memnun oldum. Adım Hilmy ve aslen Endonezyalıyım. Doğal olarak Endonezce diline çok iyi hâkimim. Aynı zamanda Sakarya Üniversitesi'nden C1 Türkçe sertifikasına sahibim. <br />Topluluk önünde konuşma deneyimim arasında, özellikle Endonezyalı topluluklar arasında İstanbul'da stand-up komedi yapmak da yer alıyor.&quot;"
+          >
             "Hello everyone, nice to meet you. My name is Hilmy, and I am
             originally from Indonesia. Naturally, I have a strong grasp of the
             Indonesian language. At the same time, I also hold a C1 Turkish
@@ -176,215 +283,196 @@
         </div>
       </div>
     </section>
-    <section id="pricing">
-      <div class="pricing">
-        <div class="pricing-box-title pricing-box-1">
-          <h2 id="pricing-title">Course Package</h2>
-        </div>
-        <div class="pricing-box pricing-box-2">
-          <h3 class="pricing-box-name">Main Package</h3>
-        </div>
-        <div class="pricing-box pricing-box-3">
-          <h3 class="pricing-box-name">Flexible Package</h3>
-        </div>
-        <div class="pricing-box pricing-box-4">
-          <div class="pricing-box-item">
-            <ul>
-              <li>Sessions: 8 meetings</li>
-              <li>Total Hours: 16 hours (2 hours each)</li>
-              <li>Include: E‑book</li>
+
+    <section id="pricing" class="dots">
+      <div class="wrap">
+        <h2 id="pricing-title" class="section-title" data-tr="Kurs Paketi">
+          Course Package
+        </h2>
+        <div class="pricing-grid">
+          <div class="pricing-box">
+            <h3 class="pricing-box-name" data-tr="Ana Paket">Main Package</h3>
+            <ul class="diamonds">
+              <li data-tr="Oturum: 8 görüşme">Sessions: 8 meetings</li>
+              <li data-tr="Toplam Süre: 16 saat (her biri 2 saat)">
+                Total Hours: 16 hours (2 hours each)
+              </li>
+              <li data-tr="Dahil: E-kitap">Include: E‑book</li>
             </ul>
+            <div class="pricing-box-price">
+              <h3 class="price" data-tr="Fiyat: 2.500 TL">Price: 2.500 TL</h3>
+              <button data-price="2500" class="pricing-btn btn">
+                <span class="edge"></span>
+                <span class="front pricing-btn-text" data-tr="Satın Al"
+                  >Buy Now</span
+                >
+              </button>
+            </div>
           </div>
-          <div class="pricing-box-price">
-            <h3 class="price">Price: 2.500 TL</h3>
-            <button data-price="2500" class="pricing-btn btn">
-              <span class="edge"></span>
-              <span class="front pricing-btn-text">Buy Now</span>
-            </button>
-          </div>
-        </div>
-        <div class="pricing-box pricing-box-5">
-          <div class="pricing-box-item">
-            <ul>
-              <li>Sessions: 1 meeting</li>
-              <li>Total Hours: 2 hours</li>
-              <li>Include: E‑book</li>
+          <div class="pricing-box">
+            <h3 class="pricing-box-name" data-tr="Esnek Paket">
+              Flexible Package
+            </h3>
+            <ul class="diamonds">
+              <li data-tr="Oturum: 1 görüşme">Sessions: 1 meeting</li>
+              <li data-tr="Toplam Süre: 2 saat">Total Hours: 2 hours</li>
+              <li data-tr="Dahil: E-kitap">Include: E‑book</li>
             </ul>
-          </div>
-          <div class="pricing-box-price">
-            <h3 class="price">Price: 400 TL</h3>
-            <button data-price="400" class="pricing-btn btn">
-              <span class="edge"></span>
-              <span class="front pricing-btn-text">Buy Now</span>
-            </button>
+            <div class="pricing-box-price">
+              <h3 class="price" data-tr="Fiyat: 400 TL">Price: 400 TL</h3>
+              <button data-price="400" class="pricing-btn btn">
+                <span class="edge"></span>
+                <span class="front pricing-btn-text" data-tr="Satın Al"
+                  >Buy Now</span
+                >
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </section>
+
     <section id="billing-form">
       <div id="modal" class="modal">
         <div id="checkout" class="checkout modal-content">
           <div class="checkout-title">
             <div>
-              <button class="modal-close-btn">&times;</button>
+              <button type="button" class="modal-close-btn" aria-label="Close">
+                &times;
+              </button>
             </div>
-            <div>
-              <h1>Checkout</h1>
-            </div>
+            <h1 data-tr="Ödeme">Checkout</h1>
           </div>
-          <div>
-            <form action="" id="checkout-form" novalidate>
-              <div class="checkout-content">
-                <div class="checkout-content-payment-option">
-                  <div class="checkout-content-payment-option-input-text">
-                    <!-- First Name -->
+          <form action="" id="checkout-form" novalidate>
+            <div class="checkout-content">
+              <div class="checkout-content-payment-option">
+                <div class="checkout-content-payment-option-input-text">
+                  <div class="field-wrapper">
+                    <label for="firstName" data-tr="Ad">First Name</label>
+                    <input
+                      type="text"
+                      name="firstName"
+                      id="firstName"
+                      autocomplete="off"
+                      required
+                    />
                     <div
-                      class="checkout-content-payment-option-input-text-container field-wrapper"
+                      id="firstNameTooltip"
+                      class="custom-tooltip hidden"
+                      role="alert"
                     >
-                      <input
-                        type="text"
-                        name="firstName"
-                        id="firstName"
-                        placeholder=""
-                        autocomplete="off"
-                        required
-                      /><br />
-                      <label
-                        class="checkout-content-payment-option-input-text-label"
-                        for="firstName"
-                        >First Name</label
-                      ><br />
-                      <div
-                        id="firstNameTooltip"
-                        class="custom-tooltip hidden"
-                        role="alert"
-                      >
-                        <span class="tooltip-arrow"></span>
-                        <span class="tooltip-text"></span>
-                      </div>
-                    </div>
-
-                    <!-- Last Name -->
-                    <div
-                      class="checkout-content-payment-option-input-text-container field-wrapper"
-                    >
-                      <input
-                        type="text"
-                        name="lastName"
-                        id="lastName"
-                        placeholder=""
-                        autocomplete="off"
-                        required
-                      /><br />
-                      <label
-                        class="checkout-content-payment-option-input-text-label"
-                        for="lastName"
-                        >Last Name</label
-                      ><br />
-                      <div
-                        id="lastNameTooltip"
-                        class="custom-tooltip hidden"
-                        role="alert"
-                      >
-                        <span class="tooltip-arrow"></span>
-                        <span class="tooltip-text"></span>
-                      </div>
-                    </div>
-
-                    <!-- Email -->
-                    <div
-                      class="checkout-content-payment-option-input-text-container field-wrapper"
-                    >
-                      <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        placeholder=""
-                        autocomplete="off"
-                        required
-                      /><br />
-                      <label
-                        class="checkout-content-payment-option-input-text-label"
-                        for="email"
-                        >E-mail</label
-                      ><br />
-                      <div
-                        id="emailTooltip"
-                        class="custom-tooltip hidden"
-                        role="alert"
-                      >
-                        <span class="tooltip-arrow"></span>
-                        <span class="tooltip-text"></span>
-                      </div>
+                      <span class="tooltip-arrow"></span
+                      ><span class="tooltip-text"></span>
                     </div>
                   </div>
-
-                  <!-- Payment Info Block (No Radios) -->
+                  <div class="field-wrapper">
+                    <label for="lastName" data-tr="Soyad">Last Name</label>
+                    <input
+                      type="text"
+                      name="lastName"
+                      id="lastName"
+                      autocomplete="off"
+                      required
+                    />
+                    <div
+                      id="lastNameTooltip"
+                      class="custom-tooltip hidden"
+                      role="alert"
+                    >
+                      <span class="tooltip-arrow"></span
+                      ><span class="tooltip-text"></span>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label for="email" data-tr="E-posta">E-mail</label>
+                    <input
+                      type="email"
+                      name="email"
+                      id="email"
+                      autocomplete="off"
+                      required
+                    />
+                    <div
+                      id="emailTooltip"
+                      class="custom-tooltip hidden"
+                      role="alert"
+                    >
+                      <span class="tooltip-arrow"></span
+                      ><span class="tooltip-text"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="checkout-content-payment-option-input-option">
                   <div
-                    class="checkout-content-payment-option-input-option field-wrapper"
+                    class="checkout-content-payment-option-input-option-title"
                   >
-                    <div
-                      class="checkout-content-payment-option-input-option-title"
-                    >
-                      <h4>Payment Method</h4>
-                    </div>
-                    <p class="payment-method-info">
-                      Payment will be processed via
-                      <strong>Havale / EFT</strong>. Details will be provided
-                      after placing your order.
-                    </p>
+                    <h4 data-tr="Ödeme Yöntemi">Payment Method</h4>
                   </div>
-                </div>
-
-                <div class="checkout-content-total">
-                  <div class="checkout-content-total-label">
-                    <h4>Total:</h4>
-                  </div>
-                  <div class="checkout-content-total-price">
-                    <h3 id="checkout-price">0 tl</h3>
-                  </div>
-                </div>
-                <div>
-                  <button type="submit" id="checkout-btn" class="btn">
-                    <span class="edge"></span>
-                    <span class="front" id="checkout-btn-text"
-                      >Get Started</span
-                    >
-                  </button>
+                  <p
+                    class="payment-method-info"
+                    data-tr="Ödeme <strong>Havale / EFT</strong> ile yapılacaktır. Ayrıntılar siparişinizi verdikten sonra iletilecektir."
+                  >
+                    Payment will be processed via <strong>Havale / EFT</strong>.
+                    Details will be provided after placing your order.
+                  </p>
                 </div>
               </div>
-            </form>
-          </div>
+              <div class="checkout-content-total">
+                <div class="checkout-content-total-label">
+                  <h4 data-tr="Toplam:">Total:</h4>
+                </div>
+                <div class="checkout-content-total-price">
+                  <h3 id="checkout-price">0 tl</h3>
+                </div>
+              </div>
+              <div>
+                <button type="submit" id="checkout-btn" class="btn">
+                  <span class="edge"></span>
+                  <span
+                    class="front"
+                    id="checkout-btn-text"
+                    data-tr="Siparişi Ver"
+                    >Place Order</span
+                  >
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
+
         <div
           id="havale-eft-payment-method"
           class="havale-eft-payment-method modal-content"
         >
           <div class="payment-method-header">
-            <div>
-              <button class="modal-return-btn">&laquo;</button>
-            </div>
-            <div>
-              <button class="modal-close-btn">&times;</button>
-            </div>
+            <button type="button" class="modal-return-btn" aria-label="Back">
+              &laquo;
+            </button>
+            <button type="button" class="modal-close-btn" aria-label="Close">
+              &times;
+            </button>
           </div>
           <div class="payment-method-content">
             <div>
-              <p class="havale-eft-payment-method-instruction">
+              <p
+                class="havale-eft-payment-method-instruction"
+                data-tr="Ödeme talimatları <strong>kayıtlı e-posta adresinize</strong> gönderildi."
+              >
                 Payment instructions have been sent to your
                 <strong>registered email address</strong>.
               </p>
-              <p class="havale-eft-payment-method-instruction">
+              <p
+                class="havale-eft-payment-method-instruction"
+                data-tr="Görünmüyorsa <strong>spam klasörünüzü</strong> kontrol edin. <strong>Aşağıdaki sayaç bittiğinde</strong> isteği <strong>yeniden gönderebilirsiniz</strong>."
+              >
                 Check your <strong>spam folder</strong> if it doesn't appear.
                 You can <strong>resend the request</strong> once the
                 <strong>timer below ends</strong>.
               </p>
             </div>
-            <div>
-              <strong id="resend-email-timer" class="resend-email-timer"
-                >00:30</strong
-              >
-            </div>
+            <strong id="resend-email-timer" class="resend-email-timer"
+              >00:30</strong
+            >
             <button
               id="havale-eft-payment-method-resend-email-btn"
               disabled
@@ -394,6 +482,7 @@
               <span
                 class="front"
                 id="havale-eft-payment-method-resend-email-btn-text"
+                data-tr="Yeniden Gönder"
                 >Resend</span
               >
             </button>
@@ -402,134 +491,104 @@
               <span
                 class="front"
                 id="havale-eft-payment-method-confirm-btn-text"
+                data-tr="Onayla"
                 >Confirm</span
               >
             </button>
           </div>
         </div>
+
         <div
           id="payment-confirmation"
           class="payment-confirmation modal-content"
         >
-          <div><h1>Thank You</h1></div>
-          <div><p>Tap here or the gray area to dismiss</p></div>
-        </div>
-      </div>
-
-      <div
-        class="checkout-content-payment-option-input-text-container field-wrapper"
-      >
-        <input
-          type="text"
-          name="firstName"
-          id="firstName"
-          placeholder=""
-          autocomplete="off"
-          required
-        /><br />
-        <label
-          class="checkout-content-payment-option-input-text-label"
-          for="firstName"
-          >First Name</label
-        ><br />
-
-        <!-- Hidden validation text containers -->
-        <span class="val-msg val-empty hidden" style="display: none"
-          >Please enter your first name.</span
-        >
-
-        <div id="firstNameTooltip" class="custom-tooltip hidden" role="alert">
-          <span class="tooltip-arrow"></span>
-          <span class="tooltip-text"></span>
-        </div>
-      </div>
-
-      <!-- Last Name Field Wrapper -->
-      <div
-        class="checkout-content-payment-option-input-text-container field-wrapper"
-      >
-        <input
-          type="text"
-          name="lastName"
-          id="lastName"
-          placeholder=""
-          autocomplete="off"
-          required
-        /><br />
-        <label
-          class="checkout-content-payment-option-input-text-label"
-          for="lastName"
-          >Last Name</label
-        ><br />
-
-        <span class="val-msg val-empty hidden" style="display: none"
-          >Please enter your last name.</span
-        >
-
-        <div id="lastNameTooltip" class="custom-tooltip hidden" role="alert">
-          <span class="tooltip-arrow"></span>
-          <span class="tooltip-text"></span>
-        </div>
-      </div>
-      <!-- Email Field Wrapper -->
-      <div
-        class="checkout-content-payment-option-input-text-container field-wrapper"
-      >
-        <input
-          type="email"
-          name="email"
-          id="email"
-          placeholder=""
-          autocomplete="off"
-          required
-        /><br />
-        <label
-          class="checkout-content-payment-option-input-text-label"
-          for="email"
-          >E-mail</label
-        ><br />
-
-        <span class="val-msg val-empty hidden" style="display: none"
-          >Please enter your email address.</span
-        >
-        <span class="val-msg val-invalid hidden" style="display: none"
-          >Please enter a valid email address.</span
-        >
-
-        <div id="emailTooltip" class="custom-tooltip hidden" role="alert">
-          <span class="tooltip-arrow"></span>
-          <span class="tooltip-text"></span>
+          <h1 data-tr="Teşekkürler">Thank You</h1>
+          <p data-tr="Kapatmak için buraya veya gri alana dokunun">
+            Tap here or the gray area to dismiss
+          </p>
         </div>
       </div>
     </section>
-    <section id="footer">
-      <footer>
-        <div class="scroller">
-          <h4 class="footer-title item item-1">Contact us</h4>
-          <a class="item item-2" href="mailto:haydiindonesia@gmail.com"
-            >E-Mail</a
-          ><a class="item item-3" href="https://wa.me/905522688924"
-            >WhatsApp
+
+    <footer id="footer">
+      <div class="footer">
+        <div class="footer-group">
+          <p class="footer-title" data-tr="Bize ulaşın">Contact us</p>
+          <a
+            class="footer-link"
+            href="mailto:haydiindonesia@gmail.com"
+            aria-label="E-Mail"
+            title="E-Mail"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+              />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>
           </a>
           <a
-            class="item item-4"
+            class="footer-link"
+            href="https://wa.me/905522688924"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="WhatsApp"
+            title="WhatsApp"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+              />
+            </svg>
+          </a>
+          <a
+            class="footer-link"
             href="https://www.superprof.com.tr/endonezyaliyim-endonezce-cok-iyi-biliyorum-tabii-ayni-zamanda-turkce-sertifikasi-aldim-turkiyede-sau-ogrenciyim.html"
-            >Superprof</a
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Superprof"
+            title="Superprof"
           >
-          <h4 class="footer-title item item-5">Follow us</h4>
-          <a
-            class="item item-6"
-            href="https://www.tiktok.com/@endonezcekuyy?_r=1&_t=ZS-92CviuCyd0C"
-            >Tiktok</a
-          >
-          <a
-            class="item item-7"
-            href="https://www.instagram.com/haydiindonesia/?utm_source=ig_web_button_share_sheet"
-            >Instagram</a
-          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M22 10 12 5 2 10l10 5 10-5z" />
+              <path d="M6 12v5c3 2 9 2 12 0v-5" />
+            </svg>
+          </a>
         </div>
-      </footer>
-    </section>
-    <script src="./js/main.js"></script>
+        <div class="footer-group">
+          <p class="footer-title" data-tr="Bizi takip edin">Follow us</p>
+          <a
+            class="footer-link"
+            href="https://www.tiktok.com/@endonezcekuyy?_r=1&amp;_t=ZS-92CviuCyd0C"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="TikTok"
+            title="TikTok"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </svg>
+          </a>
+          <a
+            class="footer-link"
+            href="https://www.instagram.com/haydiindonesia/?utm_source=ig_web_button_share_sheet"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            title="Instagram"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./js/app.js" defer></script>
   </body>
 </html>
