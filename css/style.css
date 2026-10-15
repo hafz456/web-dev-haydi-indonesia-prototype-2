@@ -1031,3 +1031,9 @@ body.intro-lock {
     animation-duration: 2.4s; /* slower, but still shows that something is happening */
   }
 }
+
+/* Solid logos (TikTok) are filled shapes, not outlines */
+.footer-link svg.filled {
+  fill: currentColor;
+  stroke: none;
+}

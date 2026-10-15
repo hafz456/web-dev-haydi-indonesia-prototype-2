@@ -77,14 +77,39 @@ function applyLang(lang) {
     el.innerHTML = lang === 'tr' ? el.dataset.tr : el.dataset.en;
   });
   Object.entries(langButtons).forEach(([code, btn]) => btn.setAttribute('aria-pressed', String(code === lang)));
-  try { localStorage.setItem('lang', lang); } catch (e) { /* storage unavailable */ }
 }
 
-Object.entries(langButtons).forEach(([code, btn]) => btn.addEventListener('click', () => applyLang(code)));
+// A visitor's own choice (the EN / TR buttons) is remembered for one week. After that, or if they never
+// chose, the browser's language decides: Turkish browser = Turkish site, any other language = English.
+const LANG_KEY = 'langChoice';
+const LANG_MEMORY_MS = 7 * 24 * 60 * 60 * 1000;
 
-let savedLang = null;
-try { savedLang = localStorage.getItem('lang'); } catch (e) { /* storage unavailable */ }
-if (savedLang === 'tr') applyLang('tr');
+function rememberLang(lang) {
+  try { localStorage.setItem(LANG_KEY, JSON.stringify({ lang, savedAt: Date.now() })); } catch (e) { /* storage unavailable */ }
+}
+
+function chosenLang() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LANG_KEY));
+    if (saved && (saved.lang === 'tr' || saved.lang === 'en') && Date.now() - saved.savedAt < LANG_MEMORY_MS) {
+      return saved.lang;
+    }
+    if (saved) localStorage.removeItem(LANG_KEY); // older than a week: forget it
+  } catch (e) { /* nothing saved, or storage unavailable */ }
+  return null;
+}
+
+function browserLang() {
+  const preferred = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+  return preferred.toLowerCase().startsWith('tr') ? 'tr' : 'en';
+}
+
+Object.entries(langButtons).forEach(([code, btn]) => btn.addEventListener('click', () => {
+  applyLang(code);
+  rememberLang(code); // only a real click is remembered, never the automatic choice
+}));
+
+if ((chosenLang() || browserLang()) === 'tr') applyLang('tr');
 
 // ---------- "Get Started" scrolls slowly to the Course Package section ----------
 function slowScrollTo(targetId, duration) {
