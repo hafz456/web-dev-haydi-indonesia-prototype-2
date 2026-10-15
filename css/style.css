@@ -532,7 +532,7 @@ section {
     justify-content: space-around;
   }
   .footer-group {
-    gap: 8px;
+    display: contents; /* the five icons spread out evenly on their own */
   }
   .footer-link {
     width: 40px;
@@ -561,6 +561,7 @@ section {
 @media (max-width: 700px) {
   #hero-title {
     font-size: clamp(2.3rem, 11vw, 3.4rem);
+    overflow-wrap: break-word;
   }
   #hero-title br {
     display: none;
@@ -909,4 +910,124 @@ body.intro-lock {
 #about-owner,
 #pricing {
   overflow-x: clip;
+}
+
+/* ---------- Course packages: swipeable carousel on phones ---------- */
+.pricing-dots {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .pricing-grid {
+    display: flex;
+    max-width: none;
+    gap: 16px;
+    /* break out of the section padding so the next card visibly peeks in from the screen edge */
+    margin-inline: calc(-1 * clamp(24px, 5vw, 72px));
+    padding: 4px clamp(24px, 5vw, 72px) 18px;
+    scroll-padding-inline: clamp(24px, 5vw, 72px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .pricing-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .pricing-box {
+    flex: 0 0 min(76vw, 420px);
+    scroll-snap-align: start;
+  }
+  .pricing-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .pricing-dot {
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    border: 3px solid var(--paper);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    transition:
+      width 0.25s ease,
+      background-color 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .pricing-dot.active {
+    width: 30px;
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+}
+
+/* ---------- Order form extras ---------- */
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.checkout-status {
+  margin-top: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.checkout-status.error {
+  color: var(--red);
+}
+.checkout-status:empty {
+  display: none;
+}
+
+/* ---------- Warning on the Havale/EFT step ---------- */
+.email-warning {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border: 3px solid var(--navy);
+  border-radius: 12px;
+  background: #fff3cf;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.email-warning p + p {
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+/* ---------- Loading indicator on buttons ---------- */
+.btn.is-loading:disabled {
+  opacity: 0.9;
+  cursor: progress;
+}
+.btn.is-loading .front {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.btn.is-loading .front::before {
+  content: "";
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border: 3px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn.is-loading .front::before {
+    animation-duration: 2.4s; /* slower, but still shows that something is happening */
+  }
 }

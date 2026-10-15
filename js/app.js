@@ -3,6 +3,7 @@ const views = modal.querySelectorAll('.modal-content');
 const checkoutPrice = document.getElementById('checkout-price');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let opener = null;
+let selectedPackage = null; // 'main' or 'flexible', sent to the server (the server knows the prices)
 
 views.forEach((view) => {
   view.setAttribute('role', 'dialog');
@@ -33,6 +34,7 @@ function closeModal() {
     modal.classList.remove('open', 'closing');
     document.body.classList.remove('modal-open');
     document.body.style.paddingRight = '';
+    resetCheckout(); // closing always clears what the visitor typed and stops the timer
     if (opener) opener.focus();
   }, reduceMotion.matches ? 0 : 160);
 }
@@ -41,15 +43,21 @@ function closeModal() {
 document.querySelectorAll('.pricing-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     opener = btn;
+    selectedPackage = btn.dataset.package;
     openModal(btn.dataset.price);
   });
 });
 
-// Close with the X buttons, a click on the grey area, the thank-you card, or Escape
+// The checkout and the Havale/EFT step hold personal details, so they close ONLY with the X button.
+// A click on the grey area, or Escape, works only on the final thank-you card.
+function thankYouIsShowing() {
+  const active = modal.querySelector('.modal-content.active');
+  return Boolean(active && active.id === 'payment-confirmation');
+}
 document.querySelectorAll('.modal-close-btn').forEach((btn) => btn.addEventListener('click', closeModal));
-modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+modal.addEventListener('click', (e) => { if (e.target === modal && thankYouIsShowing()) closeModal(); });
 document.getElementById('payment-confirmation').addEventListener('click', closeModal);
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && thankYouIsShowing()) closeModal(); });
 
 // Back arrow on the Havale/EFT step
 document.querySelector('.modal-return-btn').addEventListener('click', () => showView('checkout'));
@@ -129,7 +137,7 @@ window.addEventListener('pagehide', markSeen);
 
 // ---------- Scroll-in animations (only when the <head> script added the "animate" class) ----------
 if (document.documentElement.classList.contains('animate')) {
-  const groups = ['.section-title', '.intro', '.week', '#about-owner-paragraph', '.about-owner-container h2', '.pricing-box'];
+  const groups = ['.section-title', '.intro', '.week', '#about-owner-paragraph', '.about-owner-container h2', '.pricing-grid'];
   const items = [];
   groups.forEach((selector) => {
     document.querySelectorAll(selector).forEach((el, i) => {
@@ -154,9 +162,37 @@ if (document.documentElement.classList.contains('animate')) {
   }
 }
 
-// ---------- Checkout form validation ----------
+// ---------- Checkout form: validation, order email, resend timer ----------
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const ORDER_URL = '/api/order'; // the Netlify function that checks the email and sends the message
+const RESEND_SECONDS = 30;
+
 const checkoutForm = document.getElementById('checkout-form');
+const checkoutButton = document.getElementById('checkout-btn');
+const checkoutButtonText = document.getElementById('checkout-btn-text');
+const checkoutStatus = document.getElementById('checkout-status');
+const resendStatus = document.getElementById('resend-status');
+const timerEl = document.getElementById('resend-email-timer');
+const resendButton = document.getElementById('havale-eft-payment-method-resend-email-btn');
+const confirmButton = document.getElementById('havale-eft-payment-method-confirm-btn');
+const sentToEmail = document.getElementById('sent-to-email'); // shows the address the email went to, so a typo is easy to spot
+const placeOrderText = { en: 'Place Order', tr: 'Siparişi Ver' };
+
+// common typing mistakes in the part after the @
+const DOMAIN_FIXES = {
+  'gmial.com': 'gmail.com', 'gmai.com': 'gmail.com', 'gmal.com': 'gmail.com', 'gnail.com': 'gmail.com',
+  'gamil.com': 'gmail.com', 'gmail.con': 'gmail.com', 'gmail.cm': 'gmail.com',
+  'hotmial.com': 'hotmail.com', 'hotmal.com': 'hotmail.com', 'hotmail.con': 'hotmail.com',
+  'outlok.com': 'outlook.com', 'outlook.con': 'outlook.com',
+  'yaho.com': 'yahoo.com', 'yahooo.com': 'yahoo.com', 'yahoo.con': 'yahoo.com',
+  'icloud.con': 'icloud.com', 'icoud.com': 'icloud.com',
+};
+
+function suggestEmailFix(email) {
+  const at = email.lastIndexOf('@');
+  const fix = DOMAIN_FIXES[email.slice(at + 1).toLowerCase()];
+  return fix ? `${email.slice(0, at)}@${fix}` : null;
+}
 
 const messages = {
   en: {
@@ -164,14 +200,33 @@ const messages = {
     lastName: 'Please enter your last name.',
     emailEmpty: 'Please enter your email address.',
     emailInvalid: 'Please enter a valid email address.',
+    emailTypo: (hint) => `Did you mean ${hint}?`,
+    emailNotFound: "We couldn't find this email address. Please check it.",
+    checking: 'Checking…',
+    sendFailed: 'Something went wrong. Please try again in a moment.',
+    resent: 'The email was sent again.',
+    slow: 'Still working… this can take a few seconds.',
+    resending: 'Sending the email…',
   },
   tr: {
     firstName: 'Lütfen adınızı girin.',
     lastName: 'Lütfen soyadınızı girin.',
     emailEmpty: 'Lütfen e-posta adresinizi girin.',
     emailInvalid: 'Lütfen geçerli bir e-posta adresi girin.',
+    emailTypo: (hint) => `Bunu mu demek istediniz: ${hint}?`,
+    emailNotFound: 'Bu e-posta adresi bulunamadı. Lütfen kontrol edin.',
+    checking: 'Kontrol ediliyor…',
+    sendFailed: 'Bir sorun oluştu. Lütfen biraz sonra tekrar deneyin.',
+    resent: 'E-posta tekrar gönderildi.',
+    slow: 'Hâlâ işleniyor… birkaç saniye sürebilir.',
+    resending: 'E-posta gönderiliyor…',
   },
 };
+
+function messageFor(key, hint) {
+  const message = messages[currentLang][key];
+  return typeof message === 'function' ? message(hint) : message;
+}
 
 // validate() returns the key of the error message, or null when the value is fine
 const fields = [
@@ -179,8 +234,13 @@ const fields = [
     validate: (v) => (v ? null : 'firstName') },
   { input: document.getElementById('lastName'), tip: document.getElementById('lastNameTooltip'),
     validate: (v) => (v ? null : 'lastName') },
-  { input: document.getElementById('email'), tip: document.getElementById('emailTooltip'),
-    validate: (v) => (!v ? 'emailEmpty' : EMAIL_PATTERN.test(v) ? null : 'emailInvalid') },
+  { input: document.getElementById('email'), tip: document.getElementById('emailTooltip'), hint: '',
+    validate: (v, f) => {
+      if (!v) return 'emailEmpty';
+      if (!EMAIL_PATTERN.test(v)) return 'emailInvalid';
+      f.hint = suggestEmailFix(v);
+      return f.hint ? 'emailTypo' : null;
+    } },
 ];
 
 let activeError = null; // the one warning currently shown: { field, key }
@@ -192,7 +252,7 @@ function hideTooltips() {
 
 function showTooltip(field, key) {
   hideTooltips();
-  field.tip.querySelector('.tooltip-text').textContent = messages[currentLang][key];
+  field.tip.querySelector('.tooltip-text').textContent = messageFor(key, field.hint);
   field.tip.classList.remove('hidden');
   activeError = { field, key };
 }
@@ -212,12 +272,90 @@ function clearAllErrors() {
   hideTooltips();
 }
 
-checkoutForm.addEventListener('submit', (e) => {
+// a line of text under a button: key = message name, or null to clear it
+function setStatus(el, key, isError = true) {
+  el.dataset.key = key || '';
+  el.textContent = key ? messages[currentLang][key] : '';
+  el.classList.toggle('error', Boolean(key) && isError);
+}
+
+let sending = false;
+let flight = 0; // changes whenever the checkout is reset, so a late answer from the server is ignored
+let lastOrder = null; // { key, sentAt, data }: what was sent most recently
+let timerId = null;
+
+function setSending(flag) {
+  sending = flag;
+  checkoutButton.disabled = flag;
+  checkoutButton.classList.toggle('is-loading', flag); // spinner next to the text
+  checkoutButton.setAttribute('aria-busy', String(flag));
+  checkoutButtonText.textContent = flag ? messages[currentLang].checking : placeOrderText[currentLang];
+}
+
+async function postOrder(data) {
+  try {
+    const response = await fetch(ORDER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json().catch(() => ({}));
+    return { ok: response.ok && result.ok === true, error: result.error || 'send_failed' };
+  } catch (err) {
+    return { ok: false, error: 'send_failed' }; // offline, or the server is not running
+  }
+}
+
+// ----- Resend timer -----
+function renderTimer(seconds) {
+  timerEl.textContent = `00:${String(seconds).padStart(2, '0')}`;
+}
+
+function stopResendTimer() {
+  clearInterval(timerId);
+  timerId = null;
+}
+
+function startResendTimer() {
+  stopResendTimer();
+  const endAt = Date.now() + RESEND_SECONDS * 1000;
+  resendButton.disabled = true;
+  renderTimer(RESEND_SECONDS);
+  timerId = setInterval(() => {
+    const left = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+    renderTimer(left);
+    if (left === 0) {
+      stopResendTimer();
+      resendButton.disabled = false;
+    }
+  }, 250);
+}
+
+// Closing the checkout (X button) wipes everything the visitor typed and stops the timer
+function resetCheckout() {
+  flight += 1;
+  stopResendTimer();
+  checkoutForm.reset();
+  clearAllErrors();
+  setSending(false);
+  setStatus(checkoutStatus, null);
+  setStatus(resendStatus, null);
+  renderTimer(RESEND_SECONDS);
+  resendButton.disabled = true;
+  resendButton.classList.remove('is-loading');
+  lastOrder = null;
+  sentToEmail.textContent = '';
+}
+
+// ----- Submit: check the fields, then let the server check the email and send the message -----
+checkoutForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  if (sending) return;
+  setStatus(checkoutStatus, null);
   let firstError = null;
 
   fields.forEach((f) => {
-    const key = f.validate(f.input.value.trim());
+    const key = f.validate(f.input.value.trim(), f);
     setInvalid(f, Boolean(key));
     if (key && !firstError) firstError = { field: f, key };
   });
@@ -229,7 +367,51 @@ checkoutForm.addEventListener('submit', (e) => {
   }
 
   hideTooltips();
-  showView('havale-eft-payment-method'); // next step (emailing the instructions comes later)
+
+  const data = {
+    firstName: fields[0].input.value.trim(),
+    lastName: fields[1].input.value.trim(),
+    email: fields[2].input.value.trim(),
+    packageId: selectedPackage,
+    lang: currentLang,
+    website: document.getElementById('website').value, // hidden bot-trap field, real visitors leave it empty
+  };
+  const key = JSON.stringify([data.firstName, data.lastName, data.email.toLowerCase(), data.packageId, data.lang]);
+
+  // The same details were sent a moment ago (the visitor used the back arrow and came forward again):
+  // do not send a second email.
+  if (lastOrder && lastOrder.key === key && Date.now() - lastOrder.sentAt < RESEND_SECONDS * 1000) {
+    showView('havale-eft-payment-method');
+    return;
+  }
+
+  const mine = ++flight;
+  setSending(true);
+  const slowTimer = setTimeout(() => {
+    if (mine === flight && sending) setStatus(checkoutStatus, 'slow', false); // still waiting after 4 seconds
+  }, 4000);
+  const result = await postOrder(data);
+  clearTimeout(slowTimer);
+  if (mine !== flight) return; // the checkout was closed while we were waiting
+  setSending(false);
+  setStatus(checkoutStatus, null);
+
+  if (!result.ok) {
+    if (result.error === 'email_not_found') {
+      setInvalid(fields[2], true);
+      showTooltip(fields[2], 'emailNotFound');
+      fields[2].input.focus();
+    } else {
+      setStatus(checkoutStatus, 'sendFailed');
+    }
+    return;
+  }
+
+  lastOrder = { key, sentAt: Date.now(), data };
+  sentToEmail.textContent = data.email;
+  setStatus(resendStatus, null);
+  showView('havale-eft-payment-method');
+  startResendTimer();
 });
 
 fields.forEach((f) => {
@@ -241,7 +423,7 @@ fields.forEach((f) => {
   // leaving a filled field with a wrong value (for example a bad email) warns straight away
   f.input.addEventListener('blur', () => {
     const value = f.input.value.trim();
-    const key = value ? f.validate(value) : null;
+    const key = value ? f.validate(value, f) : null;
     if (key) {
       setInvalid(f, true);
       showTooltip(f, key);
@@ -249,12 +431,41 @@ fields.forEach((f) => {
   });
 });
 
-// start clean every time the checkout opens, and keep the warning in the right language
+// ----- Resend and Confirm on the Havale/EFT step -----
+resendButton.addEventListener('click', async () => {
+  if (!lastOrder || resendButton.disabled) return;
+  resendButton.disabled = true;
+  resendButton.classList.add('is-loading');
+  setStatus(resendStatus, 'resending', false);
+  const mine = flight;
+  const result = await postOrder({ ...lastOrder.data, lang: currentLang });
+  if (mine !== flight) return;
+  resendButton.classList.remove('is-loading');
+  if (result.ok) {
+    lastOrder.sentAt = Date.now();
+    setStatus(resendStatus, 'resent', false);
+    startResendTimer();
+  } else {
+    setStatus(resendStatus, 'sendFailed');
+    resendButton.disabled = false;
+  }
+});
+
+confirmButton.addEventListener('click', () => {
+  stopResendTimer();
+  showView('payment-confirmation');
+});
+
+// start clean every time the checkout opens, and keep every message in the right language
 document.querySelectorAll('.pricing-btn').forEach((btn) => btn.addEventListener('click', clearAllErrors));
 Object.values(langButtons).forEach((btn) => btn.addEventListener('click', () => {
   if (activeError) {
-    activeError.field.tip.querySelector('.tooltip-text').textContent = messages[currentLang][activeError.key];
+    activeError.field.tip.querySelector('.tooltip-text').textContent = messageFor(activeError.key, activeError.field.hint);
   }
+  [checkoutStatus, resendStatus].forEach((el) => {
+    if (el.dataset.key) el.textContent = messages[currentLang][el.dataset.key];
+  });
+  if (sending) checkoutButtonText.textContent = messages[currentLang].checking;
 }));
 
 // ---------- Welcome intro (first visit, or back after 2+ hours: the <head> script decides) ----------
@@ -292,7 +503,8 @@ if (!reduceMotion.matches) {
   const heroButton = document.getElementById('hero-btn');
   const titles = [...document.querySelectorAll('.section-title')].map((el) => ({ el, dx: 0 }));
   const cards = [...document.querySelectorAll('.week'), ...document.querySelectorAll('.pricing-box')]
-    .map((el, i) => ({ el, speed: i % 2 ? 0.06 : 0, dy: 0 })); // every second card drifts, so rows move out of step
+    .map((el, i) => ({ el, speed: i % 2 ? 0.06 : 0, dy: 0, pkg: el.classList.contains('pricing-box') })); // every second card drifts, so rows move out of step
+  const carousel = window.matchMedia('(max-width: 700px)');
   let ticking = false;
 
   function updateMotion() {
@@ -307,7 +519,7 @@ if (!reduceMotion.matches) {
       return clamp((r.top + r.height / 2 - vh / 2) * 0.1, 0, maxShift);
     });
     const cardShift = cards.map((c) => {
-      if (!c.speed) return 0;
+      if (!c.speed || (c.pkg && carousel.matches)) return 0;
       const r = c.el.getBoundingClientRect();
       if (r.bottom < -150 || r.top > vh + 150) return c.dy;
       return clamp((r.top + r.height / 2 - c.dy - vh / 2) * c.speed, -22, 22);
@@ -321,7 +533,7 @@ if (!reduceMotion.matches) {
     titles.forEach((t, i) => { t.el.style.transform = `translate3d(${titleShift[i]}px, 0, 0)`; });
     cards.forEach((c, i) => {
       c.dy = cardShift[i];
-      if (c.speed) c.el.style.transform = `translate3d(0, ${c.dy}px, 0)`;
+      if (c.speed) c.el.style.transform = c.pkg && carousel.matches ? '' : `translate3d(0, ${c.dy}px, 0)`;
     });
   }
 
@@ -334,3 +546,20 @@ if (!reduceMotion.matches) {
   window.addEventListener('resize', updateMotion);
   updateMotion();
 }
+
+// ---------- Course package carousel dots (phones) ----------
+const packageGrid = document.querySelector('.pricing-grid');
+const packageDots = [...document.querySelectorAll('.pricing-dot')];
+
+function updatePackageDots() {
+  const max = packageGrid.scrollWidth - packageGrid.clientWidth;
+  const index = max > 0 ? Math.round((packageGrid.scrollLeft / max) * (packageDots.length - 1)) : 0;
+  packageDots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+}
+
+packageGrid.addEventListener('scroll', updatePackageDots, { passive: true });
+window.addEventListener('resize', updatePackageDots);
+packageDots.forEach((dot, i) => dot.addEventListener('click', () => {
+  const max = packageGrid.scrollWidth - packageGrid.clientWidth;
+  packageGrid.scrollTo({ left: (max * i) / (packageDots.length - 1), behavior: 'smooth' });
+}));

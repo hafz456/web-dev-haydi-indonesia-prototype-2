@@ -84,9 +84,9 @@
       <div class="hero">
         <h1
           id="hero-title"
-          data-tr="Yeni Dünyanı<br />Endonezce ile<br />Keşfet."
+          data-tr="Yeni Dünyanı <br />Endonezce ile <br />Keşfet."
         >
-          Discover Your<br />New World Through<br />Bahasa Indonesia.
+          Discover Your <br />New World Through <br />Bahasa Indonesia.
         </h1>
         <button id="hero-btn" class="btn">
           <span class="edge"></span>
@@ -301,7 +301,7 @@
             </ul>
             <div class="pricing-box-price">
               <h3 class="price" data-tr="Fiyat: 2.500 TL">Price: 2.500 TL</h3>
-              <button data-price="2500" class="pricing-btn btn">
+              <button data-price="2500" data-package="main" class="pricing-btn btn">
                 <span class="edge"></span>
                 <span class="front pricing-btn-text" data-tr="Satın Al"
                   >Buy Now</span
@@ -320,7 +320,7 @@
             </ul>
             <div class="pricing-box-price">
               <h3 class="price" data-tr="Fiyat: 400 TL">Price: 400 TL</h3>
-              <button data-price="400" class="pricing-btn btn">
+              <button data-price="400" data-package="flexible" class="pricing-btn btn">
                 <span class="edge"></span>
                 <span class="front pricing-btn-text" data-tr="Satın Al"
                   >Buy Now</span
@@ -328,6 +328,10 @@
               </button>
             </div>
           </div>
+        </div>
+      <div class="pricing-dots">
+          <button type="button" class="pricing-dot active" aria-label="Main Package"></button>
+          <button type="button" class="pricing-dot" aria-label="Flexible Package"></button>
         </div>
       </div>
     </section>
@@ -437,6 +441,8 @@
                 </button>
               </div>
             </div>
+          <p id="checkout-status" class="checkout-status" role="alert"></p>
+            <input type="text" name="website" id="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
           </form>
         </div>
 
@@ -469,6 +475,19 @@
                 You can <strong>resend the request</strong> once the
                 <strong>timer below ends</strong>.
               </p>
+              <div class="email-warning">
+                <p>
+                  <span data-tr="Gönderilen adres:">Sent to:</span>
+                  <strong id="sent-to-email"></strong>
+                </p>
+                <p
+                  data-tr="E-posta ulaşmazsa lütfen geçerli ve doğru bir e-posta adresi girdiğinizden emin olun. Düzeltmek için « tuşuyla geri dönebilirsiniz."
+                >
+                  If you don't receive the email, please make sure you entered a
+                  valid email address. Use the &laquo; button to go back and fix
+                  it.
+                </p>
+              </div>
             </div>
             <strong id="resend-email-timer" class="resend-email-timer"
               >00:30</strong
@@ -495,6 +514,7 @@
                 >Confirm</span
               >
             </button>
+            <p id="resend-status" class="checkout-status" role="status"></p>
           </div>
         </div>
 
