@@ -501,6 +501,7 @@ let introDone = false;
 function finishIntro() {
   if (introDone || !loader) return;
   introDone = true;
+  rootEl.classList.remove('intro-covering'); // the page behind turns red only now, just as the panel starts to slide
   loader.classList.add('leaving');
   setTimeout(() => rootEl.classList.remove('intro-playing'), 350); // header and hero start as the panel slides away
   setTimeout(() => {

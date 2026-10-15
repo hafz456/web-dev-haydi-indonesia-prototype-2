@@ -1037,3 +1037,42 @@ body.intro-lock {
   fill: currentColor;
   stroke: none;
 }
+
+/* While the welcome screen is up, everything behind it is navy too, so no red can show
+   before the screen itself has been painted (the old white site hid this because white sat on white) */
+html.intro-covering {
+  background: var(--navy);
+}
+html.intro-covering body {
+  background: none;
+}
+
+/* ---------- Custom scrollbar: desktop and laptop only (a real mouse or trackpad), never on phones ---------- */
+@media (hover: hover) and (pointer: fine) {
+  html::-webkit-scrollbar {
+    width: 16px;
+  }
+  html::-webkit-scrollbar-track {
+    background: var(--navy);
+    border-left: 3px solid var(--gold);
+  }
+  html::-webkit-scrollbar-thumb {
+    min-height: 48px;
+    background: var(--gold);
+    border: 3px solid var(--navy); /* same colour as the track, so the thumb looks like a floating pill */
+    border-radius: 999px;
+  }
+  html::-webkit-scrollbar-thumb:hover {
+    background: var(--paper);
+  }
+  html::-webkit-scrollbar-thumb:active {
+    background: var(--red);
+  }
+
+  /* Firefox ignores the rules above and can only change the colours */
+  @supports not selector(::-webkit-scrollbar) {
+    html {
+      scrollbar-color: var(--gold) var(--navy);
+    }
+  }
+}

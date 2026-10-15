@@ -28,12 +28,12 @@
           animate = false;
         if (animate) {
           var root = document.documentElement;
-          root.classList.add("animate", "intro-playing");
+          root.classList.add("animate", "intro-playing", "intro-covering");
           if ("scrollRestoration" in history)
             history.scrollRestoration = "manual";
           // safety net: if app.js ever fails to run, never leave the visitor stuck behind the welcome screen
           setTimeout(function () {
-            root.classList.remove("intro-playing");
+            root.classList.remove("intro-playing", "intro-covering");
             var l = document.getElementById("loader");
             if (l) l.style.display = "none";
           }, 9000);
