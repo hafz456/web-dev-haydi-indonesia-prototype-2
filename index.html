@@ -332,9 +332,9 @@
               <li data-tr="Dahil: E-kitap">Include: E‑book</li>
             </ul>
             <div class="pricing-box-price">
-              <h3 class="price" data-tr="Fiyat: 400 TL">Price: 400 TL</h3>
+              <h3 class="price" data-tr="Fiyat: 500 TL">Price: 500 TL</h3>
               <button
-                data-price="400"
+                data-price="500"
                 data-package="flexible"
                 class="pricing-btn btn"
               >
@@ -430,29 +430,36 @@
                       ><span class="tooltip-text"></span>
                     </div>
                   </div>
-                <div class="field-wrapper">
-                  <label for="phone" data-tr="WhatsApp numarası">WhatsApp number</label>
-                  <div class="phone-row">
-                    <select id="phoneCountry" name="phoneCountry"></select>
-                    <input
-                      type="tel"
-                      name="phone"
-                      id="phone"
-                      inputmode="tel"
-                      autocomplete="tel-national"
-                      required
-                    />
+                  <div class="field-wrapper">
+                    <label for="phone" data-tr="WhatsApp numarası"
+                      >WhatsApp number</label
+                    >
+                    <div class="phone-row">
+                      <select id="phoneCountry" name="phoneCountry"></select>
+                      <input
+                        type="tel"
+                        name="phone"
+                        id="phone"
+                        inputmode="tel"
+                        autocomplete="tel-national"
+                        required
+                      />
+                    </div>
+                    <small
+                      class="field-hint"
+                      data-tr="Başka bir ülke mi? Numarayı + ile başlayarak yazın."
+                      >Other country? Type the full number starting with
+                      +.</small
+                    >
+                    <div
+                      id="phoneTooltip"
+                      class="custom-tooltip hidden"
+                      role="alert"
+                    >
+                      <span class="tooltip-arrow"></span>
+                      <span class="tooltip-text"></span>
+                    </div>
                   </div>
-                  <small
-                    class="field-hint"
-                    data-tr="Başka bir ülke mi? Numarayı + ile başlayarak yazın."
-                    >Other country? Type the full number starting with +.</small
-                  >
-                  <div id="phoneTooltip" class="custom-tooltip hidden" role="alert">
-                    <span class="tooltip-arrow"></span>
-                    <span class="tooltip-text"></span>
-                  </div>
-                </div>
                 </div>
                 <div class="checkout-content-payment-option-input-option">
                   <div
