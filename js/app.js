@@ -219,6 +219,83 @@ function suggestEmailFix(email) {
   return fix ? `${email.slice(0, at)}@${fix}` : null;
 }
 
+// Phone number rules (the same check runs in the browser and on the server).
+// Strict where we sell (Turkey and Indonesia, mobile numbers only because the number is for WhatsApp),
+// and a sensible length check for every other country. This checks the SHAPE of a number;
+// no free tool can tell whether a number really belongs to someone.
+const PHONE_RULES = {
+  '90': /^5\d{9}$/, // Turkish mobile: 5xx xxx xx xx
+  '62': /^8\d{8,11}$/, // Indonesian mobile: 8xx ... (9 to 12 digits)
+};
+
+function parsePhone(dialRaw, raw) {
+  const text = String(raw ?? '').trim();
+  if (!/^[+\d\s().-]{5,40}$/.test(text)) return { ok: false };
+
+  let digits = text.replace(/\D/g, '');
+  let international = text.startsWith('+');
+  if (!international && digits.startsWith('00')) {
+    international = true;
+    digits = digits.slice(2);
+  }
+
+  let full;
+  if (international) {
+    full = digits; // the visitor typed the whole number with the country code
+  } else {
+    const dial = String(dialRaw ?? '').replace(/\D/g, '');
+    if (!dial) return { ok: false };
+    let national = digits.replace(/^0+/, ''); // 0552... becomes 552...
+    const rule = PHONE_RULES[dial];
+    // the visitor typed the country code again (905522688924): remove it
+    if (rule && !rule.test(national) && national.startsWith(dial) && rule.test(national.slice(dial.length))) {
+      national = national.slice(dial.length);
+    }
+    full = dial + national;
+  }
+
+  if (full.length < 8 || full.length > 15) return { ok: false };
+  for (const [code, rule] of Object.entries(PHONE_RULES)) {
+    if (full.startsWith(code) && !rule.test(full.slice(code.length))) return { ok: false };
+  }
+  return { ok: true, digits: full, e164: `+${full}` };
+}
+
+const phoneInput = document.getElementById('phone');
+const countrySelect = document.getElementById('phoneCountry');
+
+// [dial code, English name, Turkish name]
+const COUNTRIES = [
+  ['90', 'Turkey', 'Türkiye'], ['62', 'Indonesia', 'Endonezya'],
+  ['43', 'Austria', 'Avusturya'], ['61', 'Australia', 'Avustralya'], ['994', 'Azerbaijan', 'Azerbaycan'],
+  ['32', 'Belgium', 'Belçika'], ['673', 'Brunei', 'Brunei'], ['86', 'China', 'Çin'],
+  ['357', 'Cyprus', 'Kıbrıs'], ['20', 'Egypt', 'Mısır'], ['33', 'France', 'Fransa'],
+  ['49', 'Germany', 'Almanya'], ['91', 'India', 'Hindistan'], ['964', 'Iraq', 'Irak'],
+  ['39', 'Italy', 'İtalya'], ['81', 'Japan', 'Japonya'], ['60', 'Malaysia', 'Malezya'],
+  ['31', 'Netherlands', 'Hollanda'], ['974', 'Qatar', 'Katar'], ['7', 'Russia', 'Rusya'],
+  ['966', 'Saudi Arabia', 'Suudi Arabistan'], ['65', 'Singapore', 'Singapur'], ['82', 'South Korea', 'Güney Kore'],
+  ['34', 'Spain', 'İspanya'], ['46', 'Sweden', 'İsveç'], ['41', 'Switzerland', 'İsviçre'],
+  ['963', 'Syria', 'Suriye'], ['971', 'United Arab Emirates', 'Birleşik Arap Emirlikleri'],
+  ['44', 'United Kingdom', 'Birleşik Krallık'], ['1', 'USA and Canada', 'ABD ve Kanada'],
+];
+// Turkey is the main market; a browser set to Indonesian starts on Indonesia
+const defaultDial = (navigator.language || '').toLowerCase().startsWith('id') ? '62' : '90';
+
+// fills the country list in the visitor's language and keeps their choice
+function renderCountryOptions() {
+  const chosen = countrySelect.value || defaultDial;
+  countrySelect.innerHTML = '';
+  COUNTRIES.forEach(([dial, en, tr]) => {
+    const option = document.createElement('option');
+    option.value = dial;
+    option.textContent = `+${dial} ${currentLang === 'tr' ? tr : en}`;
+    option.defaultSelected = dial === defaultDial; // what "reset" returns to
+    option.selected = dial === chosen;
+    countrySelect.appendChild(option);
+  });
+  countrySelect.setAttribute('aria-label', currentLang === 'tr' ? 'Ülke kodu' : 'Country code');
+}
+
 const messages = {
   en: {
     firstName: 'Please enter your first name.',
@@ -227,6 +304,8 @@ const messages = {
     emailInvalid: 'Please enter a valid email address.',
     emailTypo: (hint) => `Did you mean ${hint}?`,
     emailNotFound: "We couldn't find this email address. Please check it.",
+    phoneEmpty: 'Please enter your WhatsApp number.',
+    phoneInvalid: "This number doesn't look right. Please check the country code and the number.",
     checking: 'Checking…',
     sendFailed: 'Something went wrong. Please try again in a moment.',
     resent: 'The email was sent again.',
@@ -240,6 +319,8 @@ const messages = {
     emailInvalid: 'Lütfen geçerli bir e-posta adresi girin.',
     emailTypo: (hint) => `Bunu mu demek istediniz: ${hint}?`,
     emailNotFound: 'Bu e-posta adresi bulunamadı. Lütfen kontrol edin.',
+    phoneEmpty: 'Lütfen WhatsApp numaranızı girin.',
+    phoneInvalid: 'Bu numara doğru görünmüyor. Lütfen ülke kodunu ve numarayı kontrol edin.',
     checking: 'Kontrol ediliyor…',
     sendFailed: 'Bir sorun oluştu. Lütfen biraz sonra tekrar deneyin.',
     resent: 'E-posta tekrar gönderildi.',
@@ -266,6 +347,9 @@ const fields = [
       f.hint = suggestEmailFix(v);
       return f.hint ? 'emailTypo' : null;
     } },
+  // skipBlur: no warning while the visitor moves to the country list; it is checked on submit
+  { input: phoneInput, tip: document.getElementById('phoneTooltip'), skipBlur: true,
+    validate: (v) => (!v ? 'phoneEmpty' : parsePhone(countrySelect.value, v).ok ? null : 'phoneInvalid') },
 ];
 
 let activeError = null; // the one warning currently shown: { field, key }
@@ -397,11 +481,13 @@ checkoutForm.addEventListener('submit', async (e) => {
     firstName: fields[0].input.value.trim(),
     lastName: fields[1].input.value.trim(),
     email: fields[2].input.value.trim(),
+    phoneCountry: countrySelect.value,
+    phone: phoneInput.value.trim(),
     packageId: selectedPackage,
     lang: currentLang,
     website: document.getElementById('website').value, // hidden bot-trap field, real visitors leave it empty
   };
-  const key = JSON.stringify([data.firstName, data.lastName, data.email.toLowerCase(), data.packageId, data.lang]);
+  const key = JSON.stringify([data.firstName, data.lastName, data.email.toLowerCase(), data.phoneCountry, data.phone, data.packageId, data.lang]);
 
   // The same details were sent a moment ago (the visitor used the back arrow and came forward again):
   // do not send a second email.
@@ -426,6 +512,10 @@ checkoutForm.addEventListener('submit', async (e) => {
       setInvalid(fields[2], true);
       showTooltip(fields[2], 'emailNotFound');
       fields[2].input.focus();
+    } else if (result.error === 'phone_invalid') {
+      setInvalid(fields[3], true);
+      showTooltip(fields[3], 'phoneInvalid');
+      fields[3].input.focus();
     } else {
       setStatus(checkoutStatus, 'sendFailed');
     }
@@ -448,13 +538,20 @@ fields.forEach((f) => {
   // leaving a filled field with a wrong value (for example a bad email) warns straight away
   f.input.addEventListener('blur', () => {
     const value = f.input.value.trim();
-    const key = value ? f.validate(value, f) : null;
+    const key = value && !f.skipBlur ? f.validate(value, f) : null;
     if (key) {
       setInvalid(f, true);
       showTooltip(f, key);
     }
   });
 });
+
+// choosing another country clears an old phone warning
+countrySelect.addEventListener('change', () => {
+  setInvalid(fields[3], false);
+  if (activeError && activeError.field === fields[3]) hideTooltips();
+});
+renderCountryOptions();
 
 // ----- Resend and Confirm on the Havale/EFT step -----
 resendButton.addEventListener('click', async () => {
@@ -463,7 +560,7 @@ resendButton.addEventListener('click', async () => {
   resendButton.classList.add('is-loading');
   setStatus(resendStatus, 'resending', false);
   const mine = flight;
-  const result = await postOrder({ ...lastOrder.data, lang: currentLang });
+  const result = await postOrder({ ...lastOrder.data, lang: currentLang, resend: true });
   if (mine !== flight) return;
   resendButton.classList.remove('is-loading');
   if (result.ok) {
@@ -491,6 +588,7 @@ Object.values(langButtons).forEach((btn) => btn.addEventListener('click', () => 
     if (el.dataset.key) el.textContent = messages[currentLang][el.dataset.key];
   });
   if (sending) checkoutButtonText.textContent = messages[currentLang].checking;
+  renderCountryOptions(); // country names follow the language
 }));
 
 // ---------- Welcome intro (first visit, or back after 2+ hours: the <head> script decides) ----------
@@ -589,3 +687,102 @@ packageDots.forEach((dot, i) => dot.addEventListener('click', () => {
   const max = packageGrid.scrollWidth - packageGrid.clientWidth;
   packageGrid.scrollTo({ left: (max * i) / (packageDots.length - 1), behavior: 'smooth' });
 }));
+
+// ---------- Custom scrollbar (desktop and laptop only; phones keep the browser's own scrollbar) ----------
+const sbDesktop = window.matchMedia('(hover: hover) and (pointer: fine)');
+const sbTrack = document.createElement('div');
+const sbThumb = document.createElement('div');
+sbTrack.id = 'scroll-track';
+sbThumb.id = 'scroll-thumb';
+sbTrack.setAttribute('aria-hidden', 'true');
+sbTrack.appendChild(sbThumb);
+document.body.appendChild(sbTrack);
+
+let sbFrame = null;
+let sbRestTimer = null;
+let sbDrag = null; // while the thumb is being dragged: { startY, startScroll, ratio }
+
+// the page cannot scroll while the checkout or the welcome screen is open, so the bar does nothing then
+function sbLocked() {
+  return document.body.classList.contains('modal-open') || document.body.classList.contains('intro-lock');
+}
+
+function sbMetrics() {
+  const view = window.innerHeight; // the track is as tall as the window
+  const total = document.documentElement.scrollHeight;
+  const thumbHeight = Math.min(view, Math.max(48, (view * view) / total));
+  return { maxScroll: total - view, thumbHeight, maxThumbTop: view - thumbHeight };
+}
+
+function sbUpdate() {
+  sbFrame = null;
+  if (!sbDesktop.matches) return;
+  const m = sbMetrics();
+  sbTrack.hidden = m.maxScroll <= 1;
+  if (sbTrack.hidden) return;
+  const top = (window.scrollY / m.maxScroll) * m.maxThumbTop;
+  sbThumb.style.height = `${m.thumbHeight}px`;
+  sbThumb.style.transform = `translateY(${Math.max(0, Math.min(m.maxThumbTop, top))}px)`;
+}
+
+function sbSchedule() {
+  if (!sbFrame) sbFrame = requestAnimationFrame(sbUpdate);
+}
+
+// the thumb is strong while scrolling and fades a little when the page rests
+function sbWake() {
+  sbTrack.classList.add('active');
+  clearTimeout(sbRestTimer);
+  sbRestTimer = setTimeout(() => { if (!sbDrag) sbTrack.classList.remove('active'); }, 1200);
+}
+
+// drag the thumb
+sbThumb.addEventListener('pointerdown', (e) => {
+  if (sbLocked()) return;
+  const m = sbMetrics();
+  sbDrag = {
+    startY: e.clientY,
+    startScroll: window.scrollY,
+    ratio: m.maxThumbTop ? m.maxScroll / m.maxThumbTop : 0,
+  };
+  sbThumb.setPointerCapture(e.pointerId);
+  sbTrack.classList.add('active', 'dragging');
+  document.body.classList.add('sb-dragging');
+  e.preventDefault();
+});
+sbThumb.addEventListener('pointermove', (e) => {
+  if (!sbDrag) return;
+  window.scrollTo({ top: sbDrag.startScroll + (e.clientY - sbDrag.startY) * sbDrag.ratio, behavior: 'instant' });
+});
+function sbEndDrag() {
+  if (!sbDrag) return;
+  sbDrag = null;
+  sbTrack.classList.remove('dragging');
+  document.body.classList.remove('sb-dragging');
+  sbWake();
+}
+sbThumb.addEventListener('pointerup', sbEndDrag);
+sbThumb.addEventListener('pointercancel', sbEndDrag);
+
+// click on the empty track: glide there
+sbTrack.addEventListener('pointerdown', (e) => {
+  if (e.target !== sbTrack || sbLocked()) return;
+  const m = sbMetrics();
+  if (!m.maxThumbTop) return;
+  const thumbTop = Math.max(0, Math.min(m.maxThumbTop, e.clientY - m.thumbHeight / 2));
+  window.scrollTo({ top: (thumbTop / m.maxThumbTop) * m.maxScroll, behavior: 'smooth' });
+});
+
+window.addEventListener('scroll', () => { sbSchedule(); sbWake(); }, { passive: true });
+window.addEventListener('resize', sbSchedule);
+window.addEventListener('load', sbSchedule);
+sbTrack.addEventListener('pointerenter', sbWake);
+if ('ResizeObserver' in window) new ResizeObserver(sbSchedule).observe(document.body); // content got taller or shorter (language switch, fonts)
+
+// switch between the custom bar and the browser's own bar when the device type changes
+function sbSyncMode() {
+  document.documentElement.classList.toggle('custom-scroll', sbDesktop.matches);
+  sbSchedule();
+}
+sbDesktop.addEventListener('change', sbSyncMode);
+sbSyncMode();

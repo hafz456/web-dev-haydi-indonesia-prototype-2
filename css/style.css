@@ -1047,32 +1047,99 @@ html.intro-covering body {
   background: none;
 }
 
-/* ---------- Custom scrollbar: desktop and laptop only (a real mouse or trackpad), never on phones ---------- */
-@media (hover: hover) and (pointer: fine) {
-  html::-webkit-scrollbar {
-    width: 16px;
-  }
-  html::-webkit-scrollbar-track {
-    background: var(--navy);
-    border-left: 3px solid var(--gold);
-  }
-  html::-webkit-scrollbar-thumb {
-    min-height: 48px;
-    background: var(--gold);
-    border: 3px solid var(--navy); /* same colour as the track, so the thumb looks like a floating pill */
-    border-radius: 999px;
-  }
-  html::-webkit-scrollbar-thumb:hover {
-    background: var(--paper);
-  }
-  html::-webkit-scrollbar-thumb:active {
-    background: var(--red);
-  }
+/* ---------- Custom scrollbar (the page adds html.custom-scroll on desktop and laptop only) ---------- */
+#scroll-track {
+  display: none;
+}
+html.custom-scroll {
+  scrollbar-width: none; /* hide the browser's own bar, so nothing ever appears, disappears or shifts */
+}
+html.custom-scroll::-webkit-scrollbar {
+  display: none;
+}
+html.custom-scroll #scroll-track {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 18px;
+  z-index: 9000; /* above the header and footer, below the welcome screen */
+  transition: opacity 0.2s ease;
+}
+html.custom-scroll #scroll-track[hidden] {
+  display: none; /* nothing to scroll */
+}
+#scroll-thumb {
+  position: absolute;
+  top: 0;
+  right: 4px;
+  width: 10px;
+  min-height: 48px;
+  background: var(--gold);
+  border: 2px solid var(--navy);
+  border-radius: 999px;
+  opacity: 0.55;
+  cursor: grab;
+  touch-action: none;
+  transition:
+    opacity 0.25s ease,
+    width 0.15s ease,
+    background-color 0.15s ease;
+}
+#scroll-track.active #scroll-thumb,
+#scroll-track:hover #scroll-thumb {
+  opacity: 1;
+}
+#scroll-track:hover #scroll-thumb {
+  width: 12px;
+}
+#scroll-track.dragging #scroll-thumb {
+  background: var(--red);
+  cursor: grabbing;
+}
+body.sb-dragging {
+  user-select: none;
+  cursor: grabbing;
+}
 
-  /* Firefox ignores the rules above and can only change the colours */
-  @supports not selector(::-webkit-scrollbar) {
-    html {
-      scrollbar-color: var(--gold) var(--navy);
-    }
-  }
+/* ---------- Phone field: country code + number ---------- */
+.phone-row {
+  display: flex;
+  gap: 10px;
+}
+.phone-row select {
+  flex: 0 0 44%;
+  min-width: 0;
+  padding: 12px 10px;
+  border: 3px solid var(--navy);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--navy);
+  font: inherit;
+  text-overflow: ellipsis;
+}
+.phone-row input {
+  flex: 1;
+  min-width: 0;
+}
+.phone-row select:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 2px;
+}
+.field-wrapper.invalid select {
+  border-color: var(--red);
+  background: #fff0f0;
+}
+.field-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+/* While the checkout is open the custom scrollbar is completely hidden (and cannot be touched) */
+body.modal-open #scroll-track {
+  opacity: 0;
+  pointer-events: none;
 }

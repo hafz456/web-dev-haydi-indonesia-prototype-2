@@ -18,6 +18,15 @@
       // Animate only if the visitor is new, or was last here more than 2 hours ago.
       // Add ?animate=1 to the address to force it while testing.
       (function () {
+        // Desktop and laptop (a real mouse or trackpad) get the custom scrollbar; phones keep the browser's own.
+        if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+          document.documentElement.classList.add("custom-scroll");
+          // safety net: if the script that draws the bar never runs, give the normal scrollbar back
+          setTimeout(function () {
+            if (!document.getElementById("scroll-track"))
+              document.documentElement.classList.remove("custom-scroll");
+          }, 4000);
+        }
         var animate = true;
         try {
           var last = Number(localStorage.getItem("lastSeen"));
@@ -421,6 +430,29 @@
                       ><span class="tooltip-text"></span>
                     </div>
                   </div>
+                <div class="field-wrapper">
+                  <label for="phone" data-tr="WhatsApp numarası">WhatsApp number</label>
+                  <div class="phone-row">
+                    <select id="phoneCountry" name="phoneCountry"></select>
+                    <input
+                      type="tel"
+                      name="phone"
+                      id="phone"
+                      inputmode="tel"
+                      autocomplete="tel-national"
+                      required
+                    />
+                  </div>
+                  <small
+                    class="field-hint"
+                    data-tr="Başka bir ülke mi? Numarayı + ile başlayarak yazın."
+                    >Other country? Type the full number starting with +.</small
+                  >
+                  <div id="phoneTooltip" class="custom-tooltip hidden" role="alert">
+                    <span class="tooltip-arrow"></span>
+                    <span class="tooltip-text"></span>
+                  </div>
+                </div>
                 </div>
                 <div class="checkout-content-payment-option-input-option">
                   <div
