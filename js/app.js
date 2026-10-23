@@ -689,10 +689,12 @@ packageDots.forEach((dot, i) => dot.addEventListener('click', () => {
 }));
 
 // ---------- Custom scrollbar (desktop and laptop only; phones keep the browser's own scrollbar) ----------
+// The same bar scrolls the page, and while the checkout is open it scrolls the checkout instead.
 const sbDesktop = window.matchMedia('(hover: hover) and (pointer: fine)');
 const sbTrack = document.createElement('div');
 const sbThumb = document.createElement('div');
 sbTrack.id = 'scroll-track';
+sbTrack.classList.add('sb-off'); // starts hidden and fades in once the page has been measured
 sbThumb.id = 'scroll-thumb';
 sbTrack.setAttribute('aria-hidden', 'true');
 sbTrack.appendChild(sbThumb);
@@ -700,27 +702,48 @@ document.body.appendChild(sbTrack);
 
 let sbFrame = null;
 let sbRestTimer = null;
-let sbDrag = null; // while the thumb is being dragged: { startY, startScroll, ratio }
+let sbDrag = null; // while the thumb is being dragged: { startY, startScroll, ratio, scroller }
 
-// the page cannot scroll while the checkout or the welcome screen is open, so the bar does nothing then
+// the welcome screen covers everything, so the bar does nothing while it is up
 function sbLocked() {
-  return document.body.classList.contains('modal-open') || document.body.classList.contains('intro-lock');
+  return document.body.classList.contains('intro-lock');
+}
+
+// what the bar controls right now: the checkout while it is open, otherwise the page
+function sbScroller() {
+  if (document.body.classList.contains('modal-open')) {
+    return {
+      top: () => modal.scrollTop,
+      view: () => modal.clientHeight,
+      total: () => modal.scrollHeight,
+      to: (top, behavior) => modal.scrollTo({ top, behavior }),
+    };
+  }
+  return {
+    top: () => window.scrollY,
+    view: () => window.innerHeight,
+    total: () => document.documentElement.scrollHeight,
+    to: (top, behavior) => window.scrollTo({ top, behavior }),
+  };
 }
 
 function sbMetrics() {
-  const view = window.innerHeight; // the track is as tall as the window
-  const total = document.documentElement.scrollHeight;
-  const thumbHeight = Math.min(view, Math.max(48, (view * view) / total));
-  return { maxScroll: total - view, thumbHeight, maxThumbTop: view - thumbHeight };
+  const scroller = sbScroller();
+  const track = window.innerHeight; // the track is as tall as the window
+  const view = scroller.view();
+  const total = scroller.total();
+  const thumbHeight = Math.min(track, Math.max(48, (track * view) / total));
+  return { scroller, maxScroll: total - view, thumbHeight, maxThumbTop: track - thumbHeight };
 }
 
 function sbUpdate() {
   sbFrame = null;
   if (!sbDesktop.matches) return;
   const m = sbMetrics();
-  sbTrack.hidden = m.maxScroll <= 1;
-  if (sbTrack.hidden) return;
-  const top = (window.scrollY / m.maxScroll) * m.maxThumbTop;
+  const nothingToScroll = m.maxScroll <= 1; // for example a short checkout step
+  sbTrack.classList.toggle('sb-off', nothingToScroll); // fades away instead of vanishing
+  if (nothingToScroll) return;
+  const top = (m.scroller.top() / m.maxScroll) * m.maxThumbTop;
   sbThumb.style.height = `${m.thumbHeight}px`;
   sbThumb.style.transform = `translateY(${Math.max(0, Math.min(m.maxThumbTop, top))}px)`;
 }
@@ -729,7 +752,7 @@ function sbSchedule() {
   if (!sbFrame) sbFrame = requestAnimationFrame(sbUpdate);
 }
 
-// the thumb is strong while scrolling and fades a little when the page rests
+// the thumb is strong while scrolling and fades a little when things rest
 function sbWake() {
   sbTrack.classList.add('active');
   clearTimeout(sbRestTimer);
@@ -742,8 +765,9 @@ sbThumb.addEventListener('pointerdown', (e) => {
   const m = sbMetrics();
   sbDrag = {
     startY: e.clientY,
-    startScroll: window.scrollY,
+    startScroll: m.scroller.top(),
     ratio: m.maxThumbTop ? m.maxScroll / m.maxThumbTop : 0,
+    scroller: m.scroller,
   };
   sbThumb.setPointerCapture(e.pointerId);
   sbTrack.classList.add('active', 'dragging');
@@ -752,7 +776,7 @@ sbThumb.addEventListener('pointerdown', (e) => {
 });
 sbThumb.addEventListener('pointermove', (e) => {
   if (!sbDrag) return;
-  window.scrollTo({ top: sbDrag.startScroll + (e.clientY - sbDrag.startY) * sbDrag.ratio, behavior: 'instant' });
+  sbDrag.scroller.to(sbDrag.startScroll + (e.clientY - sbDrag.startY) * sbDrag.ratio, 'instant');
 });
 function sbEndDrag() {
   if (!sbDrag) return;
@@ -770,14 +794,30 @@ sbTrack.addEventListener('pointerdown', (e) => {
   const m = sbMetrics();
   if (!m.maxThumbTop) return;
   const thumbTop = Math.max(0, Math.min(m.maxThumbTop, e.clientY - m.thumbHeight / 2));
-  window.scrollTo({ top: (thumbTop / m.maxThumbTop) * m.maxScroll, behavior: 'smooth' });
+  m.scroller.to((thumbTop / m.maxThumbTop) * m.maxScroll, 'smooth');
 });
 
 window.addEventListener('scroll', () => { sbSchedule(); sbWake(); }, { passive: true });
+modal.addEventListener('scroll', () => { sbSchedule(); sbWake(); }, { passive: true }); // the checkout scrolls too
 window.addEventListener('resize', sbSchedule);
 window.addEventListener('load', sbSchedule);
 sbTrack.addEventListener('pointerenter', sbWake);
-if ('ResizeObserver' in window) new ResizeObserver(sbSchedule).observe(document.body); // content got taller or shorter (language switch, fonts)
+
+// the bar must re-measure when the checkout opens or closes, and when content gets taller or shorter
+let sbWasInCheckout = false;
+new MutationObserver(() => {
+  const inCheckout = document.body.classList.contains('modal-open');
+  if (inCheckout !== sbWasInCheckout) { // the bar moves between the page and the checkout: glide, do not jump
+    sbWasInCheckout = inCheckout;
+    sbThumb.classList.add('retarget');
+    setTimeout(() => sbThumb.classList.remove('retarget'), 500);
+  }
+  sbSchedule();
+}).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+if ('ResizeObserver' in window) {
+  const sbResize = new ResizeObserver(sbSchedule);
+  [document.body, modal, ...views].forEach((el) => sbResize.observe(el)); // page, checkout, and each checkout step
+}
 
 // switch between the custom bar and the browser's own bar when the device type changes
 function sbSyncMode() {

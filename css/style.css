@@ -1065,10 +1065,16 @@ html.custom-scroll #scroll-track {
   bottom: 0;
   width: 18px;
   z-index: 9000; /* above the header and footer, below the welcome screen */
-  transition: opacity 0.2s ease;
+  transition: opacity 0.4s ease;
 }
-html.custom-scroll #scroll-track[hidden] {
-  display: none; /* nothing to scroll */
+/* nothing to scroll (or the page is still loading): the whole bar fades away instead of vanishing */
+html.custom-scroll #scroll-track.sb-off {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.4s ease,
+    visibility 0s linear 0.4s;
 }
 #scroll-thumb {
   position: absolute;
@@ -1083,13 +1089,26 @@ html.custom-scroll #scroll-track[hidden] {
   cursor: grab;
   touch-action: none;
   transition:
-    opacity 0.25s ease,
-    width 0.15s ease,
-    background-color 0.15s ease;
+    opacity 0.7s ease,
+    width 0.2s ease,
+    background-color 0.2s ease; /* slow fade when the page rests */
 }
 #scroll-track.active #scroll-thumb,
 #scroll-track:hover #scroll-thumb {
   opacity: 1;
+  transition:
+    opacity 0.15s ease,
+    width 0.2s ease,
+    background-color 0.2s ease; /* quick fade-in when you scroll */
+}
+/* when the bar moves between the page and the checkout, the thumb glides to its new place and size */
+#scroll-track #scroll-thumb.retarget {
+  transition:
+    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.7s ease,
+    width 0.2s ease,
+    background-color 0.2s ease;
 }
 #scroll-track:hover #scroll-thumb {
   width: 12px;
@@ -1138,8 +1157,11 @@ body.sb-dragging {
   opacity: 0.75;
 }
 
-/* While the checkout is open the custom scrollbar is completely hidden (and cannot be touched) */
-body.modal-open #scroll-track {
-  opacity: 0;
-  pointer-events: none;
+/* While the checkout is open, the same custom bar scrolls the checkout (when it is taller than the screen),
+   so the checkout's own browser scrollbar is hidden on desktop */
+html.custom-scroll .modal {
+  scrollbar-width: none;
+}
+html.custom-scroll .modal::-webkit-scrollbar {
+  display: none;
 }
